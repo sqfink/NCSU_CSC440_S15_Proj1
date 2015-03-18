@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>placestest</title>
+  
+	<link href="animation.css" rel="stylesheet" type="text/css">
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.5/angular.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-beta.5/angular-animate.js"></script>
+  <script src="places.js"></script>
+  
+</head>
+<body ng-app="testa">
+	<div ng-controller="FetchController">
+		<button id="fetchbtn" ng-click="fetch()">fetch</button><br>
+		<pre>http status code: {{status}}</pre>
+		<pre>http response data: {{data}}</pre>
+		<p ng-if="data">Got {{data.length}} places from server</p>
+		<input type="search" ng-model="q" placeholder="filter places..." /><br>
+		<ul class="example-animate-container">
+			<li class="animate-repeat" ng-repeat="place in data | filter:q as results">
+				[{{place.place_id}}] {{place.address_line1}} {{place.address_line2}} {{place.city}}, {{place.zipcode}}
+			</li>
+			<li class="animate-repeat" ng-if="results.length == 0">
+				<strong>No results found...</strong>
+			</li>
+		</ul>
+	</div>
+</body>
+</html>
