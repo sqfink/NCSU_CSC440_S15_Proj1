@@ -7,7 +7,7 @@ import java.net.InetSocketAddress;
 
 import api.Target;
 import api.targets.Places;
-import beans.PlaceBean;
+import beans.Place;
 
 import com.sun.net.httpserver.HttpServer;
 

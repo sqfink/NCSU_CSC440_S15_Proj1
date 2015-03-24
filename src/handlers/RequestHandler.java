@@ -30,7 +30,6 @@ public abstract class RequestHandler implements HttpHandler {
 		while(read != null) {
 		    sb.append(read);
 		    read = br.readLine();
-
 		}
 		return sb.toString();
 	}

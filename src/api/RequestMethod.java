@@ -6,4 +6,5 @@ public enum RequestMethod {
 	POST,
 	DELETE,
 	HEAD,
+	UPDATE,
 }

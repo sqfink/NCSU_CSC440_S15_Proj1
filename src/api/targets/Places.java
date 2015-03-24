@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import beans.PlaceBean;
+import beans.Place;
 
 import com.sun.net.httpserver.HttpExchange;
 
@@ -28,7 +28,7 @@ public class Places extends Target {
 			case GET:
 				JSONArray arr = new JSONArray();
 				for (int i = 0; i < 7; i++) {
-					PlaceBean u = new PlaceBean();
+					Place u = new Place();
 					u.address_line1 = "" + i + " Fake street";
 					u.zipcode = i;
 					u.city = "city" + i;
