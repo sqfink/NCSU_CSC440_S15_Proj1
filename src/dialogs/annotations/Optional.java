@@ -1,4 +1,4 @@
-package beans.annotations;
+package dialogs.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface InputField {
-	String regex() default "[\\s\\S]+";
-	String prompt();
-	String failMessage();
+public @interface Optional {
+
 }

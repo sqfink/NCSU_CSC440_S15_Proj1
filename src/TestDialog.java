@@ -1,6 +1,6 @@
-import beans.InputDialog;
-import beans.annotations.DialogAttributes;
-import beans.annotations.InputField;
+import dialogs.InputDialog;
+import dialogs.annotations.DialogAttributes;
+import dialogs.annotations.InputField;
 
 @DialogAttributes(
 	prompt = "Test input dialog"

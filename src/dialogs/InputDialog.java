@@ -1,21 +1,16 @@
-package beans;
+package dialogs;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.io.Reader;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.AnnotationFormatError;
-import java.lang.instrument.IllegalClassFormatException;
 import java.lang.reflect.Field;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import beans.annotations.DialogAttributes;
-import beans.annotations.InputField;
-
+import dialogs.annotations.DialogAttributes;
+import dialogs.annotations.InputField;
 
 public abstract class InputDialog {
 	
