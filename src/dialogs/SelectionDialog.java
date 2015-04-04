@@ -28,6 +28,7 @@ public abstract class SelectionDialog {
 		Pattern p = Pattern.compile("^\\d+$");
 		Matcher match = null;
 		do {
+			outStream.print("Selection: ");
 			String line = getInput(inStream);
 			if (line == null || line.length() == 0) {
 				outStream.println("Invalid input");
