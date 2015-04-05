@@ -1,5 +1,8 @@
 package dbms;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +14,12 @@ import java.util.List;
 public class DatabaseManager {	
 	private Connection c = null;
 	private static DatabaseManager _singleton = null;
+	
+	private PrintStream logStream;
+	
+	public static void setLogFile(File path) throws FileNotFoundException {
+		_singleton.logStream = new PrintStream(path);
+	}
 	
 	public static Connection getConnection() {
 		if (_singleton == null)
@@ -71,8 +80,15 @@ public class DatabaseManager {
 		Connection c = getConnection();
 		Statement stmt = c.createStatement();
 		
+		if (_singleton.logStream != null) {
+			_singleton.logStream.println("SQL: " + query);
+		}
+		
 		if (!stmt.execute(query)) {
 			System.err.println("SQL Error: No results returned by query");
+			if (_singleton.logStream != null) {
+				_singleton.logStream.println("No results");
+			}
 			return null;
 		}
 		
@@ -90,12 +106,19 @@ public class DatabaseManager {
 			do {
 				ResultSet rs = stmt.getResultSet();
 				if (!rs.next()) {
-					throw new SQLException("Error moving to first row of results");
+					if (_singleton.logStream != null) {
+						_singleton.logStream.println("Request returned 0 rows");
+					}
+					//throw new SQLException("Error moving to first row of results");
+					break;
 				}
 				do {
 					T b = bean.newInstance();
 					b.loadFromRS(rs);
 					rs.next();
+					if (_singleton.logStream != null) {
+						_singleton.logStream.println("Result: " + b.toString());
+					}
 					l.add(b);
 				} while(!rs.isAfterLast());
 			} while (stmt.getMoreResults());
