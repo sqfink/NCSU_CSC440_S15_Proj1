@@ -1,5 +1,5 @@
 package statemachine;
 
-public class State {
-
+public abstract class State {
+	public abstract String doState(Runner r);
 }
