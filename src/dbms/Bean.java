@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import dbms.annotations.Column;
 
-public abstract class Bean {
+public abstract class Bean {	
 	public boolean loadFromRS(ResultSet rs) {
 		boolean failed = false;
 		Field[] fields = this.getClass().getFields();
