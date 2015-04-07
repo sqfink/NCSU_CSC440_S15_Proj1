@@ -13,6 +13,7 @@ import dialogs.annotations.DialogAttributes;
 import dialogs.annotations.InputField;
 
 public abstract class InputDialog {
+	private boolean hasPrompt = false;
 	
 	protected String getInput(InputStream inStream) throws IOException {
 		String buf = "";
@@ -28,7 +29,9 @@ public abstract class InputDialog {
 		Pattern p = Pattern.compile(f.regex());
 		Matcher match = null;
 		do {
-			outStream.print("\t" + f.prompt() + ": ");
+			if (hasPrompt)
+				outStream.print("\t");
+			outStream.print(f.prompt() + ": ");
 			String line = getInput(inStream);
 			if (line == null || line.length() == 0) {
 				outStream.println(f.failMessage());
@@ -51,7 +54,10 @@ public abstract class InputDialog {
 		for (Annotation a : classAnnotations) {
 			if (a instanceof DialogAttributes) {
 				DialogAttributes d = (DialogAttributes) a;
-				outStream.println(d.prompt() + ":");
+				if (d.prompt().length() > 0) {
+					hasPrompt = true;
+					outStream.println(d.prompt() + ":");
+				}
 				configuredOk = true;
 				break;
 			}

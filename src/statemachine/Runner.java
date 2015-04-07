@@ -18,12 +18,17 @@ public class Runner {
 		states.put(s.getName(), (Class<State>) s);
 	}
 	
-	public void Run() throws InstantiationException, IllegalAccessException {
+	public void Run() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		kvStore = new HashMap<String, Object>();
 		String nextState = initialState;
 		while (nextState != null) {
 			if (!states.containsKey(nextState)) {
-				throw new IllegalStateException("Requested state " + nextState + " does not exist");
+				Class<?> c = this.getClass().getClassLoader().loadClass(nextState);
+				if (c != null) {
+					states.put(nextState, (Class<State>) c);
+				} else {
+					throw new ClassNotFoundException("Class loader returned null for " + nextState);
+				}
 			}
 			State tmp = states.get(nextState).newInstance();
 			nextState = tmp.doState(this);

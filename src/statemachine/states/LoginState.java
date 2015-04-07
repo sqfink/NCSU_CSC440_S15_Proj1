@@ -7,25 +7,39 @@ import java.util.List;
 import dbms.DatabaseManager;
 import dbms.beans.LoginTestBean;
 import dialogs.impl.LoginPrompt;
+import dialogs.impl.LoginTypeDialog;
 import statemachine.Runner;
 import statemachine.State;
+import statemachine.states.student.StudentHomepageState;
 
 public class LoginState extends State {
 
 	@Override
 	public String doState(Runner r) {
+		LoginTypeDialog d = new LoginTypeDialog();
+		int userType = -1;
+		try {
+			userType = d.doCLIPrompt();
+		} catch (IllegalAccessException | IOException e1) {
+			System.out.println("Invalid selection");
+			e1.printStackTrace();
+		}
+		if (userType == 4) {
+			return StartState.class.getName();
+		}
+		
 		LoginPrompt prompt = new LoginPrompt();
 		try {
 			prompt.doCLIPrompt();
 		} catch (IllegalAccessException | IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Illegal input");
 			e.printStackTrace();
 		}
 		String pwHash = prompt.hashString(prompt.password);
 		List<LoginTestBean> res = null;
 		try {
 			res = DatabaseManager.executeBeanQuery(
-					"SELECT * FROM `users` WHERE `Username`=\"" + prompt.username + "\" AND `Password`=\"" + pwHash + "\";",
+					"SELECT * FROM `users` WHERE `Username`=\"" + prompt.username + "\" AND `Password`=\"" + pwHash + "\" AND `UserType`=\"" + userType + "\";",
 					LoginTestBean.class
 			);
 		} catch (SQLException e) {
@@ -36,10 +50,21 @@ public class LoginState extends State {
 			System.out.println("Login accepted.");
 			r.setKV("Username", prompt.username);
 			r.setKV("UserID", res.get(0).ID);
-			return null;
+			r.setKV("UserType", res.get(0).UserType);
+			switch (res.get(0).UserType) {
+			case 1:
+				return StudentHomepageState.class.getName();
+			case 2:
+				return "StaffHomepageState";
+			case 3:
+				return "GuestHomepageState";
+			default:
+				System.err.println("Invalid user type " + res.get(0).UserType + " loaded");
+				return null;
+			}
 		} else {
 			System.out.println("Login request failed. Invalid username/password");
-			return null;
+			return this.getClass().getName();
 		}
 	}
 	

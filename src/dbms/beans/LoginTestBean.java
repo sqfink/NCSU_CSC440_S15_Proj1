@@ -12,4 +12,7 @@ public class LoginTestBean extends Bean {
 	
 	@Column(columnIndex = 3)
 	public String PasswordHash;
+	
+	@Column(columnIndex = 4)
+	public Integer UserType;
 }

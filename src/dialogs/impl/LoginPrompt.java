@@ -13,8 +13,8 @@ import dialogs.annotations.InputField;
 	)
 public class LoginPrompt extends InputDialog {
 	@InputField(
-			failMessage = "Invalid username",
-			prompt = "Username",
+			failMessage = "Invalid User ID",
+			prompt = "User ID",
 			regex = "[a-zA-Z0-9]+"
 		)
 	public String username;
