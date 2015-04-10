@@ -17,7 +17,7 @@ public class StudentHomepageState extends State {
 			case 1:
 				return StudentHousingOptionsState.class.getName();
 			case 2:
-				return "StudentParkingState";
+				return StudentParkingHomeState.class.getName();
 			case 3:
 				System.out.println("Bye!");
 				return null;

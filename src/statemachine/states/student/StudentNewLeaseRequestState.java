@@ -17,7 +17,14 @@ public class StudentNewLeaseRequestState extends State {
 
 	@Override
 	public String doState(Runner r) {
-		LeaseRequestStorBean b = new LeaseRequestStorBean();
+		LeaseRequestStorBean b = null;
+		if (r.getKV("LeaseRequest") == null) {
+			b = new LeaseRequestStorBean();
+			r.setKV("LeaseRequest", b);
+		} else {
+			b = (LeaseRequestStorBean) r.getKV("LeaseRequest");
+		}
+		
 		do {
 			NewLeaseMainDialog maind = new NewLeaseMainDialog();
 			try {
@@ -108,6 +115,7 @@ public class StudentNewLeaseRequestState extends State {
 					return "SaveLeaseRequestState";
 				case 6:
 					System.out.println("New lease request discarded");
+					r.setKV("LeaseRequest", null);
 					return StudentHousingOptionsState.class.getName();
 				default:
 					throw new IOException("Illegal response returned by dialog");
