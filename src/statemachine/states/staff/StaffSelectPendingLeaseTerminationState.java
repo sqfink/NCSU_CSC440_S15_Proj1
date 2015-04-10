@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Date;
 
 import dbms.beans.tmpstore.StaffLeaseTerminationStorBean;
+import dialogs.impl.staff.StaffAssignDamagesDialog;
 import dialogs.impl.staff.StaffAssignInspectionDateDialog;
 import dialogs.impl.staff.StaffLeaseTerminationMainDialog;
 import statemachine.Runner;
@@ -47,7 +48,7 @@ public class StaffSelectPendingLeaseTerminationState extends State {
 				b.InspectionDate = ad.str;
 				return this.getClass().getName();
 			case 2:
-				StaffAssignDamagesDialog dmg = new StaffAssignInspectionDateDialog();
+				StaffAssignDamagesDialog dmg = new StaffAssignDamagesDialog();
 				do {
 					dmg.doCLIPrompt();
 				} while (dmg.str == null || validateDate(dmg.str));
