@@ -3,17 +3,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Properties;
 
 import statemachine.Runner;
-import statemachine.State;
-import statemachine.states.LoginState;
 import statemachine.states.StartState;
-import statemachine.states.student.StudentHomepageState;
-import sun.security.provider.ConfigFile;
 import dbms.DatabaseManager;
-import dialogs.impl.student.StudentHomepageDialog;
 
 public class main {
 
