@@ -10,6 +10,7 @@ import dialogs.impl.LoginPrompt;
 import dialogs.impl.LoginTypeDialog;
 import statemachine.Runner;
 import statemachine.State;
+import statemachine.states.staff.StaffMainState;
 import statemachine.states.student.StudentHomepageState;
 
 public class LoginState extends State {
@@ -55,9 +56,9 @@ public class LoginState extends State {
 			case 1:
 				return StudentHomepageState.class.getName();
 			case 2:
-				return "StaffHomepageState";
+				return StaffMainState.class.getName();
 			case 3:
-				return "GuestHomepageState";
+				return StudentHomepageState.class.getName(); //TODO: are any real changes needed here?
 			default:
 				System.err.println("Invalid user type " + res.get(0).UserType + " loaded");
 				return null;
