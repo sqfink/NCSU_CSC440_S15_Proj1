@@ -1,7 +1,5 @@
 DROP TABLE IF EXISTS users;
 
-DROP TABLE IF EXISTS student;
-
 DROP TABLE IF EXISTS family;
 
 DROP TABLE IF EXISTS guest;
@@ -26,6 +24,9 @@ DROP TABLE IF EXISTS studenthallinspection;
 
 DROP TABLE IF EXISTS staff;
 
+DROP TABLE IF EXISTS lineitems;
+
 DROP TABLE IF EXISTS invoices;
 
-DROP TABLE IF EXISTS lineitems;
+DROP TABLE IF EXISTS student;
+

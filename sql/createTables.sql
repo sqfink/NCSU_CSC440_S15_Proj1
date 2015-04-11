@@ -58,8 +58,8 @@ CREATE TABLE course(
 ); 
 
 CREATE TABLE lease(
-	placenumber INT(10) unsigned auto_increment primary key,
-	leasenumber INT(10) unsigned auto_increment primary key,
+	placenumber INT(10) primary key,
+	leasenumber INT(10),
 	snumber INT NOT NULL,
 	sname VARCHAR(40),
 	roomnumber INT NOT NULL,
@@ -93,8 +93,8 @@ CREATE TABLE parking(
  */
 CREATE TABLE parkingspots(
 	spotnumber INT(10) unsigned auto_increment primary key,
-	lotnumber INT(10) unsigned auto_increment primary key,
-	classification VARCHAR(30),
+	lotnumber INT(10),
+	classification VARCHAR(30)
 );
 
 /**
@@ -110,8 +110,7 @@ CREATE TABLE studenthallinspection(
 	residencename VARCHAR(30) NOT NULL,
 	inspectiondate VARCHAR(10),
 	propertycondition VARCHAR(20),
-	comments VARCHAR(50),
-	FOREIGN KEY (placenumber) REFERENCES lease(placenumber)
+	comments VARCHAR(50)
 );
 
 CREATE TABLE staff(
