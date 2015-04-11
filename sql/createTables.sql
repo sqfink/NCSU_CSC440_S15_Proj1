@@ -90,13 +90,14 @@ CREATE TABLE parking(
 
 CREATE TABLE housing(
 	housingLocation INT(10) NOT NULL PRIMARY KEY,
-	name VARCHAR(32) NOT NULL,
+	name VARCHAR(64) NOT NULL,
 	address VARCHAR(100) NOT NULL,
 	city VARCHAR(15) NOT NULL, 
 	state VARCHAR(2) NOT NULL,
 	zip VARCHAR(10) NOT NULL,
 	supervisor INT NOT NULL,
 	requiredYear INT NOT NULL,
+	phone VARCHAR(12) NOT NULL,
 	FOREIGN KEY (supervisor) REFERENCES staff(staffnumber)
 );
 
@@ -122,7 +123,7 @@ CREATE TABLE parkingclasscosts(
 );
 
 CREATE TABLE parkinglotsnear(
-	lotnumber INT(10) NOT NULL PRIMARY KEY,
+	lotnumber INT(10) NOT NULL,
 	near INT(10) NOT NULL,
 	FOREIGN KEY (near) REFERENCES housing(housingLocation)
 );
@@ -145,17 +146,17 @@ CREATE TABLE studenthallinspection(
 
 CREATE TABLE staff(
 	staffnumber INT NOT NULL,
-	firstname VARCHAR(40),
-	lastname VARCHAR(40),
-	location VARCHAR(40),
-	department VARCHAR(50),
-	position VARCHAR(50),
-	dob VARCHAR(10),
-	address varchar(30),
-	city varchar(15),
-	state varchar(2),
-	zip varchar(10),
-	sex varchar(1),
+	firstname VARCHAR(40) NOT NULL,
+	lastname VARCHAR(40) NOT NULL,
+	department VARCHAR(50) NOT NULL,
+	position VARCHAR(50) NOT NULL,
+	dob VARCHAR(10) NOT NULL,
+	address varchar(30) NOT NULL,
+	city varchar(15) NOT NULL,
+	state varchar(2) NOT NULL,
+	zip varchar(10) NOT NULL,
+	country VARCHAR(16) NOT NULL,
+	sex varchar(1) NOT NULL,
 	PRIMARY KEY (staffnumber)
 ); 
 
