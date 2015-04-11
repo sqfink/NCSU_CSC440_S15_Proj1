@@ -8,16 +8,19 @@ public class Runner {
 	protected Map<String, Object> kvStore;
 	protected String initialState;
 	
+	@SuppressWarnings("unchecked")
 	public <T extends State> Runner(Class<T> initialState) {
 		this.initialState = initialState.getName();
 		states = new HashMap<String, Class<State>>();
 		states.put(initialState.getName(), (Class<State>) initialState);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public <T extends State> void addState(Class<T> s) {
 		states.put(s.getName(), (Class<State>) s);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void Run() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		kvStore = new HashMap<String, Object>();
 		String nextState = initialState;

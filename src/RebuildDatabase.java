@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
+
 import dbms.DatabaseManager;
 
 public class RebuildDatabase {
@@ -28,11 +30,17 @@ public class RebuildDatabase {
 			System.out.println("Loaded " + cmds.size() + " commands from files");
 			for (String cmd : cmds) {
 				try {
-				DatabaseManager.getConnection().createStatement().execute(cmd);
-				} catch (SQLException ex) {
+					DatabaseManager.getConnection().createStatement().execute(cmd);
+					Thread.sleep(25);
+				} catch (CommunicationsException ex) {
+					System.out.println("Server connection failure!");
+					ex.printStackTrace();
+					System.exit(-1);
+				}
+				 catch (SQLException ex) {
 					System.out.println("Failed to execute: " + cmd);
 					ex.printStackTrace();
-				}
+				 }
 			}
 			System.out.println("Database rebuild completed.");
 		} catch (Exception e) {
