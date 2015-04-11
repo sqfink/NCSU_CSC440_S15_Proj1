@@ -1,3 +1,5 @@
+SET foreign_key_checks = 0;
+
 CREATE TABLE users(
 	id INT NOT NULL UNIQUE,
 	password VARCHAR(64),
@@ -6,22 +8,25 @@ CREATE TABLE users(
 
 CREATE TABLE student(
 	snumber INT NOT NULL UNIQUE,
-	name VARCHAR(40),
+	firstname VARCHAR(40),
+	lastname VARCHAR(40),
 	rentalstatus VARCHAR(10),
+	leasenumber INT NOT NULL,
 	parkingnumber INT NOT NULL,
 	dob VARCHAR(10),
 	phone VARCHAR(12),
 	alternatephone VARCHAR(12),
 	nationality VARCHAR(20),
-	address varchar(30),
-	city varchar(15),
-	state varchar(2),
+	address varchar(30) NOT NULL,
+	city varchar(15) NOT NULL,
+	state varchar(2) NOT NULL,
+	country varchar(32) NOT NULL,
 	zip varchar(10),
-	year varchar(4),
+	year INT(4) NOT NULL,
 	specialneeds varchar(50),
 	comments varchar(150),
-	sex varchar(1),
-	smoker varchar(1),
+	sex varchar(1) NOT NULL,
+	smoker varchar(1) NOT NULL,
 	guest INT(1) NOT NULL,
 	PRIMARY KEY (snumber)
 ); 
@@ -35,8 +40,8 @@ CREATE TABLE family(
 
 CREATE TABLE nextofkin(
 	snumber INT NOT NULL,
-	name VARCHAR(40),
-	rentalstatus VARCHAR(10),
+	firstname VARCHAR(40),
+	lastname VARCHAR(40),
 	address varchar(30),
 	city varchar(15),
 	state varchar(2),
@@ -53,15 +58,16 @@ CREATE TABLE course(
 ); 
 
 CREATE TABLE lease(
-	placenumber INT(10) primary key,
-	leasenumber INT(10),
+	leasenumber INT(10) primary key,
+	placenumber INT(10) NOT NULL,
 	snumber INT NOT NULL,
 	sname VARCHAR(40),
 	roomnumber INT NOT NULL,
 	paymentduration INT,
 	earlyterminationfee INT,
 	securitydeposits INT,
-	rentalperiod VARCHAR(10)
+	rentalperiod VARCHAR(10),
+	FOREIGN KEY (placenumber) REFERENCES places(placenumber)
 );
 
 CREATE TABLE studentflat(
@@ -72,8 +78,7 @@ CREATE TABLE studentflat(
 	private VARCHAR(1),
 	bedrooms INT,
 	rate INT,
-	roomnumber INT,
-	FOREIGN KEY (placenumber) REFERENCES lease(placenumber)
+	roomnumber INT
 );
 
 CREATE TABLE parking(
@@ -83,21 +88,51 @@ CREATE TABLE parking(
 	FOREIGN KEY (snumber) REFERENCES student(snumber)
 );
 
-/**
- * TODO need to determine relationship
- */
-CREATE TABLE parkingspots(
-	spotnumber INT(10) unsigned auto_increment primary key,
-	lotnumber INT(10),
-	classification VARCHAR(30)
+CREATE TABLE housing(
+	housingLocation INT(10) NOT NULL PRIMARY KEY,
+	name VARCHAR(32) NOT NULL,
+	address VARCHAR(100) NOT NULL,
+	city VARCHAR(15) NOT NULL, 
+	state VARCHAR(2) NOT NULL,
+	zip VARCHAR(10) NOT NULL,
+	supervisor INT NOT NULL,
+	requiredYear INT NOT NULL,
+	FOREIGN KEY (supervisor) REFERENCES staff(staffnumber)
 );
 
-/**
- * TODO need to determine relationship
- */
-CREATE TABLE parkingclassification(
-	rate INT,
-	classificationtype VARCHAR(15)
+CREATE TABLE places(
+	placenumber INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	housingLocation INT NOT NULL,
+	snumber INT NOT NULL,
+	FOREIGN KEY (housingLocation) REFERENCES housing(housingLocation),
+	FOREIGN KEY (snumber) REFERENCES student(snumber)
+);
+
+CREATE TABLE appartments(
+	housingLocation INT(10) NOT NULL,
+	rent REAL NOT NULL,
+	deposit REAL NOT NULL,
+	apttype VARCHAR(64) NOT NULL,
+	FOREIGN KEY (housingLocation) REFERENCES housing(housingLocation)
+);
+
+CREATE TABLE parkingclasscosts(
+	classification VARCHAR(32) NOT NULL,
+	cost REAL NOT NULL
+);
+
+CREATE TABLE parkinglotsnear(
+	lotnumber INT(10) NOT NULL PRIMARY KEY,
+	near INT(10) NOT NULL,
+	FOREIGN KEY (near) REFERENCES housing(housingLocation)
+);
+
+CREATE TABLE parkingspots(
+	spotnumber INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	lotnumber INT(10),
+	classification VARCHAR(30),
+	snumber INT(11), 
+	FOREIGN KEY (snumber) REFERENCES student(snumber)
 );
 
 CREATE TABLE studenthallinspection(
@@ -110,7 +145,8 @@ CREATE TABLE studenthallinspection(
 
 CREATE TABLE staff(
 	staffnumber INT NOT NULL,
-	staffname VARCHAR(40),
+	firstname VARCHAR(40),
+	lastname VARCHAR(40),
 	location VARCHAR(40),
 	department VARCHAR(50),
 	position VARCHAR(50),
@@ -126,7 +162,6 @@ CREATE TABLE staff(
 CREATE TABLE invoices(
 	invoicenumber INT NOT NULL,
 	snumber INT NOT NULL,
-	studentname VARCHAR(40),
 	staffname VARCHAR(40),
 	residencename VARCHAR(50),
 	roomnumber INT,
@@ -149,3 +184,5 @@ CREATE TABLE lineitems(
 	itemtype VARCHAR(40),
 	FOREIGN KEY (invoicenumber) REFERENCES invoices(invoicenumber)
 ); 
+
+SET foreign_key_checks = 1;

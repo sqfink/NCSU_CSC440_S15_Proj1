@@ -20,8 +20,6 @@ DROP TABLE IF EXISTS parking;
 
 DROP TABLE IF EXISTS parkingspots;
 
-DROP TABLE IF EXISTS parkingclassification;
-
 DROP TABLE IF EXISTS studenthallinspection;
 
 DROP TABLE IF EXISTS staff;
@@ -31,5 +29,15 @@ DROP TABLE IF EXISTS lineitems;
 DROP TABLE IF EXISTS invoices;
 
 DROP TABLE IF EXISTS student;
+
+DROP TABLE IF EXISTS housing;
+
+DROP TABLE IF EXISTS parkinglotsnear;
+
+DROP TABLE IF EXISTS places;
+
+DROP TABLE IF EXISTS appartments;
+
+DROP TABLE IF EXISTS parkingclasscosts;
 
 SET foreign_key_checks = 1;
