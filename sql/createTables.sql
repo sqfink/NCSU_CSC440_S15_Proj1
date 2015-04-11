@@ -1,11 +1,11 @@
 CREATE TABLE users(
-	id INT NOT NULL,
-	password VARCHAR(200),
+	id INT NOT NULL UNIQUE,
+	password VARCHAR(64),
 	PRIMARY KEY (id)
 ); 
 
 CREATE TABLE student(
-	snumber INT NOT NULL,
+	snumber INT NOT NULL UNIQUE,
 	name VARCHAR(40),
 	rentalstatus VARCHAR(10),
 	parkingnumber INT NOT NULL,
@@ -22,6 +22,7 @@ CREATE TABLE student(
 	comments varchar(150),
 	sex varchar(1),
 	smoker varchar(1),
+	guest INT(1) NOT NULL,
 	PRIMARY KEY (snumber)
 ); 
 
@@ -30,13 +31,7 @@ CREATE TABLE family(
 	name VARCHAR(40),
 	dob VARCHAR(10),
 	FOREIGN KEY (snumber) REFERENCES student(snumber)
-); 
-
-CREATE TABLE guest(
-	snumber INT NOT NULL,
-	approvalvalid VARCHAR(1),
-	FOREIGN KEY (snumber) REFERENCES student(snumber)
-); 
+);
 
 CREATE TABLE nextofkin(
 	snumber INT NOT NULL,

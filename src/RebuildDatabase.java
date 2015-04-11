@@ -24,6 +24,7 @@ public class RebuildDatabase {
 			DatabaseManager.setLogFile(new File("C:/tmp/db.log"));
 			List<String> cmds = getSqlCmds("sql/dropTables.sql");
 			cmds.addAll(getSqlCmds("sql/createTables.sql"));
+			cmds.addAll(getSqlCmds("sql/initData.sql"));
 			System.out.println("Loaded " + cmds.size() + " commands from files");
 			for (String cmd : cmds) {
 				try {

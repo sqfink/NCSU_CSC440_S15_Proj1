@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import dbms.DatabaseManager;
+import dbms.beans.LoginStaffBean;
+import dbms.beans.LoginStudentBean;
 import dbms.beans.LoginTestBean;
 import dialogs.impl.LoginPrompt;
 import dialogs.impl.LoginTypeDialog;
@@ -37,35 +39,54 @@ public class LoginState extends State {
 			e.printStackTrace();
 		}
 		String pwHash = prompt.hashString(prompt.password);
-		List<LoginTestBean> res = null;
+
 		try {
-			res = DatabaseManager.executeBeanQuery(
-					"SELECT * FROM `users` WHERE `Username`=\"" + prompt.username + "\" AND `Password`=\"" + pwHash + "\" AND `UserType`=\"" + userType + "\";",
-					LoginTestBean.class
-			);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		if (res.size() > 0) {
-			System.out.println("Login accepted.");
-			r.setKV("Username", prompt.username);
-			r.setKV("UserID", res.get(0).ID);
-			r.setKV("UserType", res.get(0).UserType);
-			switch (res.get(0).UserType) {
+			switch (userType) {
 			case 1:
+			case 3:
+				int isGuest;
+				if (userType == 3)
+					isGuest = 1;
+				else
+					isGuest = 0;
+				
+				String studentQuery = "SELECT * FROM `users` INNER JOIN `student` ON users.id=student.snumber WHERE `id`=\""
+						+ prompt.username + "\" AND `password`=\"" + pwHash + "\" AND `guest`=\"" + isGuest + "\";";
+				
+				List<LoginStudentBean> res = DatabaseManager.executeBeanQuery(studentQuery, LoginStudentBean.class);
+				
+				if (res.size() != 1) {
+					if (isGuest == 1)
+						System.out.println("No guest with matching approval ID and password found");
+					else
+						System.out.println("No student with matching ID and password found");
+					return this.getClass().getName();
+				}
+				
+				r.setKV("LoggedInUser", res.get(0)); //Store the user details for this session
+
 				return StudentHomepageState.class.getName();
 			case 2:
+				String staffQuery = "SELECT * FROM `users` INNER JOIN `staff` ON users.id=staff.staffnumber WHERE `id`=\""
+						+ prompt.username + "\" AND `password`=\"" + pwHash + "\";";
+				
+				List<LoginStaffBean> res2 = DatabaseManager.executeBeanQuery(staffQuery, LoginStaffBean.class);
+				
+				if (res2.size() != 1) {
+					System.out.println("No staff with matching staff number and password found");
+					return this.getClass().getName();
+				}
+				
+				r.setKV("LoggedInUser", res2.get(0)); //Store the user details for this session
+				
 				return StaffMainState.class.getName();
-			case 3:
-				return StudentHomepageState.class.getName(); //TODO: are any real changes needed here?
 			default:
-				System.err.println("Invalid user type " + res.get(0).UserType + " loaded");
+				System.err.println("Invalid user type reported by dialog");
 				return null;
 			}
-		} else {
-			System.out.println("Login request failed. Invalid username/password");
-			return this.getClass().getName();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 	
