@@ -13,8 +13,11 @@ public class StudentBean extends Bean {
 	@Column(columnName="snumber")
 	public String snumber;
 	
-	@Column(columnName="name")
-	public String name;
+	@Column(columnName="firstname")
+	public String firstname;
+
+	@Column(columnName="lastname")
+	public String lastname;
 
 	@Column(columnName="rentalstatus")
 	public String rentalstatus;

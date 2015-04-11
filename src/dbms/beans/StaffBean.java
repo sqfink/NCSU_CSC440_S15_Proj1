@@ -6,10 +6,13 @@ import dbms.annotations.Column;
 public class StaffBean extends Bean {
 	@Column(columnName="staffnumber")
 	public Long staffnumber;
-	
-	@Column(columnName="staffname")
-	public String staffname;
 
+	@Column(columnName="firstname")
+	public String firstname;
+
+	@Column(columnName="lastname")
+	public String lastname;
+	
 	@Column(columnName="location")
 	public String location;
 
