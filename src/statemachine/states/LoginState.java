@@ -7,7 +7,6 @@ import java.util.List;
 import dbms.DatabaseManager;
 import dbms.beans.LoginStaffBean;
 import dbms.beans.LoginStudentBean;
-import dbms.beans.LoginTestBean;
 import dialogs.impl.LoginPrompt;
 import dialogs.impl.LoginTypeDialog;
 import statemachine.Runner;

@@ -1,3 +1,5 @@
+SET foreign_key_checks = 0;
+
 DROP TABLE IF EXISTS users;
 
 DROP TABLE IF EXISTS family;
@@ -30,3 +32,4 @@ DROP TABLE IF EXISTS invoices;
 
 DROP TABLE IF EXISTS student;
 
+SET foreign_key_checks = 1;
