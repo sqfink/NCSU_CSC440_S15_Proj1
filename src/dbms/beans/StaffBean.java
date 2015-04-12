@@ -18,8 +18,11 @@ public class StaffBean extends Bean {
 
 	@Column(columnName="department")
 	public String department;
-
+	
 	@Column(columnName="position")
+	public String position;
+
+	@Column(columnName="dob")
 	public String dob;
 
 	@Column(columnName="address")
@@ -33,6 +36,9 @@ public class StaffBean extends Bean {
 
 	@Column(columnName="zip")
 	public String zip;
+	
+	@Column(columnName="country")
+	public String country;
 
 	@Column(columnName="sex")
 	public String sex;

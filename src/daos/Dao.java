@@ -1,6 +1,7 @@
 package daos;
 
 import dbms.DatabaseManager;
+import dbms.beans.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,12 +20,12 @@ public class Dao {
 	 * @param password
 	 * @return True if the uid and password match a record. False if not
 	 */
-	public boolean loginUser(int uid, String password) {
+	public boolean loginUser(LoginStudentBean lsb) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT uid FROM users WHERE id=? AND password=?");
-			ps.setInt(0, uid);
-			ps.setString(1, password);
+			PreparedStatement ps = conn.prepareStatement("SELECT id FROM users WHERE id=? AND password=?");
+			ps.setLong(0, lsb.id);
+			ps.setString(1, lsb.password);
 			ResultSet rs = ps.executeQuery();
 			return rs.next();
 		} catch(SQLException e) {
@@ -40,12 +41,12 @@ public class Dao {
 		return false;
 	}
 	
-	public void newUser(int uid, String password) {
+	public void newUser(LoginStudentBean lsb) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO users (id,password) VALUES(??)");
-			ps.setInt(0, uid);
-			ps.setString(1, password);
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO users (id,password) VALUES(?,?)");
+			ps.setLong(0, lsb.id);
+			ps.setString(1, lsb.password);
 			ps.executeQuery();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -59,26 +60,48 @@ public class Dao {
 		}
 	}
 	
-	public int newStudent(Map<String, String> attributes, int parkingnumber, boolean smoker) {
+	public int newStudent(StudentBean sb) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO student (sex,comments,specialneeds,year,address,nationality,phone,alternatephone,dob,parkingnumber,rentalstatus,smoker,name,city,state,zip) VALUES(???????????????)", Statement.RETURN_GENERATED_KEYS);
-			ps.setString(0, attributes.get("sex"));
-			ps.setString(1, attributes.get("comments"));
-			ps.setString(2, attributes.get("specialneeds"));
-			ps.setString(3, attributes.get("year"));
-			ps.setString(4, attributes.get("address"));
-			ps.setString(5, attributes.get("nationality"));
-			ps.setString(6, attributes.get("phone"));
-			ps.setString(7, attributes.get("alternatephone"));
-			ps.setString(8, attributes.get("dob"));
-			ps.setLong(9, parkingnumber);
-			ps.setString(10, attributes.get("rentalstatus"));
-			ps.setBoolean(11, smoker);
-			ps.setString(12, attributes.get("name"));
-			ps.setString(13, attributes.get("city"));
-			ps.setString(14, attributes.get("state"));
-			ps.setString(15, attributes.get("zip"));
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO student (firstname,lastname,leasenumber,parkingnumber,dob,phone,alternatephone,nationality,address,city,state,country,zip,year,specialneeds,comments,sex,smoker,guest) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+
+			ps.setString(0, sb.firstname);
+			ps.setString(1, sb.lastname);
+			ps.setLong(2, sb.leasenumber);
+			ps.setLong(3, sb.parkingnumber);
+			ps.setString(4, sb.dob);
+			ps.setString(5, sb.phone);
+			ps.setString(6, sb.alternatephone);
+			ps.setString(7, sb.nationality);
+			ps.setString(8, sb.address);
+			ps.setString(9, sb.city);
+			ps.setString(10, sb.state);
+			ps.setString(11, sb.country);
+			ps.setString(12, sb.zip);
+			String year = sb.year.toLowerCase();
+			if(year.equals("freshman")) {
+				ps.setInt(13, 0);
+			} else if(year.equals("sophomore")) {
+				ps.setInt(13, 1);
+			} else if(year.equals("junior")) {
+				ps.setInt(13, 2);
+			} else if(year.equals("senior")) {
+				ps.setInt(13, 3);
+			} else if(year.equals("graduate")) {
+				ps.setInt(13, 4);
+			} else {
+				ps.setInt(13,-1);
+			}
+
+			ps.setString(14, sb.specialneeds);
+			ps.setString(15, sb.comments);
+			ps.setString(16, sb.sex);
+			ps.setString(17, sb.smoker);
+			if(sb.guest) {
+				ps.setInt(18, 1);
+			} else {
+				ps.setInt(18, 0);
+			}
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs != null && rs.next()) {
@@ -95,58 +118,30 @@ public class Dao {
 			}
 		}
 		return -1;
+		
 	}
-	
-	public void newGuest(Map<String, String> attributes, int year, int phonenumber, int altphone, Long parkingnumber, boolean smoker) {
-		Connection conn = DatabaseManager.getConnection();
-		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO guest (sex,comments,specialneeds,year,address,nationality,phonenumber,alternatephone,dob,parkingnumber,rentalstatus,smoker,name,password) VALUES(??????????????)");
-			ps.setString(0, attributes.get("sex"));
-			ps.setString(1, attributes.get("comments"));
-			ps.setString(2, attributes.get("specialneeds"));
-			ps.setInt(3, year);
-			ps.setString(4, attributes.get("address"));
-			ps.setString(5, attributes.get("nationality"));
-			ps.setInt(6, phonenumber);
-			ps.setInt(7, altphone);
-			ps.setString(8, attributes.get("dob"));
-			ps.setLong(9, parkingnumber);
-			ps.setString(10, attributes.get("rentalstatus"));
-			ps.setBoolean(11, smoker);
-			ps.setString(12, attributes.get("name"));
-			ps.setString(13, attributes.get("password"));
-			ps.executeUpdate();
-		} catch(SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
-		}
-	}
-	
+
 	/**
 	 * Insert new record into staff with the given values
 	 * @param attributes
 	 * @return The staffnumber of the new record
 	 */
-	public int newStaff(Map<String, String> attributes) {
+	public int newStaff(StaffBean sb) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO staff (location,staffname,address,dob,sex,position,department,city,state,zip) VALUES(?????????)", Statement.RETURN_GENERATED_KEYS);
-			ps.setString(0, attributes.get("location"));
-			ps.setString(1, attributes.get("staffname"));
-			ps.setString(2, attributes.get("address"));
-			ps.setString(3, attributes.get("dob"));
-			ps.setString(4, attributes.get("sex"));
-			ps.setString(5, attributes.get("position"));
-			ps.setString(6, attributes.get("department"));
-			ps.setString(7, attributes.get("city"));
-			ps.setString(8, attributes.get("state"));
-			ps.setString(9, attributes.get("zip"));
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO staff (firstname,lastname,department,position,dob,address,city,state,zip,country,sex) VALUES(?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+						
+			ps.setString(0, sb.firstname);
+			ps.setString(1, sb.lastname);
+			ps.setString(2, sb.department);
+			ps.setString(3, sb.position);
+			ps.setString(4, sb.dob);
+			ps.setString(5, sb.address);
+			ps.setString(6, sb.city);
+			ps.setString(7, sb.state);
+			ps.setString(8, sb.zip);
+			ps.setString(9, sb.country);
+			ps.setString(10, sb.sex);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs != null && rs.next()) {
@@ -165,12 +160,25 @@ public class Dao {
 		return -1;
 	}
 	
-	
-	public ResultSet getAvailableResidence() {
+	/**
+	 * Gets available Residence Hall rooms
+	 * @return A results set containing hall name and room number records
+	 */
+	public List<AvailableHousingBean> getAvailableResidence() {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT placenumber,residencename FROM residencehall WHERE NOT EXISTS (SELECT placenumber FROM rents) GOUP BY residencename");
-			return ps.executeQuery();
+			PreparedStatement ps = conn.prepareStatement("SELECT HD.name,HR.roomnum FROM hallrooms HR, housingdetails HD WHERE HR.housingDetailsLocation=HD.housingDetailsLocation AND HR.snumber=-1");
+			ResultSet rs =  ps.executeQuery();
+			ArrayList<AvailableHousingBean> ret = new ArrayList<AvailableHousingBean>();
+			AvailableHousingBean ahb;
+			if(rs != null) {
+				while(rs.next()) {
+					ahb = new AvailableHousingBean();
+					ahb.name = rs.getString("name");
+					ahb.roomnum = rs.getLong("roomnum");
+				}
+			}
+			return ret;
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -184,11 +192,25 @@ public class Dao {
 		return null;
 	}
 	
-	public ResultSet getAvailableApartment() {
+	/**
+	 * Gets available Residence Hall rooms
+	 * @return A results set containing apartment name and room number records
+	 */
+	public List<AvailableHousingBean> getAvailableApartment() {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT placenumber FROM studentflat WHERE NOT EXISTS (SELECT placenumber FROM rents)");
-			return ps.executeQuery();
+			PreparedStatement ps = conn.prepareStatement("SELECT HD.name,AR.roomnum FROM appartments A, appartmentrooms AR, housingdetails HD WHERE A.aptnum=AR.aptnum AND AR.housingDetailsLocation=HD.housingDetailsLocation AND HR.snumber=-1");
+			ResultSet rs =  ps.executeQuery();
+			ArrayList<AvailableHousingBean> ret = new ArrayList<AvailableHousingBean>();
+			AvailableHousingBean ahb;
+			if(rs != null) {
+				while(rs.next()) {
+					ahb = new AvailableHousingBean();
+					ahb.name = rs.getString("name");
+					ahb.roomnum = rs.getLong("roomnum");
+				}
+			}
+			return ret;
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -207,12 +229,12 @@ public class Dao {
 	 * @param uid The id of the user signed in
 	 * @return
 	 */
-	public ResultSet viewInvoices(long uid) {
+	public List<InvoiceBean> viewInvoices(long snumber) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM invoices WHERE snumber=?");
-			ps.setLong(0, uid);
-			return ps.executeQuery();
+			ps.setLong(0, snumber);
+	//		return ps.executeQuery();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -329,7 +351,7 @@ public class Dao {
 	public void addLineItem(long invoicenumber, int fee, String itemtype) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO lineitems fee,itemtype,invoicenumber VALUES(???)");
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO lineitems fee,itemtype,invoicenumber VALUES(?,?,?)");
 			ps.setInt(0, fee);
 			ps.setString(1, itemtype);
 			ps.setLong(2, invoicenumber);
@@ -417,7 +439,7 @@ public class Dao {
 			if(rs.getLong("parkingnumber") == 0) {
 				return -1;
 			}
-			ps = conn.prepareStatement("INSERT INTO ParkingSpots (lotnumber,classification) VALUES(??)");
+			ps = conn.prepareStatement("INSERT INTO ParkingSpots (lotnumber,classification) VALUES(?,?)");
 			ps.setLong(0, parkingnumber);
 			ps.setString(1, classification);
 			ps.executeUpdate();
@@ -462,5 +484,26 @@ public class Dao {
 			}
 		}
 		return null;
+	}
+	
+	public void AddHousingDetail() {
+		Connection conn = DatabaseManager.getConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("SELECT parkingnumber FROM parking WHERE lotsavailable>0");
+			ResultSet rs =  ps.executeQuery();
+			ArrayList<Long> ret = new ArrayList<Long>();
+			while(rs.next()) {
+				ret.add(rs.getLong("parkingnumber"));
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch(SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}
 	}
 }

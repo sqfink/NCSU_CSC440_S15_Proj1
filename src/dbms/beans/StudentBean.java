@@ -19,8 +19,8 @@ public class StudentBean extends Bean {
 	@Column(columnName="lastname")
 	public String lastname;
 
-	@Column(columnName="rentalstatus")
-	public String rentalstatus;
+	@Column(columnName="leasenumber")
+	public Long leasenumber;
 	
 	@Column(columnName="parkingnumber")
 	public Long parkingnumber;
@@ -45,6 +45,9 @@ public class StudentBean extends Bean {
 
 	@Column(columnName="state")
 	public String state;
+	
+	@Column(columnName="country")
+	public String country;
 
 	@Column(columnName="zip")
 	public String zip;
