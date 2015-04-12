@@ -10,9 +10,8 @@ CREATE TABLE student(
 	snumber INT NOT NULL UNIQUE,
 	firstname VARCHAR(40),
 	lastname VARCHAR(40),
-	rentalstatus VARCHAR(10),
-	leasenumber INT NOT NULL,
-	parkingnumber INT NOT NULL,
+	leasenumber INT,
+	parkingnumber INT,
 	dob VARCHAR(10),
 	phone VARCHAR(12),
 	alternatephone VARCHAR(12),
@@ -58,27 +57,19 @@ CREATE TABLE course(
 ); 
 
 CREATE TABLE lease(
-	leasenumber INT(10) primary key,
-	placenumber INT(10) NOT NULL,
+	leasenumber INT(10) PRIMARY KEY,
+	hallLocation INT(10),
+	aptLocation INT(10),
 	snumber INT NOT NULL,
-	sname VARCHAR(40),
-	roomnumber INT NOT NULL,
-	paymentduration INT,
-	earlyterminationfee INT,
-	securitydeposits INT,
+	paymentperiod VARCHAR(16),
 	rentalperiod VARCHAR(10),
-	FOREIGN KEY (placenumber) REFERENCES places(placenumber)
-);
-
-CREATE TABLE studentflat(
-	appnumber INT(10) unsigned auto_increment primary key,
-	placenumber INT(10),
-	bathrooms INT,
-	flattype VARCHAR(20),
-	private VARCHAR(1),
-	bedrooms INT,
-	rate INT,
-	roomnumber INT
+	startdate DATE NOT NULL,
+	ended INT NOT NULL DEFAULT '0',
+	active INT NOT NULL DEFAULT '0',
+	pending INT NOT NULL DEFAULT '1',
+	FOREIGN KEY (snumber) REFERENCES student(snumber),
+	FOREIGN KEY (hallLocation) REFERENCES hallrooms(hallLocation),
+	FOREIGN KEY (aptLocation) REFERENCES aptrooms(aptLocation)
 );
 
 CREATE TABLE parking(
@@ -88,8 +79,17 @@ CREATE TABLE parking(
 	FOREIGN KEY (snumber) REFERENCES student(snumber)
 );
 
-CREATE TABLE housing(
-	housingLocation INT(10) NOT NULL PRIMARY KEY,
+CREATE TABLE hallrooms(
+	hallLocation INT PRIMARY KEY,
+	housingDetailsLocation INT(10) NOT NULL,
+	roomnum INT(10) NOT NULL,
+	snumber INT,
+	FOREIGN KEY (snumber) REFERENCES student(snumber),
+	FOREIGN KEY (housingDetailsLocation) REFERENCES housingdetails(housingDetailsLocation)
+);
+
+CREATE TABLE housingdetails(
+	housingDetailsLocation INT(10) NOT NULL PRIMARY KEY,
 	name VARCHAR(64) NOT NULL,
 	address VARCHAR(100) NOT NULL,
 	city VARCHAR(15) NOT NULL, 
@@ -101,20 +101,23 @@ CREATE TABLE housing(
 	FOREIGN KEY (supervisor) REFERENCES staff(staffnumber)
 );
 
-CREATE TABLE places(
-	placenumber INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	housingLocation INT NOT NULL,
-	snumber INT NOT NULL,
-	FOREIGN KEY (housingLocation) REFERENCES housing(housingLocation),
-	FOREIGN KEY (snumber) REFERENCES student(snumber)
+CREATE TABLE appartmentrooms(
+	aptLocation INT(10) NOT NULL PRIMARY KEY,
+	aptnum INT NOT NULL,
+	roomnum INT NOT NULL,
+	snumber INT,
+	FOREIGN KEY (snumber) REFERENCES student(snumber),
+	FOREIGN KEY (aptnum) REFERENCES appartments(aptnum)
 );
 
 CREATE TABLE appartments(
-	housingLocation INT(10) NOT NULL,
 	rent REAL NOT NULL,
 	deposit REAL NOT NULL,
 	apttype VARCHAR(64) NOT NULL,
-	FOREIGN KEY (housingLocation) REFERENCES housing(housingLocation)
+	housingDetailsLocation INT NOT NULL,
+	aptnum INT NOT NULL PRIMARY KEY,
+	family INT NOT NULL,
+	FOREIGN KEY (housingDetailsLocation) REFERENCES housingdetails(housingDetailsLocation)
 );
 
 CREATE TABLE parkingclasscosts(
@@ -125,7 +128,7 @@ CREATE TABLE parkingclasscosts(
 CREATE TABLE parkinglotsnear(
 	lotnumber INT(10) NOT NULL,
 	near INT(10) NOT NULL,
-	FOREIGN KEY (near) REFERENCES housing(housingLocation)
+	FOREIGN KEY (near) REFERENCES housingdetails(housingDetailsLocation)
 );
 
 CREATE TABLE parkingspots(
@@ -137,11 +140,14 @@ CREATE TABLE parkingspots(
 );
 
 CREATE TABLE studenthallinspection(
-	staffname VARCHAR(30) NOT NULL,
-	residencename VARCHAR(30) NOT NULL,
+	inspectionID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	staffnumber INT NOT NULL, 
+	leasenumber INT NOT NULL,
 	inspectiondate VARCHAR(10),
 	propertycondition VARCHAR(20),
-	comments VARCHAR(50)
+	comments VARCHAR(50),
+	FOREIGN KEY (staffnumber) REFERENCES staff(staffnumber),
+	FOREIGN KEY (leasenumber) REFERENCES lease(leasenumber)
 );
 
 CREATE TABLE staff(
@@ -181,9 +187,19 @@ CREATE TABLE invoices(
 
 CREATE TABLE lineitems(
 	invoicenumber INT NOT NULL,
-	fee INT NOT NULL,
+	fee REAL NOT NULL,
 	itemtype VARCHAR(40),
 	FOREIGN KEY (invoicenumber) REFERENCES invoices(invoicenumber)
-); 
+);
+
+CREATE TABLE maintnencetickets(
+	ticketnumber INT NOT NULL PRIMARY KEY UNIQUE AUTO_INCREMENT,
+	issue VARCHAR(100) NOT NULL,
+	createdon VARCHAR(10) NOT NULL,
+	status VARCHAR(32) NOT NULL,
+	createdby INT NOT NULL,
+	comments VARCHAR(256) NOT NULL,
+	FOREIGN KEY (createdby) REFERENCES lease(leasenumber)
+);
 
 SET foreign_key_checks = 1;

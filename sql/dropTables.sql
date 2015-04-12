@@ -36,8 +36,18 @@ DROP TABLE IF EXISTS parkinglotsnear;
 
 DROP TABLE IF EXISTS places;
 
+DROP TABLE IF EXISTS parkingclasscosts;
+
+DROP TABLE IF EXISTS housingdetails;
+
 DROP TABLE IF EXISTS appartments;
 
-DROP TABLE IF EXISTS parkingclasscosts;
+DROP TABLE IF EXISTS appartmentlocations;
+
+DROP TABLE IF EXISTS hallrooms;
+
+DROP TABLE IF EXISTS appartmentrooms;
+
+DROP TABLE IF EXISTS maintnencetickets;
 
 SET foreign_key_checks = 1;
