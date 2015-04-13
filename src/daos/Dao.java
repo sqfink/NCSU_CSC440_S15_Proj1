@@ -307,6 +307,31 @@ public class Dao {
 		return -1;
 	}
 	
+	/**
+	 * Gets a list of current invoices
+	 * @param invoicenumber
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<InvoiceBean> viewCurrentInvoicesBySnumber(Long snumber) throws SQLException {
+		String query = "SELECT * FROM invoices WHERE paiddate='null' AND snumber=" + snumber + ";";
+		List<InvoiceBean> ib = DatabaseManager.executeBeanQuery(query, InvoiceBean.class);
+		return ib;
+	}
+	
+	/**
+	 * Gets a list of former invoices
+	 * @param invoicenumber
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<InvoiceBean> viewFormerInvoicesBySnumber(Long snumber) throws SQLException {
+		String query = "SELECT * FROM invoices WHERE NOT paiddate='null' AND snumber=" + snumber + ";";
+		List<InvoiceBean> ib = DatabaseManager.executeBeanQuery(query, InvoiceBean.class);
+		return ib;
+	}
+	
+	
 	public List<InvoiceBean> getInvoice(Long invoicenumber) throws SQLException {
 		String query = "SELECT * FROM invoices WHERE invoicenumber=" + invoicenumber + ";";
 		List<InvoiceBean> ib = DatabaseManager.executeBeanQuery(query, InvoiceBean.class);
@@ -438,24 +463,35 @@ public class Dao {
 	 * @param uid
 	 * @return
 	 */
-	public ResultSet viewLeases(long uid) {
-		Connection conn = DatabaseManager.getConnection();
-		try {
-			PreparedStatement ps = conn.prepareStatement("SELECT FROM lease WHERE snumber=?");
-			ps.setLong(0, uid);
-			return ps.executeQuery();
-		} catch(SQLException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
-		}
-		return null;
+	public List<LeaseBean> viewALLeasesBySnumber(Long snumber) throws SQLException {
+		String query = "SELECT * FROM lease WHERE snumber=" + snumber + ";";
+		List<LeaseBean> ret = DatabaseManager.executeBeanQuery(query, LeaseBean.class);
+		return ret;
 	}
+	
+	/**
+	 * Get the user's current Lease
+	 * @param uid
+	 * @return
+	 */
+	public List<LeaseBean> viewCurrentLeaseBySnumber(Long snumber) throws SQLException {
+		String query = "SELECT * FROM lease WHERE active=1 AND snumber=" + snumber + ";";
+		List<LeaseBean> ret = DatabaseManager.executeBeanQuery(query, LeaseBean.class);
+		return ret;
+	}
+	
+	/**
+	 * Get the user's former Leases
+	 * @param uid
+	 * @return
+	 */
+	public List<LeaseBean> viewFormerLeasesBySnumber(Long snumber) throws SQLException {
+		String query = "SELECT * FROM lease WHERE ended=1 AND snumber=" + snumber + ";";
+		List<LeaseBean> ret = DatabaseManager.executeBeanQuery(query, LeaseBean.class);
+		return ret;
+	}
+	
+	
 	
 	/**
 	 * Gets a set of parking lot numbers that are nearby to a specified place of residence
