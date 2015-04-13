@@ -619,6 +619,8 @@ public class Dao {
 			while(rs.next()) {
 				ret.add(rs.getLong("parkingnumber"));
 			}
+			rs.close();
+			ps.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -960,5 +962,58 @@ public class Dao {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void addLeaseRequest(LeaseRequestBean lrb) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("INSERT INTO leaserequest (snumber, reqloc1, reqloc2, reqloc3, staffnumber, leasenumber) VALUES(?,?,?,?,?,?)");
+
+			ps.setLong(1, lrb.snumber);
+			ps.setLong(2, lrb.reqloc1);
+			ps.setLong(3, lrb.reqloc2);
+			ps.setLong(4, lrb.reqloc3);
+			ps.setLong(5, lrb.staffnumber);
+			ps.setLong(6, lrb.leasenumber);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void addLeaseTerminationRequest(LeaseTerminationRequestBean ltrb) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("INSERT INTO leaseterminaterequest (leasenumber, status, reason, enddate, staffnumber) VALUES(?,?,?,?,?)");
+
+			ps.setLong(1, ltrb.leasenumber);
+			ps.setString(2, ltrb.status);
+			ps.setString(3, ltrb.reason);
+			ps.setDate(4, ltrb.enddate);
+			ps.setLong(5, ltrb.staffnumber);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}	
 	}
 }
