@@ -568,4 +568,309 @@ public class Dao {
 			}
 		}
 	}
+	
+	/**
+	 * Returns the available apartments
+	 * 
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<ApartmentBean> getAllAvailableApartments() throws SQLException {
+			String getAllAvailabelApartmentsQuery = "SELECT * FROM appartments" + ";";
+			List<ApartmentBean> availableApartments = DatabaseManager.executeBeanQuery(getAllAvailabelApartmentsQuery, ApartmentBean.class);
+			return availableApartments;
+	}
+
+	/**
+	 * Adds to the appartment table
+	 * 
+	 * @param rent
+	 * @param deposit
+	 * @param apttype
+	 * @param housingDetailsLocation
+	 * @param aptnum
+	 * @param family
+	 */
+	public void addAppartments(long rent, long deposit, String apttype,
+			int housingDetailsLocation, int aptnum, int family) {
+		Connection conn = DatabaseManager.getConnection();
+		try {
+			PreparedStatement ps = conn
+					.prepareStatement("INSERT INTO appartments (rent, deposit,apttype,housingDetailsLocation,aptnum,family) VALUES(?,?,?,?,?,?)");
+			ps.setFloat(1, rent);
+			ps.setFloat(2, deposit);
+			ps.setString(3, apttype);
+			ps.setInt(4, housingDetailsLocation);
+			ps.setInt(5, aptnum);
+			ps.setInt(6, family);
+			ps.executeUpdate();
+			// TODO add payments to invoices
+			/*
+			 * ps =
+			 * conn.prepareStatement("UPDATE invoices SET paymentdue=paymentdue+?"
+			 * ); ps.setInt(0, fee); ps.executeUpdate();
+			 */
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}
+	}
+
+	// TODO Might need to change the return type
+	/**
+	 * Get the cost for the specified parking classification
+	 * 
+	 * @param classification
+	 * @return
+	 */
+	public float getParkingClassCosts(String classification) {
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn
+					.prepareStatement("SELECT cost FROM parkingclasscosts WHERE classification = ?");
+			ps.setString(1, classification);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				float cost = rs.getFloat("cost");
+				rs.close();
+				ps.close();
+				return cost;
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * Adds the parkingcost
+	 * 
+	 * @param classification
+	 * @param cost
+	 */
+	public void addParkingClassCosts(String classification, float cost) {
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("INSERT INTO parkingclasscosts (classification, cost) VALUES(?,?)");
+			ps.setString(1, classification);
+			ps.setFloat(2, cost);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public List<String> getParkingLotsNear(int nearLotNumber) {
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("SELECT lotnumber FROM parkinglotsnear WHERE near = ?");
+			ps.setInt(1, nearLotNumber);
+			ResultSet rs = ps.executeQuery();
+			List<String> lotsNumber = new ArrayList<String>();
+			if (rs.next()) {
+				lotsNumber.add(rs.getString("lotnumber"));
+				rs.close();
+				ps.close();
+				return lotsNumber;
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Adds the parkingcost
+	 * 
+	 * @param classification
+	 * @param cost
+	 */
+	public void addParkingLotsNear(Long lotNumber, Long near) {
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("INSERT INTO parkinglotsnear (lotnumber, near) VALUES(?,?)");
+			ps.setLong(1, lotNumber);
+			ps.setLong(2, near);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public List<Long> getParkingSpotsForStudent(int snumber) {
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("SELECT spotnumber FROM parkingspots WHERE snumber = ?");
+			ps.setInt(1, snumber);
+			ResultSet rs = ps.executeQuery();
+			List<Long> lotsNumber = new ArrayList<Long>();
+			if (rs.next()) {
+				lotsNumber.add(rs.getLong("lotnumber"));
+				rs.close();
+				ps.close();
+				return lotsNumber;
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	public List<ParkingSpotsBean> getAllParkingSpots() throws SQLException {
+		String getAllParkingSpotsQuery = "SELECT * FROM parkingspots" + ";";
+		List<ParkingSpotsBean> getAllParkingSpots = DatabaseManager.executeBeanQuery(getAllParkingSpotsQuery, ParkingSpotsBean.class);
+		return getAllParkingSpots;
+			
+	}
+
+	/**
+	 * Adds the parkingcost
+	 * 
+	 * @param classification
+	 * @param cost
+	 */
+	public void addParkingSpot(Long lotNumber, String classification, Long sNumber) {
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("INSERT INTO parkingspots (lotnumber, classification, snumber) VALUES(?,?,?)");
+			ps.setLong(1, lotNumber);
+			ps.setString(2, classification);
+			ps.setLong(3, sNumber);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public List<StudentHallInspectionBean> getStudentHallInspection(int inspectionID) throws SQLException {
+		String getStudentHallInspectionQuery = "SELECT * FROM studenthallinspection WHERE inspectionID = " + inspectionID + ";";
+		List<StudentHallInspectionBean> getStudentHallInspection = DatabaseManager.executeBeanQuery(getStudentHallInspectionQuery, StudentHallInspectionBean.class);
+		return getStudentHallInspection;
+			
+	}
+
+	public void addStudentHallInspectionInformation(Long staffNumber, Long leaseNumber, String inspectionDate, String propertyCondition, String comments) {
+
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("INSERT INTO studenthallinspection (staffnumber, leasenumber, inspectiondate, propertycondition, comments) VALUES(?,?,?,?,?)");
+			ps.setLong(1, staffNumber);
+			ps.setLong(2, leaseNumber);
+			ps.setString(3, inspectionDate);
+			ps.setString(4, propertyCondition);
+			ps.setString(5, comments);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public List<StaffBean> getStaffByStaffNumber(long staffNumber) throws SQLException {
+		String getStaffByStaffNumberQuery = "SELECT * FROM staff WHERE staffnumber = " + staffNumber + ";";
+		List<StaffBean> getStaffByStaffNumber = DatabaseManager.executeBeanQuery(getStaffByStaffNumberQuery, StaffBean.class);
+		return getStaffByStaffNumber;
+	}
+	
+	public List<StaffBean> getAllStaff() throws SQLException {
+		String getAllStaffQuery = "SELECT * FROM staff" + ";";
+		List<StaffBean> getAllStaff = DatabaseManager.executeBeanQuery(getAllStaffQuery, StaffBean.class);
+		return getAllStaff;
+	}
+	
+	public List<MaintenanceTicketBean> getMaintenanceTicketsByLeaseNumber(long leaseNumber) throws SQLException {
+		String getMaintenanceTicketsByLeaseNumberQuery = "SELECT * FROM maintnencetickets WHERE createdby = " + leaseNumber + ";";
+		List<MaintenanceTicketBean> getMaintenanceTicketsByLeaseNumber = DatabaseManager.executeBeanQuery(getMaintenanceTicketsByLeaseNumberQuery, MaintenanceTicketBean.class);
+		return getMaintenanceTicketsByLeaseNumber;
+	}
+	
+	public List<MaintenanceTicketBean> getAllMaintenanceTickets() throws SQLException {
+		String getAllMaintenanceQuery = "SELECT * FROM maintnencetickets" + ";";
+		List<MaintenanceTicketBean> getAllMaintenanceTickets = DatabaseManager.executeBeanQuery(getAllMaintenanceQuery, MaintenanceTicketBean.class);
+		return getAllMaintenanceTickets;
+	}
 }
