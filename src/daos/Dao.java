@@ -176,6 +176,7 @@ public class Dao {
 					ahb = new AvailableHousingBean();
 					ahb.name = rs.getString("name");
 					ahb.roomnum = rs.getLong("roomnum");
+					ret.add(ahb);
 				}
 			}
 			return ret;
@@ -208,6 +209,7 @@ public class Dao {
 					ahb = new AvailableHousingBean();
 					ahb.name = rs.getString("name");
 					ahb.roomnum = rs.getLong("roomnum");
+					ret.add(ahb);
 				}
 			}
 			return ret;
@@ -233,8 +235,29 @@ public class Dao {
 		Connection conn = DatabaseManager.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT * FROM invoices WHERE snumber=?");
-			ps.setLong(0, snumber);
-	//		return ps.executeQuery();
+			ResultSet rs =  ps.executeQuery();
+			ArrayList<InvoiceBean> ret = new ArrayList<InvoiceBean>();
+			InvoiceBean ib;
+			if(rs != null) {
+				while(rs.next()) {
+					ib = new InvoiceBean();
+					ib.staffname = rs.getString("staffname");
+					ib.residencename = rs.getString("residencename");
+					ib.roomnumber = rs.getLong("roomnumber");
+					ib.placenumber = rs.getLong("placenumber");
+					ib.leasenumber = rs.getLong("leasenumber");
+					ib.duedate = rs.getString("duedate");
+					ib.paiddate = rs.getString("paiddate");
+					ib.paymentdue = rs.getLong("paymentdue");
+					ib.paymenttype = rs.getString("paymenttype");
+					ib.location = rs.getString("location");
+					ib.department = rs.getString("department");
+					ib.position = rs.getString("position");
+					ib.dob = rs.getString("roomnum");
+					ret.add(ib);
+				}
+			}
+			return ret;
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -248,21 +271,59 @@ public class Dao {
 		return null;
 	}
 	
-	public long generateInvoice(long uid) {
-		return 0;
+	public long addInvoice(InvoiceBean ib) {
+		Connection conn = DatabaseManager.getConnection();
+		try {
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO invoices (snumber,staffname,residencename,roomnumber,placenumber,leasenumber,duedate,paiddate,paymentdue,paymenttype,location,department,position,dob) Values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			ps.setLong(0, ib.snumber);
+			ps.setString(1, ib.staffname);
+			ps.setString(2, ib.residencename);
+			ps.setLong(3, ib.roomnumber);
+			ps.setLong(4, ib.placenumber);
+			ps.setLong(5, ib.leasenumber);
+			ps.setString(6, ib.duedate);
+			ps.setString(7, ib.paiddate);
+			ps.setLong(8, ib.paymentdue);
+			ps.setString(9, ib.paymenttype);
+			ps.setString(10, ib.location);
+			ps.setString(11, ib.department);
+			ps.setString(12, ib.position);
+			ps.setString(13, ib.dob);
+			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+			if(rs != null && rs.next()) {
+				return rs.getLong(1);
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch(SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}
+		return -1;
+	}
+	
+	public List<InvoiceBean> getInvoice(Long invoicenumber) throws SQLException {
+		String query = "SELECT * FROM invoices WHERE invoicenumber=" + invoicenumber + ";";
+		List<InvoiceBean> ib = DatabaseManager.executeBeanQuery(query, InvoiceBean.class);
+		return ib;
 	}
 	
 	/**
 	 * Creates a new invoice for a given user. The invoice will include the monthly rent and parking fee.
 	 * @param uid
-	 */
-	public void generateMonthlyInvoice(long uid) {
-		long invoiceID = generateInvoice(uid);
+	 
+	public void generateMonthlyInvoice(long snumber) {
+		long invoiceID = generateInvoice(snumber);
 		Connection conn = DatabaseManager.getConnection();
 		try {
 			// Get the users placenumber from Lease
 			PreparedStatement ps = conn.prepareStatement("SELECT placenumber FROM lease WHERE snumber=?");
-			ps.setLong(0, uid);
+			ps.setLong(0, snumber);
 			ResultSet rs =  ps.executeQuery();
 			long pnum = 0;
 			if(rs != null && rs.next()) {
@@ -288,13 +349,13 @@ public class Dao {
 			
 			// Look in the Student table for the uid
 			ps = conn.prepareStatement("SELECT parkingnumber FROM student WHERE snumber=?");
-			ps.setLong(0, uid);
+			ps.setLong(0, snumber);
 			rs = ps.executeQuery();
 			// If the result is empty
 			if(rs == null || !rs.next()) {
 				// Then look in the Guest table
 				ps = conn.prepareStatement("SELECT parkingnumber FROM guest WHERE snumber=?");
-				ps.setLong(0, uid);
+				ps.setLong(0, snumber);
 				rs = ps.executeQuery();
 				// Advance the ResultSet to the first column so that both paths of this if will have rs pointing to the first record
 				if(rs  != null) {
@@ -318,6 +379,7 @@ public class Dao {
 			}
 		}
 	}
+	*/
 	
 	/**
 	 * Get the line items associated with an invoice

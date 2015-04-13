@@ -11,10 +11,10 @@ public class InvoiceBean extends Bean {
 	public Long snumber;
 
 	@Column(columnName="staffname")
-	public Long staffname;
+	public String staffname;
 	
 	@Column(columnName="residencename")
-	public Long residencename;
+	public String residencename;
 	
 	@Column(columnName="invoicenumber")
 	public Long roomnumber;
@@ -26,27 +26,27 @@ public class InvoiceBean extends Bean {
 	public Long leasenumber;
 	
 	@Column(columnName="duedate")
-	public Long duedate;
+	public String duedate;
 	
 	@Column(columnName="paiddate")
-	public Long paiddate;
+	public String paiddate;
 	
 	@Column(columnName="paymentdue")
 	public Long paymentdue;
 	
 	@Column(columnName="paymenttype")
-	public Long paymenttype;
+	public String paymenttype;
 	
 	@Column(columnName="location")
-	public Long location;
+	public String location;
 	
 	@Column(columnName="department")
-	public Long department;
+	public String department;
 	
 	@Column(columnName="position")
-	public Long position;
+	public String position;
 	
 	@Column(columnName="dob")
-	public Long dob;
+	public String dob;
 	
 }
