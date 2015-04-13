@@ -485,6 +485,32 @@ public class Dao {
 		return null;
 	}
 	
+	public List<ParkingSpaceBean> getAvailibleParking(long housingLocation, boolean remoteAllowed) {
+		String sql;
+		if (remoteAllowed) {
+			sql = "SELECT * FROM `parkingspots` WHERE `lotnumber` IN (" +
+				  "	SELECT `lotnumber` FROM `parkinglotsnear` WHERE `near` = " + housingLocation +
+				  ") AND `snumber` IS NULL;";
+		} else {
+			sql = "SELECT * FROM " + 
+			"(SELECT * FROM `parkingspots` WHERE `lotnumber` IN  (" + 
+			"	SELECT `lotnumber` FROM `parkinglots` WHERE `lotnumber` NOT IN (" +
+			"		SELECT `lotnumber` FROM `parkinglotsnear`" +
+			"	)" + 
+			") AND `snumber` IS NULL) AS A" + 
+			"UNION" +
+			"(SELECT * FROM `parkingspots` WHERE `lotnumber` IN (" +
+			"	SELECT `lotnumber` FROM `parkinglotsnear` WHERE `near` = " + housingLocation +
+			") AND `snumber` IS NULL);";
+		}
+
+		try {
+			return DatabaseManager.executeBeanQuery(sql, ParkingSpaceBean.class);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	/**
 	 * Gets an available parking spot in a specified lot. -1 if there are no available lots
