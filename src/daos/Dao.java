@@ -78,7 +78,7 @@ public class Dao {
 			ps.setString(10, sb.state);
 			ps.setString(11, sb.country);
 			ps.setString(12, sb.zip);
-			String year = sb.year.toLowerCase();
+			String year = sb.year.toString();
 			if(year.equals("freshman")) {
 				ps.setInt(13, 0);
 			} else if(year.equals("sophomore")) {
