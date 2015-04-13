@@ -34,7 +34,7 @@ CREATE TABLE student(
 ); 
 
 CREATE TABLE family(
-	snumber INT NOT NULL PRIMARY KEY,
+	snumber INT NOT NULL,
 	name VARCHAR(80) UNIQUE NOT NULL,
 	dob DATE NOT NULL,
 	FOREIGN KEY (snumber) REFERENCES student(snumber)
@@ -176,15 +176,12 @@ CREATE TABLE invoices(
 	invoicenumber INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	snumber INT NOT NULL,
 	staffnumber INT NOT NULL,
-	residencename VARCHAR(50),
-	roomnumber INT,
-	placenumber INT,
-	leasenumber INT,
-	duedate VARCHAR(10),
-	paiddate VARCHAR(10),
-	paymentdue INT,
+	leasenumber INT NOT NULL,
+	duedate DATE NOT NULL,
+	paiddate DATE,
+	paymentdue INT(1) NOT NULL,
 	paymenttype VARCHAR(10),
-	dob DATE NOT NULL,
+	FOREIGN KEY (leasenumber) REFERENCES lease(leasenumber),
 	FOREIGN KEY (snumber) REFERENCES student(snumber),
 	FOREIGN KEY (staffnumber) REFERENCES staff(staffnumber)
 ); 
@@ -199,11 +196,11 @@ CREATE TABLE lineitems(
 CREATE TABLE maintnencetickets(
 	ticketnumber INT NOT NULL PRIMARY KEY UNIQUE AUTO_INCREMENT,
 	issue VARCHAR(100) NOT NULL,
-	createdon VARCHAR(10) NOT NULL,
+	createdon DATE NOT NULL,
 	status VARCHAR(32) NOT NULL,
 	createdby INT NOT NULL,
-	comments VARCHAR(256) NOT NULL,
-	FOREIGN KEY (createdby) REFERENCES lease(leasenumber)
+	comments VARCHAR(512) NOT NULL,
+	FOREIGN KEY (createdby) REFERENCES student(snumber)
 );
 
 CREATE TABLE parkingrequests(
