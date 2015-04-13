@@ -84,6 +84,7 @@ CREATE TABLE hallrooms(
 	housingDetailsLocation INT(10) NOT NULL,
 	roomnum INT(10) NOT NULL,
 	snumber INT,
+	restricted INT(1),
 	FOREIGN KEY (snumber) REFERENCES student(snumber),
 	FOREIGN KEY (housingDetailsLocation) REFERENCES housingdetails(housingDetailsLocation)
 );
@@ -117,6 +118,8 @@ CREATE TABLE appartments(
 	housingDetailsLocation INT NOT NULL,
 	aptnum INT NOT NULL PRIMARY KEY,
 	family INT NOT NULL,
+	beds INT(4) NOT NULL,
+	baths INT(4) NOT NULL,
 	FOREIGN KEY (housingDetailsLocation) REFERENCES housingdetails(housingDetailsLocation)
 );
 
