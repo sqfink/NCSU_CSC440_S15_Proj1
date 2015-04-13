@@ -109,14 +109,13 @@ CREATE TABLE appartmentrooms(
 );
 
 CREATE TABLE appartments(
+	aptnum INT NOT NULL PRIMARY KEY,
 	rent REAL NOT NULL,
 	deposit REAL NOT NULL,
 	apttype VARCHAR(64) NOT NULL,
 	housingDetailsLocation INT NOT NULL,
-	aptnum INT NOT NULL PRIMARY KEY,
 	family INT NOT NULL,
-	private INT(1) NOT NULL,
-	baths INT(4) NOT NULL,
+	private INT(1) NOT NULL DEFAULT '0',
 	FOREIGN KEY (housingDetailsLocation) REFERENCES housingdetails(housingDetailsLocation)
 );
 
