@@ -1,6 +1,49 @@
 
+INSERT INTO `courses` (`cnumber`, `title`) VALUES ('1', 'Defence Against Dark Arts');
+INSERT INTO `courses` (`cnumber`, `title`) VALUES ('2', 'Muggle Studies');
+INSERT INTO `courses` (`cnumber`, `title`) VALUES ('3', 'Care of Magical Creatures');
+INSERT INTO `courses` (`cnumber`, `title`) VALUES ('4', 'Potions');
+INSERT INTO `courses` (`cnumber`, `title`) VALUES ('5', 'Coaching Triwizard Cup');
+INSERT INTO `courses` (`cnumber`, `title`) VALUES ('6', 'Guest Lecturer Triwizard Cup');
+INSERT INTO `courses` (`cnumber`, `title`) VALUES ('7', 'Artificial Iintelligence');
+
 INSERT INTO `users` (`id`, `password`) VALUES ('100540001', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
-INSERT INTO `student` (`snumber`, `firstname`, `lastname`, `parkingnumber`, `dob`, `phone`, `alternatephone`, `nationality`, `address`, `city`, `state`, `zip`, `country`, `year`, `specialneeds`, `comments`, `sex`, `smoker`, `guest`) VALUES ('100540001', 'Harry', 'Potter', '003', '1991-07-21', '9189327078', '9176326078', 'British', '31 B, Privet Drive', 'London', '', 'W12 7TS', 'England', '1', 'None', NULL, 'M', 'N', '0');
+INSERT INTO `users` (`id`, `password`) VALUES ('100540002', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
+INSERT INTO `users` (`id`, `password`) VALUES ('100540003', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
+INSERT INTO `users` (`id`, `password`) VALUES ('100540004', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
+INSERT INTO `users` (`id`, `password`) VALUES ('100540005', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
+INSERT INTO `users` (`id`, `password`) VALUES ('100540006', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
+INSERT INTO `users` (`id`, `password`) VALUES ('100540007', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
+INSERT INTO `users` (`id`, `password`) VALUES ('100540008', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
+INSERT INTO `users` (`id`, `password`) VALUES ('100540009', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
+
+INSERT INTO `student` (`snumber`, `firstname`, `lastname`, `dob`, `phone`, `alternatephone`, `nationality`, `address`, `city`, `state`, `zip`, `country`, `year`, `sex`, `smoker`, `guest`, `course`) VALUES ('100540001', 'Harry', 'Potter', '1991-07-21', '9189327078', '9176326078', 'British', '31 B, Privet Drive', 'London', '', '27605', 'England', '1', 'M', 'N', '0', '1');
+INSERT INTO `student` (`snumber`, `firstname`, `lastname`, `dob`, `phone`, `nationality`, `address`, `city`, `state`, `country`, `zip`, `year`, `specialneeds`, `sex`, `smoker`, `guest`, `course`) VALUES ('100540002', 'Draco', 'Malfoy', '1990-06-05', '9183270672', 'American', '31 B, Malfoy Drive', 'New York', 'NY', 'USA', '27506', '0', NULL, 'M', 'Y', '0', '2');
+INSERT INTO `student` (`snumber`, `firstname`, `lastname`, `dob`, `phone`, `nationality`, `address`, `city`, `country`, `zip`, `year`, `specialneeds`, `sex`, `smoker`, `guest`, `course`) VALUES ('100540003', 'Ron', 'Weasley', '1986-03-01', '9189567067', 'Italian', '31 B, Weasley Road', 'Rome', 'Italy', '27456', '5', NULL, 'M', 'N', '0', '3');
+INSERT INTO `student` (`snumber`, `firstname`, `lastname`, `dob`, `phone`, `nationality`, `address`, `city`, `country`, `zip`, `year`, `sex`, `smoker`, `guest`, `course`) VALUES ('100540004', 'Hermione', 'Granger', '1986-11-19', '9185685674', 'Scottish', '32 A, Granger Road', 'Edinburg', 'Scotland', '25556', '5', 'F', 'N', '0', '2');
+INSERT INTO `student` (`snumber`, `firstname`, `lastname`, `dob`, `phone`, `alternatephone`, `nationality`, `address`, `city`, `country`, `zip`, `year`, `sex`, `smoker`, `guest`, `course`) VALUES ('100540005', 'Fred', 'Weasley', '1982-10-20', '9133368567', '9133368511', 'Italian', '31 B, Weasley Road', 'Rome', 'Italy', '27456', '4', 'M', 'N', '0', '2');
+INSERT INTO `student` (`snumber`, `firstname`, `lastname`, `dob`, `phone`, `nationality`, `address`, `city`, `country`, `zip`, `year`, `sex`, `smoker`, `guest`, `course`) VALUES ('100540006', 'George', 'Weasley', '1982-10-20', '9133368568', 'Italian', '31 B, Weasley Road', 'Rome', 'Italy', '27456', '4', 'M', 'N', '0', '2');
+INSERT INTO `student` (`snumber`, `firstname`, `lastname`, `dob`, `phone`, `nationality`, `address`, `city`, `country`, `zip`, `year`, `specialneeds`, `sex`, `smoker`, `guest`, `course`) VALUES ('100540007', 'Bill', 'Weasley', '1982-11-29', '9198568567', 'Belgian', '32 A, William Road', 'Brussels', 'Belgium', '2535', '5', 'Difficulty in walking', 'M', 'N', '0', '4');
+INSERT INTO `student` (`snumber`, `firstname`, `lastname`, `dob`, `phone`, `alternatephone`, `nationality`, `address`, `city`, `state`, `country`, `zip`, `year`, `sex`, `smoker`, `guest`, `course`) VALUES ('100540008', 'Vernon', 'Dursley', '1975-11-29', '9198954357', '9198954786', 'American', '32 A, Dursley Road', 'Raleigh', 'NC', 'USA', '27606', '5', 'M', 'Y', '0', '2');
+INSERT INTO `student` (`snumber`, `firstname`, `lastname`, `dob`, `phone`, `alternatephone`, `nationality`, `address`, `city`, `state`, `country`, `zip`, `year`, `sex`, `smoker`, `guest`, `course`) VALUES ('100540009', 'Jim', 'Green', '1975-11-22', '9198944352', '9198955765', 'American', '11 A, Dursley Road', 'Raleigh', 'NC', 'USA', '27606', '5', 'M', 'Y', '0', '7');
+
+INSERT INTO `users` (`id`, `password`) VALUES ('200540001', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
+INSERT INTO `users` (`id`, `password`) VALUES ('200540002', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
+
+INSERT INTO `student` (`snumber`, `firstname`, `lastname`, `dob`, `phone`, `alternatephone`, `nationality`, `address`, `city`, `country`, `zip`, `year`, `sex`, `smoker`, `guest`, `course`) VALUES ('200540001', 'Viktor', 'Krum', '1982-11-29', '9198333567', '9198332233', 'Bulgarian', '32 A, Krum Road', 'Sofia', 'Bulgaria', '2221', '99', 'M', 'Y', '1', '5');
+INSERT INTO `student` (`snumber`, `firstname`, `lastname`, `dob`, `phone`, `nationality`, `address`, `city`, `country`, `zip`, `year`, `sex`, `smoker`, `guest`, `course`) VALUES ('200540002', 'Olympe', 'Maxime', '1970-05-19', '9197773567', 'French', '32 A, Maxime Road', 'Paris', 'France', '2331', '99', 'F', 'Y', '1', '6');
+
+INSERT INTO `nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `country`, `zip`, `phone`) VALUES ('100540001', 'Sirius', 'Black', 'Godfather', '12 Grimmauld Place', 'London', 'England', '27605', '9439560752');
+INSERT INTO `nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `state`, `country`, `zip`, `phone`) VALUES ('100540002', 'Lucius', 'Malfoy', 'Father', '31 B, Malfoy Drive', 'New York', 'NY', 'USA', '27506', '9439560752');
+INSERT INTO `nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `country`, `zip`, `phone`) VALUES ('100540003', 'Aurthur', 'Weasly', 'Father', '31 B, Weasley Road', 'Rome', 'Italy', '27456', '9436660752');
+INSERT INTO `nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `country`, `zip`, `phone`) VALUES ('100540004', 'Mr.', 'Granger', 'Father', '32 A, Granger Road', 'Edinburg', 'Scotland', '25556', '9433360752');
+INSERT INTO `nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `country`, `zip`, `phone`) VALUES ('100540005', 'Aurthur', 'Weasly', 'Father', '31 B, Weasley Road', 'Rome', 'Italy', '27456', '9436660752');
+INSERT INTO `nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `country`, `zip`, `phone`) VALUES ('100540006', 'Aurthur', 'Weasly', 'Father', '31 B, Weasley Road', 'Rome', 'Italy', '27456', '9436660752');
+INSERT INTO `nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `country`, `zip`, `phone`) VALUES ('100540007', 'Aurthur', 'Weasly', 'Father', '31 B, Weasley Road', 'Rome', 'Italy', '27456', '9436660752');
+INSERT INTO `nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `country`, `zip`, `phone`) VALUES ('200540001', 'Igor', 'Karkaroff', 'Headmaster', '32 A, Krum Road', 'Sofia', 'Bulgaria', '2221', '94363530752');
+INSERT INTO `nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `country`, `zip`, `phone`) VALUES ('200540002', 'Bathilda', 'Bagshot', 'Friend', '32 A, Bagshot Road', 'Zurich', 'Switzerland', '35221', '94363595752');
+INSERT INTO `nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `state`, `country`, `zip`, `phone`) VALUES ('100540008', 'Petunia', 'Dursley', 'Wife', '32 A, Dursley Road', 'Raleigh', 'NC', 'USA', '27606', '94363654752');
+INSERT INTO `nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `state`, `country`, `zip`, `phone`) VALUES ('100540009', 'Michael', 'Green', 'Father', '11 A, Dursley Road', 'Raleigh', 'NC', 'USA', '27606', '9197823321');
 
 INSERT INTO `users` (`id`, `password`) VALUES ('2', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
 INSERT INTO `users` (`id`, `password`) VALUES ('3', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
@@ -8,6 +51,7 @@ INSERT INTO `users` (`id`, `password`) VALUES ('4', 'ac67aa3ae9bb7df054d795f0e0b
 INSERT INTO `users` (`id`, `password`) VALUES ('5', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
 INSERT INTO `users` (`id`, `password`) VALUES ('6', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
 INSERT INTO `users` (`id`, `password`) VALUES ('7', 'ac67aa3ae9bb7df054d795f0e0b8054ace35477dc48c1098e92d5a1347ba5560');
+
 INSERT INTO `staff` (`staffnumber`, `firstname`, `lastname`, `department`, `position`, `dob`, `address`, `city`, `state`, `zip`, `country`, `sex`) VALUES ('2', 'Minerva', 'McGonagall', 'UNKNOWN', 'Hall Manager/Supervisor', '1950-08-04', 'McGonagall Road', 'Delhi', '', '011', 'India', 'F');
 INSERT INTO `staff` (`staffnumber`, `firstname`, `lastname`, `department`, `position`, `dob`, `address`, `city`, `state`, `zip`, `country`, `sex`) VALUES ('3', 'Severus', 'Snape', 'UNKNOWN', 'Hall Manager/Supervisor', '1953-10-07', 'Snape Road', 'Lahore', '', '007', 'Pakistan', 'M');
 INSERT INTO `staff` (`staffnumber`, `firstname`, `lastname`, `department`, `position`, `dob`, `address`, `city`, `state`, `zip`, `country`, `sex`) VALUES ('4', 'Filius', 'Flitwick', 'UNKNOWN', 'Hall Manager/Supervisor', '1960-08-06', 'Flitwick Road', 'Sydney', '', '050', 'Australia', 'M');
@@ -15,12 +59,12 @@ INSERT INTO `staff` (`staffnumber`, `firstname`, `lastname`, `department`, `posi
 INSERT INTO `staff` (`staffnumber`, `firstname`, `lastname`, `department`, `position`, `dob`, `address`, `city`, `state`, `zip`, `country`, `sex`) VALUES ('6', 'Lebron', 'James', 'UNKNOWN', 'Hall Manager/Supervisor', '1981-01-01', '1702 Beach Road', 'Miami', 'FL', '33101', 'USA', 'M');
 INSERT INTO `staff` (`staffnumber`, `firstname`, `lastname`, `department`, `position`, `dob`, `address`, `city`, `state`, `zip`, `country`, `sex`) VALUES ('7', 'Albus', 'Dumbledore', 'UNKNOWN', 'Hall Manager/Supervisor', '1945-04-23', 'Dumbledore Road', 'Gandhinagar', '', '382007', 'India', 'M');
 
-INSERT INTO `housingdetails` (`housingDetailsLocation`, `name`, `address`, `city`, `state`, `zip`, `supervisor`, `requiredYear`, `phone`) VALUES ('1', 'Falcon House', '2746 Cates Avenue', 'Raleigh', 'NC', '27607', '6', '0', '919-777-6541');
-INSERT INTO `housingdetails` (`housingDetailsLocation`, `name`, `address`, `city`, `state`, `zip`, `supervisor`, `requiredYear`, `phone`) VALUES ('2', 'Gryffindor Hall', '2751 Cates Avenue, Gryffindor Residence Hall', 'Raleigh', 'NC', '27607', '2', '0', '919-540-0001');
-INSERT INTO `housingdetails` (`housingDetailsLocation`, `name`, `address`, `city`, `state`, `zip`, `supervisor`, `requiredYear`, `phone`) VALUES ('3', 'Slytherin Hall', '210 Dan Allen Drive', 'Raleigh', 'NC', '27695', '3', '5', '919-540-0002');
-INSERT INTO `housingdetails` (`housingDetailsLocation`, `name`, `address`, `city`, `state`, `zip`, `supervisor`, `requiredYear`, `phone`) VALUES ('4', 'Ravenclaw', '315 Gorman Crossings', 'Raleigh', 'NC', '27606', '4', '0', '919-540-0003');
-INSERT INTO `housingdetails` (`housingDetailsLocation`, `name`, `address`, `city`, `state`, `zip`, `supervisor`, `requiredYear`, `phone`) VALUES ('5', 'Hufflepuff', '515 University Commons', 'Raleigh', 'NC', '27606', '5', '0', '919-540-0004');
-INSERT INTO `housingdetails` (`housingDetailsLocation`, `name`, `address`, `city`, `state`, `zip`, `supervisor`, `requiredYear`, `phone`) VALUES ('6', 'Hogwarts', '300 Wade Avenue', 'Raleigh', 'NC', '27606', '7', '0', '919-540-0005');
+INSERT INTO `housingdetails` (`housingDetailsLocation`, `name`, `address`, `city`, `state`, `zip`, `supervisor`, `requiredYear`, `phone`) VALUES ('1', 'Falcon House', '2746 Cates Avenue', 'Raleigh', 'NC', '27607', '6', '1', '9197776541');
+INSERT INTO `housingdetails` (`housingDetailsLocation`, `name`, `address`, `city`, `state`, `zip`, `supervisor`, `requiredYear`, `phone`) VALUES ('2', 'Gryffindor Hall', '2751 Cates Avenue, Gryffindor Residence Hall', 'Raleigh', 'NC', '27607', '2', '0', '9195400001');
+INSERT INTO `housingdetails` (`housingDetailsLocation`, `name`, `address`, `city`, `state`, `zip`, `supervisor`, `requiredYear`, `phone`) VALUES ('3', 'Slytherin Hall', '210 Dan Allen Drive', 'Raleigh', 'NC', '27695', '3', '5', '9195400002');
+INSERT INTO `housingdetails` (`housingDetailsLocation`, `name`, `address`, `city`, `state`, `zip`, `supervisor`, `requiredYear`, `phone`) VALUES ('4', 'Ravenclaw', '315 Gorman Crossings', 'Raleigh', 'NC', '27606', '4', '0', '9195400003');
+INSERT INTO `housingdetails` (`housingDetailsLocation`, `name`, `address`, `city`, `state`, `zip`, `supervisor`, `requiredYear`, `phone`) VALUES ('5', 'Hufflepuff', '515 University Commons', 'Raleigh', 'NC', '27606', '5', '0', '9195400004');
+INSERT INTO `housingdetails` (`housingDetailsLocation`, `name`, `address`, `city`, `state`, `zip`, `supervisor`, `requiredYear`, `phone`) VALUES ('6', 'Hogwarts', '300 Wade Avenue', 'Raleigh', 'NC', '27606', '7', '0', '9195400005');
 
 INSERT INTO `appartments` (`housingDetailsLocation`, `rent`, `deposit`, `apttype`, `aptnum`, `family`) VALUES ('4', '350', '400', '3 Bed, 3 Bath', '101', '0');
 INSERT INTO `appartments` (`housingDetailsLocation`, `rent`, `deposit`, `apttype`, `aptnum`, `family`) VALUES ('4', '350', '400', '4 Bed, 4 Bath', '102', '0');
