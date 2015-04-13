@@ -5,22 +5,22 @@ import dbms.annotations.Column;
 
 public class MaintenanceTicketBean extends Bean {
 	
-	@Column(columnName="rent")
-	public float rent;
-
-	@Column(columnName="deposit")
-	public float deposit;
-
-	@Column(columnName="apttype")
-	public String apttype;
+	@Column(columnName="ticketnumber")
+	public Long ticketnumber;
 	
-	@Column(columnName="housingDetailsLocation")
-	public int housingDetailsLocation;
-
-	@Column(columnName="aptnum")
-	public int aptnum;
-
-	@Column(columnName="family")
-	public int family;
+	@Column(columnName="issue")
+	public String issue;
+	
+	@Column(columnName="createdon")
+	public String createdon;
+	
+	@Column(columnName="status")
+	public String status;
+	
+	@Column(columnName="createdby")
+	public Long createdby;
+	
+	@Column(columnName="comments")
+	public String comments;
 
 }

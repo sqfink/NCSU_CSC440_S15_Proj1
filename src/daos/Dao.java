@@ -24,8 +24,8 @@ public class Dao {
 		Connection conn = DatabaseManager.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT id FROM users WHERE id=? AND password=?");
-			ps.setLong(0, lsb.id);
-			ps.setString(1, lsb.password);
+			ps.setLong(1, lsb.id);
+			ps.setString(2, lsb.password);
 			ResultSet rs = ps.executeQuery();
 			return rs.next();
 		} catch(SQLException e) {
@@ -45,8 +45,8 @@ public class Dao {
 		Connection conn = DatabaseManager.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO users (id,password) VALUES(?,?)");
-			ps.setLong(0, lsb.id);
-			ps.setString(1, lsb.password);
+			ps.setLong(1, lsb.id);
+			ps.setString(2, lsb.password);
 			ps.executeQuery();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -65,42 +65,42 @@ public class Dao {
 		try {
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO student (firstname,lastname,leasenumber,parkingnumber,dob,phone,alternatephone,nationality,address,city,state,country,zip,year,specialneeds,comments,sex,smoker,guest) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
-			ps.setString(0, sb.firstname);
-			ps.setString(1, sb.lastname);
-			ps.setLong(2, sb.leasenumber);
-			ps.setLong(3, sb.parkingnumber);
-			ps.setString(4, sb.dob);
-			ps.setString(5, sb.phone);
-			ps.setString(6, sb.alternatephone);
-			ps.setString(7, sb.nationality);
-			ps.setString(8, sb.address);
-			ps.setString(9, sb.city);
-			ps.setString(10, sb.state);
-			ps.setString(11, sb.country);
-			ps.setString(12, sb.zip);
+			ps.setString(1, sb.firstname);
+			ps.setString(2, sb.lastname);
+			ps.setLong(3, sb.leasenumber);
+			ps.setLong(4, sb.parkingnumber);
+			ps.setString(5, sb.dob);
+			ps.setString(6, sb.phone);
+			ps.setString(7, sb.alternatephone);
+			ps.setString(8, sb.nationality);
+			ps.setString(9, sb.address);
+			ps.setString(10, sb.city);
+			ps.setString(11, sb.state);
+			ps.setString(12, sb.country);
+			ps.setString(13, sb.zip);
 			String year = sb.year.toString();
 			if(year.equals("freshman")) {
-				ps.setInt(13, 0);
+				ps.setInt(14, 0);
 			} else if(year.equals("sophomore")) {
-				ps.setInt(13, 1);
+				ps.setInt(14, 1);
 			} else if(year.equals("junior")) {
-				ps.setInt(13, 2);
+				ps.setInt(14, 2);
 			} else if(year.equals("senior")) {
-				ps.setInt(13, 3);
+				ps.setInt(14, 3);
 			} else if(year.equals("graduate")) {
-				ps.setInt(13, 4);
+				ps.setInt(14, 4);
 			} else {
-				ps.setInt(13,-1);
+				ps.setInt(14,-1);
 			}
 
-			ps.setString(14, sb.specialneeds);
-			ps.setString(15, sb.comments);
-			ps.setString(16, sb.sex);
-			ps.setString(17, sb.smoker);
+			ps.setString(15, sb.specialneeds);
+			ps.setString(16, sb.comments);
+			ps.setString(17, sb.sex);
+			ps.setString(18, sb.smoker);
 			if(sb.guest) {
-				ps.setInt(18, 1);
+				ps.setInt(19, 1);
 			} else {
-				ps.setInt(18, 0);
+				ps.setInt(19, 0);
 			}
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
@@ -131,17 +131,17 @@ public class Dao {
 		try {
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO staff (firstname,lastname,department,position,dob,address,city,state,zip,country,sex) VALUES(?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 						
-			ps.setString(0, sb.firstname);
-			ps.setString(1, sb.lastname);
-			ps.setString(2, sb.department);
-			ps.setString(3, sb.position);
-			ps.setString(4, sb.dob);
-			ps.setString(5, sb.address);
-			ps.setString(6, sb.city);
-			ps.setString(7, sb.state);
-			ps.setString(8, sb.zip);
-			ps.setString(9, sb.country);
-			ps.setString(10, sb.sex);
+			ps.setString(1, sb.firstname);
+			ps.setString(2, sb.lastname);
+			ps.setString(3, sb.department);
+			ps.setString(4, sb.position);
+			ps.setString(5, sb.dob);
+			ps.setString(6, sb.address);
+			ps.setString(7, sb.city);
+			ps.setString(8, sb.state);
+			ps.setString(9, sb.zip);
+			ps.setString(10, sb.country);
+			ps.setString(11, sb.sex);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs != null && rs.next()) {
@@ -275,20 +275,20 @@ public class Dao {
 		Connection conn = DatabaseManager.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO invoices (snumber,staffname,residencename,roomnumber,placenumber,leasenumber,duedate,paiddate,paymentdue,paymenttype,location,department,position,dob) Values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-			ps.setLong(0, ib.snumber);
-			ps.setString(1, ib.staffname);
-			ps.setString(2, ib.residencename);
-			ps.setLong(3, ib.roomnumber);
-			ps.setLong(4, ib.placenumber);
-			ps.setLong(5, ib.leasenumber);
-			ps.setString(6, ib.duedate);
-			ps.setString(7, ib.paiddate);
-			ps.setLong(8, ib.paymentdue);
-			ps.setString(9, ib.paymenttype);
-			ps.setString(10, ib.location);
-			ps.setString(11, ib.department);
-			ps.setString(12, ib.position);
-			ps.setString(13, ib.dob);
+			ps.setLong(1, ib.snumber);
+			ps.setString(2, ib.staffname);
+			ps.setString(3, ib.residencename);
+			ps.setLong(4, ib.roomnumber);
+			ps.setLong(5, ib.placenumber);
+			ps.setLong(6, ib.leasenumber);
+			ps.setString(7, ib.duedate);
+			ps.setString(8, ib.paiddate);
+			ps.setLong(9, ib.paymentdue);
+			ps.setString(10, ib.paymenttype);
+			ps.setString(11, ib.location);
+			ps.setString(12, ib.department);
+			ps.setString(13, ib.position);
+			ps.setString(14, ib.dob);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs != null && rs.next()) {
@@ -414,7 +414,7 @@ public class Dao {
 		Connection conn = DatabaseManager.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT fee,itemtype FROM lineitems WHERE invoicenumber=?");
-			ps.setLong(0, invoicenumber);
+			ps.setLong(1, invoicenumber);
 			return ps.executeQuery();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -439,12 +439,12 @@ public class Dao {
 		Connection conn = DatabaseManager.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO lineitems fee,itemtype,invoicenumber VALUES(?,?,?)");
-			ps.setInt(0, fee);
-			ps.setString(1, itemtype);
-			ps.setLong(2, invoicenumber);
+			ps.setInt(1, fee);
+			ps.setString(2, itemtype);
+			ps.setLong(3, invoicenumber);
 			ps.executeUpdate();
 			ps = conn.prepareStatement("UPDATE invoices SET paymentdue=paymentdue+?");
-			ps.setInt(0, fee);
+			ps.setInt(1, fee);
 			ps.executeUpdate();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -502,7 +502,7 @@ public class Dao {
 		Connection conn = DatabaseManager.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT parkingnumber FROM nearby WHERE pacenumber=?");
-			ps.setLong(0, placenumber);
+			ps.setLong(1, placenumber);
 			ResultSet rs =  ps.executeQuery();
 			ArrayList<Long> ret = new ArrayList<Long>();
 			while(rs.next()) {
@@ -557,15 +557,15 @@ public class Dao {
 		Connection conn = DatabaseManager.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("SELECT lotsavailable FROM parking WHERE parkingnumber=?", Statement.RETURN_GENERATED_KEYS);
-			ps.setLong(0, parkingnumber);
+			ps.setLong(1, parkingnumber);
 			ResultSet rs =  ps.executeQuery();
 			rs.next();
 			if(rs.getLong("parkingnumber") == 0) {
 				return -1;
 			}
 			ps = conn.prepareStatement("INSERT INTO ParkingSpots (lotnumber,classification) VALUES(?,?)");
-			ps.setLong(0, parkingnumber);
-			ps.setString(1, classification);
+			ps.setLong(1, parkingnumber);
+			ps.setString(2, classification);
 			ps.executeUpdate();
 			rs = ps.getGeneratedKeys();
 			if(rs != null && rs.next()) {
@@ -934,5 +934,31 @@ public class Dao {
 		String getAllMaintenanceQuery = "SELECT * FROM maintnencetickets" + ";";
 		List<MaintenanceTicketBean> getAllMaintenanceTickets = DatabaseManager.executeBeanQuery(getAllMaintenanceQuery, MaintenanceTicketBean.class);
 		return getAllMaintenanceTickets;
+	}
+	
+	public void addMaintenanceTicket(MaintenanceTicketBean mtb) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("INSERT INTO maintnencetickets (issue, createdon, status, createdby, comments) VALUES(?,?,?,?,?)");
+			
+			ps.setString(1, mtb.issue);
+			ps.setString(2, mtb.createdon);
+			ps.setString(3, mtb.status);
+			ps.setLong(4, mtb.createdby);
+			ps.setString(5, mtb.comments);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections");
+				e.printStackTrace();
+			}
+		}
 	}
 }
