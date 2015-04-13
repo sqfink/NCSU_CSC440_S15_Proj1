@@ -15,7 +15,7 @@ public class StudentViewLeasesState extends State {
 			int result = d.doCLIPrompt();
 			switch (result) {
 			case 1:
-				return "StudentDisplayCurrentLease";
+				return StudentDisplayCurrentLeaseState.class.getName();
 			case 2:
 				return "StudentDisplayPastLeases";
 			case 3:

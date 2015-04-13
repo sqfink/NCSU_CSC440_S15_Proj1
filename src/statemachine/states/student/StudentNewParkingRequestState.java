@@ -57,7 +57,7 @@ public class StudentNewParkingRequestState extends State {
 				}
 				break;
 			case 3:
-				return "StudentSubmitParkingRequest";
+				return StudentSubmitParkingRequestState.class.getName();
 			case 4:
 				System.out.println("Pending parking request discarded");
 				r.setKV("ParkingRequest", null);

@@ -38,7 +38,7 @@ public class StudentNewLeaseRequestState extends State {
 						b.housingLen = "Full";
 						break;
 					case 2:
-						b.housingLen = "Half";
+						b.housingLen = "Semester";
 						break;
 					case 3:
 						System.out.println("Housing term input canceled");
