@@ -118,7 +118,7 @@ CREATE TABLE appartments(
 	housingDetailsLocation INT NOT NULL,
 	aptnum INT NOT NULL PRIMARY KEY,
 	family INT NOT NULL,
-	beds INT(4) NOT NULL,
+	private INT(1) NOT NULL,
 	baths INT(4) NOT NULL,
 	FOREIGN KEY (housingDetailsLocation) REFERENCES housingdetails(housingDetailsLocation)
 );
