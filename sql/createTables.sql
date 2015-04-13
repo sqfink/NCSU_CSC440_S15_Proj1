@@ -59,21 +59,57 @@ CREATE TABLE courses(
 	title VARCHAR(128) NOT NULL UNIQUE	
 ); 
 
+CREATE TABLE semesters(
+	semesterid INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	start DATE NOT NULL,
+	end DATE NOT NULL,
+	name VARCHAR(32) NOT NULL
+);
+
+CREATE TABLE newleasereq(
+	reqid INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	snumber INT NOT NULL,
+	reqloc1 INT NOT NULL,
+	reqloc2 INT,
+	reqloc3 INT,
+	status VARCHAR(16) NOT NULL DEFAULT "PENDING",
+	staffnumber INT, 
+	changedon TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	leasenumber INT,
+	FOREIGN KEY (leasenumber) REFERENCES lease(leasenumber),
+	FOREIGN KEY (reqloc1) REFERENCES housingdetails(housingDetailsLocation),
+	FOREIGN KEY (reqloc2) REFERENCES housingdetails(housingDetailsLocation),
+	FOREIGN KEY (reqloc3) REFERENCES housingdetails(housingDetailsLocation),
+	FOREIGN KEY (snumber) REFERENCES student(snumber),
+	FOREIGN KEY (staffnumber) REFERENCES staff(staffnumber)
+);
+
 CREATE TABLE lease(
 	leasenumber INT(10) PRIMARY KEY UNIQUE AUTO_INCREMENT,
+	snumber INT NOT NULL,
 	hallLocation INT(10),
 	aptLocation INT(10),
-	snumber INT NOT NULL,
 	paymentperiod VARCHAR(16),
-	rentalperiod VARCHAR(10),
 	startdate DATE NOT NULL,
-	ended INT NOT NULL DEFAULT '0',
+	enddate DATE NOT NULL,
 	active INT NOT NULL DEFAULT '0',
-	pending INT NOT NULL DEFAULT '1',
 	FOREIGN KEY (snumber) REFERENCES student(snumber),
 	FOREIGN KEY (hallLocation) REFERENCES hallrooms(hallLocation),
-	FOREIGN KEY (aptLocation) REFERENCES aptrooms(aptLocation),
+	FOREIGN KEY (aptLocation) REFERENCES appartmentrooms(aptLocation),
+	CONSTRAINT ensureValidSpan CHECK (enddate > startdate),
 	CONSTRAINT ensureOneLocation CHECK (NOT ((aptLocation IS NOT NULL) AND (hallLocation IS NOT NULL)))
+);
+
+CREATE TABLE leaseterminaterequest(
+	requestid INT PRIMARY KEY UNIQUE AUTO_INCREMENT,
+	leasenumber INT(10) NOT NULL, 
+	status VARCHAR(16) NOT NULL DEFAULT "PENDING",
+	reason VARCHAR(1024) NOT NULL,
+	enddate DATE NOT NULL,
+	staffnumber INT, 
+	changedon TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	FOREIGN KEY (staffnumber) REFERENCES staff(staffnumber),
+	FOREIGN KEY (leasenumber) REFERENCES lease(leasenumber)
 );
 
 CREATE TABLE hallrooms(
@@ -81,7 +117,6 @@ CREATE TABLE hallrooms(
 	housingDetailsLocation INT(10) NOT NULL,
 	roomnum INT(10) NOT NULL,
 	snumber INT,
-	restricted INT(1),
 	FOREIGN KEY (snumber) REFERENCES student(snumber),
 	FOREIGN KEY (housingDetailsLocation) REFERENCES housingdetails(housingDetailsLocation)
 );
@@ -200,16 +235,22 @@ CREATE TABLE maintnencetickets(
 	status VARCHAR(32) NOT NULL,
 	createdby INT NOT NULL,
 	comments VARCHAR(512) NOT NULL,
+	changedon TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	changedby INT,
+	FOREIGN KEY (changedby) REFERENCES staff(staffnumber),
 	FOREIGN KEY (createdby) REFERENCES student(snumber)
 );
 
 CREATE TABLE parkingrequests(
 	reqnumber INT(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	lreqid INT NOT NULL,
 	snumber INT(10) NOT NULL,
 	farok INT(1) NOT NULL,
 	classification VARCHAR(32) NOT NULL,
 	approved INT(1) NOT NULL,
 	pending INT(1) NOT NULL,
+	changedon TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	FOREIGN KEY (lreqid) REFERENCES newleasereq(reqid),
 	FOREIGN KEY (classification) REFERENCES parkingclasscosts(classification),
 	FOREIGN KEY (snumber) REFERENCES student(snumber)
 );

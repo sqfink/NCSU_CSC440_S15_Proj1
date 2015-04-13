@@ -52,4 +52,10 @@ DROP TABLE IF EXISTS parkinglots;
 
 DROP TABLE IF EXISTS parkingrequests;
 
+DROP TABLE IF EXISTS semesters;
+
+DROP TABLE IF EXISTS leaseterminaterequest;
+
+DROP TABLE IF EXISTS newleasereq;
+
 SET foreign_key_checks = 1;
