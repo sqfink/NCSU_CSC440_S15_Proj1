@@ -11,6 +11,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import dbms.beans.CountReadBean;
+
 public class DatabaseManager {	
 	private Connection c = null;
 	private static DatabaseManager _singleton = null;
@@ -131,5 +133,40 @@ public class DatabaseManager {
 		}
 		
 		return l;
+	}
+	
+	public static boolean exec(String sql) throws SQLException {
+		Connection c = getConnection();
+		Statement stmt = c.createStatement();
+		
+		if (_singleton.logStream != null) {
+			_singleton.logStream.println("SQL: " + sql);
+		}
+		
+		if (!stmt.execute(sql)) {
+			System.err.println("SQL Error: No results returned by query");
+			if (_singleton.logStream != null) {
+				_singleton.logStream.println("No results");
+			}
+			return false;
+		}
+		
+		SQLWarning warn = stmt.getWarnings();
+		if (warn != null) {
+			System.err.println("Request returned warnings:");
+			do {
+				System.err.print("\t[" + warn.getErrorCode() + "] " + warn.getMessage());
+			} while ((warn = warn.getNextWarning()) != null);
+		}
+		
+		return true;
+	}
+	
+	public static Long execCount(String sql) throws SQLException {
+		List<CountReadBean> r = executeBeanQuery(sql, CountReadBean.class);
+		if (r == null || r.size() == 0) {
+			return null;
+		}
+		return r.get(0).count;
 	}
 }

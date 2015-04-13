@@ -57,6 +57,14 @@ INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VA
 INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VALUES ('7', '3', '2');
 INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VALUES ('8', '3', '3');
 
+INSERT INTO `parkinglots` (`lotnumber`) VALUES ('1');
+INSERT INTO `parkinglots` (`lotnumber`) VALUES ('2');
+INSERT INTO `parkinglots` (`lotnumber`) VALUES ('3');
+INSERT INTO `parkinglots` (`lotnumber`) VALUES ('4');
+INSERT INTO `parkinglots` (`lotnumber`) VALUES ('5');
+INSERT INTO `parkinglots` (`lotnumber`) VALUES ('6');
+INSERT INTO `parkinglots` (`lotnumber`) VALUES ('7');
+
 INSERT INTO `parkinglotsnear` (`lotnumber`, `near`) VALUES ('1', '1');
 INSERT INTO `parkinglotsnear` (`lotnumber`, `near`) VALUES ('1', '2');
 INSERT INTO `parkinglotsnear` (`lotnumber`, `near`) VALUES ('2', '3');

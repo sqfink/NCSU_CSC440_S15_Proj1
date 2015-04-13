@@ -128,6 +128,10 @@ CREATE TABLE parkingclasscosts(
 	cost REAL NOT NULL
 );
 
+CREATE TABLE parkinglots(
+	lotnumber INT(10) NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY
+);
+
 CREATE TABLE parkinglotsnear(
 	lotnumber INT(10) NOT NULL,
 	near INT(10) NOT NULL,
@@ -138,7 +142,7 @@ CREATE TABLE parkingspots(
 	spotnumber INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	lotnumber INT(10),
 	classification VARCHAR(30),
-	snumber INT(11), 
+	snumber INT(11) UNIQUE, 
 	FOREIGN KEY (snumber) REFERENCES student(snumber)
 );
 
@@ -203,6 +207,15 @@ CREATE TABLE maintnencetickets(
 	createdby INT NOT NULL,
 	comments VARCHAR(256) NOT NULL,
 	FOREIGN KEY (createdby) REFERENCES lease(leasenumber)
+);
+
+CREATE TABLE parkingrequests(
+	reqnumber INT(10) NOT NULL PRIMARY KEY AUTO_INCREMENT UNIQUE,
+	snumber INT(10) NOT NULL,
+	farok INT(1) NOT NULL,
+	classification VARCHAR(32) NOT NULL,
+	approved INT(1) NOT NULL,
+	FOREIGN KEY (snumber) REFERENCES student(snumber)
 );
 
 SET foreign_key_checks = 1;

@@ -11,7 +11,7 @@ public class StudentBean extends Bean {
 	public String password;
 	
 	@Column(columnName="snumber")
-	public String snumber;
+	public Long snumber;
 	
 	@Column(columnName="firstname")
 	public String firstname;
@@ -53,7 +53,7 @@ public class StudentBean extends Bean {
 	public String zip;
 
 	@Column(columnName="year")
-	public String year;
+	public Long year;
 
 	@Column(columnName="specialneeds")
 	public String specialneeds;

@@ -50,4 +50,8 @@ DROP TABLE IF EXISTS appartmentrooms;
 
 DROP TABLE IF EXISTS maintnencetickets;
 
+DROP TABLE IF EXISTS parkinglots;
+
+DROP TABLE IF EXISTS parkingrequests;
+
 SET foreign_key_checks = 1;
