@@ -184,9 +184,9 @@ CREATE TABLE studenthallinspection(
 	inspectionID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	staffnumber INT NOT NULL, 
 	leasenumber INT NOT NULL,
-	inspectiondate VARCHAR(10),
+	inspectiondate DATE NOT NULL,
 	propertycondition VARCHAR(20),
-	comments VARCHAR(50),
+	comments VARCHAR(512),
 	FOREIGN KEY (staffnumber) REFERENCES staff(staffnumber),
 	FOREIGN KEY (leasenumber) REFERENCES lease(leasenumber)
 );
@@ -224,7 +224,7 @@ CREATE TABLE invoices(
 CREATE TABLE lineitems(
 	invoicenumber INT NOT NULL,
 	fee REAL NOT NULL,
-	itemtype VARCHAR(40),
+	itemtype VARCHAR(128),
 	FOREIGN KEY (invoicenumber) REFERENCES invoices(invoicenumber)
 );
 
