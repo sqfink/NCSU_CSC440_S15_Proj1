@@ -2,8 +2,14 @@ package statemachine.states.staff;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.util.List;
 
+import daos.Dao;
+import dbms.DatabaseManager;
+import dbms.beans.StaffPendingHousingBean;
 import dbms.beans.tmpstore.StaffLeaseTerminationStorBean;
+import dialogs.ListSelectionDialog;
 import dialogs.impl.staff.StaffAssignDamagesDialog;
 import dialogs.impl.staff.StaffAssignInspectionDateDialog;
 import dialogs.impl.staff.StaffLeaseTerminationMainDialog;
@@ -26,14 +32,39 @@ public class StaffSelectPendingLeaseTerminationState extends State {
 		}
 	}
 	
+	private List<StaffLeaseTerminationStorBean> getBeanList() throws SQLException {
+		// WHERE status='PENDING'
+		String sql = "SELECT * FROM leaseterminaterequest;";
+		return DatabaseManager.executeBeanQuery(sql, StaffLeaseTerminationStorBean.class);
+	}
+	
+	private class Selector extends ListSelectionDialog<StaffLeaseTerminationStorBean> {
+
+		public Selector(List<StaffLeaseTerminationStorBean> in) {
+			super(in);
+		}
+
+		@Override
+		protected String EntityPrinter(StaffLeaseTerminationStorBean element) {
+			return String.format("Lease Number:%s RequestID:%s Reason:%s", element.leasenumber, element.requestid, element.reason);
+		}
+		
+	}
+	
 	@Override
 	public String doState(Runner r) {
 		StaffLeaseTerminationStorBean b = null;
-		if (r.getKV("LeaseTerminationRequestBean") == null) {
-			b = new StaffLeaseTerminationStorBean();
-			r.setKV("LeaseTerminationRequestBean", b);
-		} else {
-			b = (StaffLeaseTerminationStorBean) r.getKV("LeaseTerminationRequestBean");
+		try {
+			List<StaffLeaseTerminationStorBean> l = getBeanList();
+			ListSelectionDialog<StaffLeaseTerminationStorBean> dialog = new Selector(l);
+			if (l.size() == 0) {
+				System.out.println("There are no pending lease termination requests");
+				return StaffMainState.class.getName();
+			} else {
+				b = dialog.doCLIPrompt();
+			}
+		} catch (SQLException | IOException | IllegalAccessException e) {
+			e.printStackTrace();
 		}
 		
 		StaffLeaseTerminationMainDialog d = new StaffLeaseTerminationMainDialog();
@@ -52,14 +83,14 @@ public class StaffSelectPendingLeaseTerminationState extends State {
 				do {
 					dmg.doCLIPrompt();
 				} while (dmg.str == null || validateDate(dmg.str));
-				b.InspectionDate = dmg.str;
+				b.Damages = dmg.str;
 				return this.getClass().getName();
 			case 3:
-				
-				break;
+				Dao.approveLeaseTerminationRequest(b);
+				return StaffDoRequestsMainState.class.getName();
 			case 4:
-				
-				break;
+				Dao.rejectLeaseTerminationRequeset(b);
+				return StaffDoRequestsMainState.class.getName();
 			case 5:
 				r.setKV("LeaseTerminationRequestBean", null);
 				return StaffDoRequestsMainState.class.getName();

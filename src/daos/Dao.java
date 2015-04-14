@@ -2,6 +2,7 @@ package daos;
 
 import dbms.DatabaseManager;
 import dbms.beans.*;
+import dbms.beans.tmpstore.StaffLeaseTerminationStorBean;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -981,6 +982,14 @@ public class Dao {
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
+		}
+	}
+	
+	public static void approveLeaseTerminationRequest(StaffLeaseTerminationStorBean b) {
+		
+	}
+	
+	public static void rejectLeaseTerminationRequeset(StaffLeaseTerminationStorBean b) {
+		
 	}
 }
