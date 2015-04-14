@@ -30,13 +30,6 @@ public class Dao {
 			return rs.next();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 		return false;
 	}
@@ -50,13 +43,6 @@ public class Dao {
 			ps.executeQuery();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -107,13 +93,6 @@ public class Dao {
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 		return -1;
 		
@@ -147,13 +126,6 @@ public class Dao {
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 		return -1;
 	}
@@ -180,13 +152,6 @@ public class Dao {
 			return ret;
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}
@@ -213,13 +178,6 @@ public class Dao {
 			return ret;
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}
@@ -258,13 +216,6 @@ public class Dao {
 			return ret;
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}
@@ -294,13 +245,6 @@ public class Dao {
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 		return -1;
 	}
@@ -416,14 +360,7 @@ public class Dao {
 			return ps.executeQuery();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
-		}
+		} 
 		return null;
 	}
 	
@@ -446,14 +383,7 @@ public class Dao {
 			ps.executeUpdate();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
-		}	
+		} 
 	}
 	
 	/**
@@ -508,13 +438,6 @@ public class Dao {
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}
@@ -571,13 +494,6 @@ public class Dao {
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 		return -1;
 	}
@@ -597,13 +513,6 @@ public class Dao {
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}
@@ -621,13 +530,6 @@ public class Dao {
 			ps.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch(SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -674,13 +576,6 @@ public class Dao {
 			 */
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -711,13 +606,6 @@ public class Dao {
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 		return 0;
 	}
@@ -741,13 +629,6 @@ public class Dao {
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -771,14 +652,7 @@ public class Dao {
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
-		}
+		} 
 		return null;
 	}
 
@@ -801,13 +675,6 @@ public class Dao {
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -831,13 +698,6 @@ public class Dao {
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}
@@ -869,13 +729,6 @@ public class Dao {
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -902,13 +755,6 @@ public class Dao {
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -952,13 +798,6 @@ public class Dao {
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -979,13 +818,6 @@ public class Dao {
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -1097,6 +929,58 @@ public class Dao {
 				System.err.println("Error closing connections");
 				e.printStackTrace();
 			}
+		}	
+	}
+	
+	public static void rejectLeaseRequestByReqID(Long reqid) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("UPDATE newleasereq SET status='REJECTED' WHERE reqid=?");
+			ps.setLong(1, reqid);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	@SuppressWarnings("resource")
+	public static void approveLeaseRequest(StaffPendingHousingBean b) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			
+			// Update the lease request to be processed
+			ps = conn.prepareStatement("UPDATE newleasereq SET status='PROCESSED' WHERE reqid=?");
+			ps.setLong(1, b.reqid);
+			ps.executeUpdate();
+			
+			// Check to see if there is a the AssignedPlace references a halllocation
+			ps = conn.prepareStatement("SELECT * FROM hallrooms WHERE hallLocation=?");
+			
+			ps.setLong(1, b.AssignedPlace);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			// If AssignedPlace references a halllocation
+			if(rs.next()) {
+				// Update the room that this student is being assigned to with their snumber
+				ps = conn.prepareStatement("UPDATE hallrooms SET snumber=? WHERE hallLocation=? AND roomnum=? ");
+			} else {
+				// If not the AssignedPlace should be an appartment. We will just assume that it is.
+				ps = conn.prepareStatement("UPDATE appartmentrooms SET snumber=? WHERE aptLocation=? AND roomnum=?");
+			}
+			
+			ps.setLong(1, b.snumber);
+			ps.setLong(2, b.AssignedPlace);
+			ps.setLong(3, b.AssignedRoom);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}	
 	}
 }

@@ -2,6 +2,7 @@ package statemachine.states.staff;
 
 import java.io.IOException;
 
+import daos.Dao;
 import dbms.beans.StaffPendingHousingBean;
 import dialogs.impl.staff.StaffAssignPlaceDialog;
 import dialogs.impl.staff.StaffAssignRoomDialog;
@@ -34,16 +35,18 @@ public class StaffEditHousingRequestState extends State {
 				b.AssignedRoom = rd.num;
 				return this.getClass().getName();
 			case 3:
-				//TODO: update the database with the rejection
-				return StaffMainState.class.getName();
-			case 4:
 				if (b.AssignedPlace == null) {
 					System.out.println("Residence assignment must be made before approving the request");
+					return StaffEditHousingRequestState.class.getName();
 				}
 				if (b.AssignedRoom == null) {
 					System.out.println("Room assignment must be made before approving the request");
+					return StaffEditHousingRequestState.class.getName();
 				}
-				//TODO: submit the data
+				Dao.approveLeaseRequest(b);
+				return StaffMainState.class.getName();
+			case 4:
+				Dao.rejectLeaseRequestByReqID(b.reqid);
 				return StaffMainState.class.getName();
 			case 5:
 				return StaffMainState.class.getName();
