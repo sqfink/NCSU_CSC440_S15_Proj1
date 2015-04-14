@@ -1038,6 +1038,18 @@ public class Dao {
 		return null;
 	}
 	
+	public static List<SemesterBean> getSemesterList() {
+		String sql = "SELECT * FROM `semesters`;";
+		try {
+			List<SemesterBean> l = DatabaseManager.executeBeanQuery(sql, SemesterBean.class);
+			return l;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
 	public static List<AptSimpleInfo> getSimpleAptInfo(long snumber, boolean current) {
 		String sql = "SELECT appartmentrooms.roomnum, appartments.aptnum, housingdetails.name, startdate, enddate, leasenumber, paymentperiod FROM lease " +
 			"JOIN appartmentrooms ON lease.`aptLocation`=appartmentrooms.aptLocation " + 
