@@ -1,5 +1,6 @@
 package dbms.beans;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import dbms.Bean;
@@ -34,4 +35,10 @@ public class LeaseRequestBean extends Bean {
 	@Column(columnName="leasenumber")
 	public Long leasenumber;
 
+	@Column(columnName="startdate")
+	public Date startdate;
+
+	@Column(columnName="enbdate")
+	public Date enddate;
+	
 }
