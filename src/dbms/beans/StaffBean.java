@@ -13,9 +13,6 @@ public class StaffBean extends Bean {
 	@Column(columnName="lastname")
 	public String lastname;
 	
-	@Column(columnName="location")
-	public String location;
-
 	@Column(columnName="department")
 	public String department;
 	
