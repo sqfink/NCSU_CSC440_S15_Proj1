@@ -23,7 +23,7 @@ public class RebuildDatabase {
 			String usr = p.getProperty("User");
 			String pw = p.getProperty("Password");
 			DatabaseManager.Initialize("jdbc:mysql://" + srv + "/" + db, usr, pw);
-			//DatabaseManager.setLogFile(new File("C:/tmp/db.log"));
+			DatabaseManager.setLogFile(new File("db.log"));
 			List<String> cmds = getSqlCmds("sql/dropTables.sql");
 			cmds.addAll(getSqlCmds("sql/createTables.sql"));
 			cmds.addAll(getSqlCmds("sql/initData.sql"));

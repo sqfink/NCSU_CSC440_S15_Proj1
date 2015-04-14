@@ -22,9 +22,10 @@ public class main {
 			String usr = p.getProperty("User");
 			String pw = p.getProperty("Password");
 			DatabaseManager.Initialize("jdbc:mysql://" + srv + "/" + db, usr, pw);
-			DatabaseManager.setLogFile(new File("C:/tmp/db.log"));
+			DatabaseManager.setLogFile(new File("db.log"));
 			Runner r = new Runner(StartState.class);
 			r.Run();	
+			DatabaseManager.closeLog();
 		} catch (IllegalAccessException e1 ) {
 			e1.printStackTrace();
 		} catch (InstantiationException e) {
