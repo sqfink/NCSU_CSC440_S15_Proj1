@@ -14,8 +14,7 @@ import statemachine.State;
 public class StaffSelectPendingHousingState extends State {
 
 	private List<StaffPendingHousingBean> getBeanList() throws SQLException {
-		//WHERE status='PENDING'
-		String sql = "SELECT * FROM newleasereq WHERE status='REJECTED';"; //TODO: Query goes here
+		String sql = "SELECT * FROM newleasereq WHERE status='PENDING';"; //TODO: Query goes here
 		return DatabaseManager.executeBeanQuery(sql, StaffPendingHousingBean.class);
 	}
 	
