@@ -59,9 +59,13 @@ public abstract class Bean {
 			s.append(f.getName());
 			s.append(": \"");
 			try {
-				s.append(f.get(this).toString());
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				System.err.println("Error retrieving value of field");
+				if (f.get(this) == null) {
+					s.append("NULL");
+				} else {
+					s.append(f.get(this).toString());
+				}
+			} catch (IllegalArgumentException | IllegalAccessException | NullPointerException e) {
+				System.err.println("Error retrieving value of field " + f.getName());
 				e.printStackTrace();
 				s.append("ERORR RETRIEVING FIELD");
 			}

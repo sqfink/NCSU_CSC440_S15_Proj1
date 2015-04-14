@@ -23,6 +23,11 @@ public class DatabaseManager {
 		_singleton.logStream = new PrintStream(path);
 	}
 	
+	public static void closeLog() {
+		_singleton.logStream.flush();
+		_singleton.logStream.close();
+	}
+	
 	public static Connection getConnection() {
 		if (_singleton == null)
 			throw new IllegalAccessError("The database connection must be initialized before getting the connection");
