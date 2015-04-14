@@ -80,7 +80,7 @@ INSERT INTO `appartments` (`housingDetailsLocation`, `rent`, `deposit`, `apttype
 INSERT INTO `appartments` (`housingDetailsLocation`, `rent`, `deposit`, `apttype`, `aptnum`, `family`) VALUES ('6', '450', '500', '1 Bed', '105', '1');
 INSERT INTO `appartments` (`housingDetailsLocation`, `rent`, `deposit`, `apttype`, `aptnum`, `family`) VALUES ('6', '550', '600', '2 Bed', '106', '1');
 INSERT INTO `appartments` (`housingDetailsLocation`, `rent`, `deposit`, `apttype`, `aptnum`, `family`) VALUES ('6', '700', '800', '3 Bed', '107', '1');
-INSERT INTO `appartments` (`housingDetailsLocation`, `rent`, `deposit`, `apttype`, `aptnum`, `family`) VALUES ('1', '400', '400', 'Shared House', '108', '1');
+INSERT INTO `appartments` (`housingDetailsLocation`, `rent`, `deposit`, `apttype`, `aptnum`, `family`, `private`) VALUES ('1', '400', '400', 'Shared House', '108', '1', '1');
 
 INSERT INTO `appartmentrooms` (`aptLocation`, `aptnum`, `roomnum`) VALUES ('1', '101', '1');
 INSERT INTO `appartmentrooms` (`aptLocation`, `aptnum`, `roomnum`) VALUES ('2', '101', '2');
