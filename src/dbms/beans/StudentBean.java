@@ -18,12 +18,6 @@ public class StudentBean extends Bean {
 
 	@Column(columnName="lastname")
 	public String lastname;
-
-	@Column(columnName="leasenumber")
-	public Long leasenumber;
-	
-	@Column(columnName="parkingnumber")
-	public Long parkingnumber;
 	
 	@Column(columnName="dob") //Should be ISO8601
 	public String dob;

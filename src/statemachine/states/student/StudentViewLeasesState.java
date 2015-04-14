@@ -17,7 +17,7 @@ public class StudentViewLeasesState extends State {
 			case 1:
 				return StudentDisplayCurrentLeaseState.class.getName();
 			case 2:
-				return "StudentDisplayPastLeases";
+				return StudentDisplayPastLeasesState.class.getName();
 			case 3:
 				return StudentHousingOptionsState.class.getName();
 			default:

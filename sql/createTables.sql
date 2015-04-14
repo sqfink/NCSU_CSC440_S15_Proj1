@@ -10,8 +10,6 @@ CREATE TABLE student(
 	snumber INT NOT NULL UNIQUE,
 	firstname VARCHAR(40) NOT NULL,
 	lastname VARCHAR(40) NOT NULL,
-	leasenumber INT,
-	parkingnumber INT,
 	dob DATE,
 	phone VARCHAR(12) NOT NULL,
 	alternatephone VARCHAR(10),

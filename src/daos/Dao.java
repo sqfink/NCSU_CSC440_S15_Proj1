@@ -63,44 +63,42 @@ public class Dao {
 	public int newStudent(StudentBean sb) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO student (firstname,lastname,leasenumber,parkingnumber,dob,phone,alternatephone,nationality,address,city,state,country,zip,year,specialneeds,comments,sex,smoker,guest) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO student (firstname,lastname,dob,phone,alternatephone,nationality,address,city,state,country,zip,year,specialneeds,comments,sex,smoker,guest) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, sb.firstname);
 			ps.setString(2, sb.lastname);
-			ps.setLong(3, sb.leasenumber);
-			ps.setLong(4, sb.parkingnumber);
-			ps.setString(5, sb.dob);
-			ps.setString(6, sb.phone);
-			ps.setString(7, sb.alternatephone);
-			ps.setString(8, sb.nationality);
-			ps.setString(9, sb.address);
-			ps.setString(10, sb.city);
-			ps.setString(11, sb.state);
-			ps.setString(12, sb.country);
-			ps.setString(13, sb.zip);
+			ps.setString(3, sb.dob);
+			ps.setString(4, sb.phone);
+			ps.setString(5, sb.alternatephone);
+			ps.setString(6, sb.nationality);
+			ps.setString(7, sb.address);
+			ps.setString(8, sb.city);
+			ps.setString(9, sb.state);
+			ps.setString(10, sb.country);
+			ps.setString(11, sb.zip);
 			String year = sb.year.toString();
 			if(year.equals("freshman")) {
-				ps.setInt(14, 0);
+				ps.setInt(12, 0);
 			} else if(year.equals("sophomore")) {
-				ps.setInt(14, 1);
+				ps.setInt(12, 1);
 			} else if(year.equals("junior")) {
-				ps.setInt(14, 2);
+				ps.setInt(12, 2);
 			} else if(year.equals("senior")) {
-				ps.setInt(14, 3);
+				ps.setInt(12, 3);
 			} else if(year.equals("graduate")) {
-				ps.setInt(14, 4);
+				ps.setInt(12, 4);
 			} else {
-				ps.setInt(14,-1);
+				ps.setInt(12,-1);
 			}
 
-			ps.setString(15, sb.specialneeds);
-			ps.setString(16, sb.comments);
-			ps.setString(17, sb.sex);
-			ps.setString(18, sb.smoker);
+			ps.setString(13, sb.specialneeds);
+			ps.setString(14, sb.comments);
+			ps.setString(15, sb.sex);
+			ps.setString(16, sb.smoker);
 			if(sb.guest) {
-				ps.setInt(19, 1);
+				ps.setInt(17, 1);
 			} else {
-				ps.setInt(19, 0);
+				ps.setInt(17, 0);
 			}
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
@@ -989,6 +987,79 @@ public class Dao {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static LeaseBean getCurrentlLease(long snumber) {
+		try {
+			List<LeaseBean> b = DatabaseManager.executeBeanQuery("SELECT * FROM `lease` WHERE `snumber`=" + snumber + " AND `active`=1 LIMIT 1;", LeaseBean.class);
+			if (b.size() == 0)
+				return null;
+			return b.get(0);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error getting current lease status");
+			return null;
+		}
+	}
+	
+	public static List<LeaseBean> getPastLeases(long snumber) {
+		try {
+			List<LeaseBean> b = DatabaseManager.executeBeanQuery("SELECT * FROM `lease` WHERE `snumber`=" + snumber + " AND `active`=0;", LeaseBean.class);
+			if (b.size() == 0)
+				return null;
+			return b;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error getting current lease status");
+			return null;
+		}
+	}
+	
+	public static List<HallSimpleInfo> getSimpleHallInfo(long snumber, boolean current) {
+		String sql = "SELECT hallrooms.roomnum, housingdetails.name, startdate, enddate, leasenumber, paymentperiod FROM lease " +
+				"JOIN hallrooms ON hallrooms.hallLocation=lease.hallLocation " +
+				"JOIN housingdetails ON hallrooms.housingDetailsLocation = housingdetails.housingDetailsLocation " +
+				"WHERE lease.snumber=" + snumber + " ";
+
+		int flag = current?1:0;
+		sql += " AND `active`=" + flag + ";";
+		
+		try {
+			List<HallSimpleInfo> i = DatabaseManager.executeBeanQuery(sql, HallSimpleInfo.class);
+			if (i == null || i.size() == 0){
+				System.out.println("Error no current hall lease found");
+				return null;
+			}
+			return i;
+		} catch (SQLException e) {
+			System.out.println("Error retrieving hall details");
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static List<AptSimpleInfo> getSimpleAptInfo(long snumber, boolean current) {
+		String sql = "SELECT appartmentrooms.roomnum, appartments.aptnum, housingdetails.name, startdate, enddate, leasenumber, paymentperiod FROM lease " +
+			"JOIN appartmentrooms ON lease.`aptLocation`=appartmentrooms.aptLocation " + 
+			"JOIN `appartments` ON appartmentrooms.aptnum=appartments.aptnum " +
+			"JOIN `housingdetails` ON housingdetails.housingDetailsLocation = appartments.housingDetailsLocation " +
+			"WHERE lease.snumber=" + snumber + " ";
+		
+		int flag = current?1:0;
+		sql += " AND `active`=" + flag + ";";
+		
+		try {
+			List<AptSimpleInfo> i = DatabaseManager.executeBeanQuery(sql, AptSimpleInfo.class);
+			if (i == null || i.size() == 0){
+				System.out.println("Error no current appartment lease found");
+				return null;
+			}
+			return i;
+		} catch (SQLException e) {
+			System.out.println("Error retrieving appartment details");
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void addLeaseTerminationRequest(LeaseTerminationRequestBean ltrb) {

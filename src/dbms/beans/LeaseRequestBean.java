@@ -28,6 +28,7 @@ public class LeaseRequestBean extends Bean {
 	@Column(columnName="staffnumber")
 	public Long staffnumber;
 	
+	@Column(columnName="changedon")
 	public Timestamp changedon;
 	
 	@Column(columnName="leasenumber")
