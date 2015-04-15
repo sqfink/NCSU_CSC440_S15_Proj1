@@ -563,7 +563,6 @@ public class Dao {
 		}
 	}
 
-	// TODO Might need to change the return type
 	/**
 	 * Get the cost for the specified parking classification
 	 * 
@@ -1011,6 +1010,18 @@ public class Dao {
 	}
 	
 	public static void rejectLeaseTerminationRequeset(StaffLeaseTerminationStorBean b) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			Long l = b.requestid;
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("UPDATE leaseterminationrequest SET status='REJECTED' WHERE reqid=?");
+			ps.setLong(1, l);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
 		
 	}
 }
