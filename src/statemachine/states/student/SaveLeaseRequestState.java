@@ -15,6 +15,18 @@ public class SaveLeaseRequestState extends State {
 			System.out.println("Error submitting request. Request not found");
 			return StudentNewLeaseRequestState.class.getName();
 		}
+		if (b.startdate == null || b.enddate == null) {
+			System.out.println("Lease term not set. Cannot submit unfinished request.");
+			return StudentNewLeaseRequestState.class.getName();
+		}
+		if (b.paymentperiod == null) {
+			System.out.println("Payment period not set. Cannot submit unfinished request.");
+			return StudentNewLeaseRequestState.class.getName();
+		}
+		if (b.reqloc1 == null) {
+			System.out.println("No location requests set. Cannot submit unfinished request.");
+			return StudentNewLeaseRequestState.class.getName();
+		}
 		Dao.addLeaseRequest(b);
 		System.out.println("Lease request submitted");
 		return StudentHomepageState.class.getName();

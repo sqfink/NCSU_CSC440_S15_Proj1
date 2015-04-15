@@ -789,7 +789,7 @@ public class Dao {
 		PreparedStatement ps = null;
 		try {
 			conn = DatabaseManager.getConnection();
-			ps = conn.prepareStatement("INSERT INTO newleasereq (snumber, reqloc1, reqloc2, reqloc3, startdate, enddate, paymentperiod) VALUES(?,?,?,?,?,?,?)");
+			ps = conn.prepareStatement("INSERT INTO newleasereq (snumber, reqloc1, reqloc2, reqloc3, startdate, enddate, paymentperiod, changedon) VALUES(?,?,?,?,?,?,?,CURRENT_TIMESTAMP)");
 
 			ps.setLong(1, lrb.snumber);
 			ps.setLong(2, lrb.reqloc1);
@@ -1044,6 +1044,17 @@ public class Dao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static List<LeaseRequestBean> getLeaseRequestsByStudent(Long snumber) {
+		String sql = "SELECT * FROM `newleasereq` WHERE `snumber`=" + snumber + " AND leasenumber IS NULL;";
+		try {
+			return DatabaseManager.executeBeanQuery(sql, LeaseRequestBean.class);
+		} catch (SQLException e) {
+			System.out.println("Error retreiving lease requests");
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public static void rejectLeaseTerminationRequeset(StaffLeaseTerminationStorBean b) {

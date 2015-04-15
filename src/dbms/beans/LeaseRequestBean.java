@@ -41,7 +41,7 @@ public class LeaseRequestBean extends Bean {
 	@Column(columnName="startdate")
 	public Date startdate;
 
-	@Column(columnName="enbdate")
+	@Column(columnName="enddate")
 	public Date enddate;
 	
 }
