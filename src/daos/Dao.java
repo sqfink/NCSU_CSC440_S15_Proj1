@@ -962,19 +962,28 @@ public class Dao {
 		}
 	}
 	
-	public void addLeaseRequest(LeaseRequestBean lrb) {
+	public static void addLeaseRequest(LeaseRequestBean lrb) {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		try {
 			conn = DatabaseManager.getConnection();
-			ps = conn.prepareStatement("INSERT INTO leaserequest (snumber, reqloc1, reqloc2, reqloc3, staffnumber, leasenumber) VALUES(?,?,?,?,?,?)");
+			ps = conn.prepareStatement("INSERT INTO newleasereq (snumber, reqloc1, reqloc2, reqloc3, startdate, enddate, paymentperiod) VALUES(?,?,?,?,?,?,?)");
 
 			ps.setLong(1, lrb.snumber);
 			ps.setLong(2, lrb.reqloc1);
-			ps.setLong(3, lrb.reqloc2);
-			ps.setLong(4, lrb.reqloc3);
-			ps.setLong(5, lrb.staffnumber);
-			ps.setLong(6, lrb.leasenumber);
+			if (lrb.reqloc2 != null)
+				ps.setLong(3, lrb.reqloc2);
+			else
+				ps.setNull(3, java.sql.Types.INTEGER);
+			if (lrb.reqloc3 != null)
+				ps.setLong(4, lrb.reqloc3);
+			else
+				ps.setNull(4, java.sql.Types.INTEGER);
+			
+			ps.setDate(5, lrb.startdate);
+			ps.setDate(6, lrb.enddate);
+			ps.setString(7, lrb.paymentperiod);
+			
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {
@@ -1050,6 +1059,23 @@ public class Dao {
 		
 	}
 	
+	public static List<AptFullInfo> getAppartments(Long year) {
+		String sql = "SELECT * FROM `appartments` "+ 
+			"JOIN `housingdetails` ON appartments.housingDetailsLocation = housingdetails.housingDetailsLocation " + 
+			"WHERE requiredYear <= " + year + ";";
+		try {
+			List<AptFullInfo> i = DatabaseManager.executeBeanQuery(sql, AptFullInfo.class);
+			if (i == null || i.size() == 0){
+				System.out.println("No appartments availible for this student class year");
+				return null;
+			}
+			return i;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public static List<AptSimpleInfo> getSimpleAptInfo(long snumber, boolean current) {
 		String sql = "SELECT appartmentrooms.roomnum, appartments.aptnum, housingdetails.name, startdate, enddate, leasenumber, paymentperiod FROM lease " +
 			"JOIN appartmentrooms ON lease.`aptLocation`=appartmentrooms.aptLocation " + 
@@ -1098,5 +1124,16 @@ public class Dao {
 				e.printStackTrace();
 			}
 		}	
+	}
+
+	public static List<HousingDetailsBean> getHousingLocations(Long year) {
+		String sql = "SELECT * FROM `housingdetails` WHERE `requiredYear` <= " + year + ";";
+		try {
+			return DatabaseManager.executeBeanQuery(sql, HousingDetailsBean.class);
+		} catch (SQLException e) {
+			System.out.println("Error retrieving list of housing options");
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

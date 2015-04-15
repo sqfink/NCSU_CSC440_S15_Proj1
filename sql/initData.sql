@@ -189,17 +189,17 @@ INSERT INTO `parkingspots` (`lotnumber`, `spotnumber`, `classification`) VALUES 
 INSERT INTO `parkingspots` (`lotnumber`, `spotnumber`, `classification`) VALUES ('7', '51', 'Large Car');
 INSERT INTO `parkingspots` (`lotnumber`, `spotnumber`, `classification`) VALUES ('7', '52', 'Large Car');
 
-INSERT INTO `newleasereq` (`snumber`, `reqloc1`) VALUES ('100540001', '2');
-INSERT INTO `newleasereq` (`snumber`, `reqloc1`) VALUES ('100540002', '4');
-INSERT INTO `newleasereq` (`snumber`, `reqloc1`) VALUES ('100540003', '2');
-INSERT INTO `newleasereq` (`snumber`, `reqloc1`) VALUES ('100540004', '2');
-INSERT INTO `newleasereq` (`snumber`, `reqloc1`) VALUES ('100540005', '5');
-INSERT INTO `newleasereq` (`snumber`, `reqloc1`) VALUES ('100540006', '5');
-INSERT INTO `newleasereq` (`snumber`, `reqloc1`) VALUES ('100540007', '3');
-INSERT INTO `newleasereq` (`snumber`, `reqloc1`) VALUES ('200540001', '4');
-INSERT INTO `newleasereq` (`snumber`, `reqloc1`) VALUES ('200540002', '4');
-INSERT INTO `newleasereq` (`snumber`, `reqloc1`) VALUES ('100540008', '6');
-INSERT INTO `newleasereq` (`snumber`, `reqloc1`) VALUES ('100540009', '1');
+INSERT INTO `newleasereq` (`snumber`, `reqloc1`, `startdate`, `enddate`, `paymentperiod`) VALUES ('100540001', '2', '2015-01-01', '2015-07-31', 'SEMESTER');
+INSERT INTO `newleasereq` (`snumber`, `reqloc1`, `startdate`, `enddate`, `paymentperiod`) VALUES ('100540002', '4', '2015-01-01', '2015-07-31', 'SEMESTER');
+INSERT INTO `newleasereq` (`snumber`, `reqloc1`, `startdate`, `enddate`, `paymentperiod`) VALUES ('100540003', '2', '2015-01-01', '2015-05-31', 'MONTH');
+INSERT INTO `newleasereq` (`snumber`, `reqloc1`, `startdate`, `enddate`, `paymentperiod`) VALUES ('100540004', '2', '2015-01-01', '2015-07-31', 'MONTH');
+INSERT INTO `newleasereq` (`snumber`, `reqloc1`, `startdate`, `enddate`, `paymentperiod`) VALUES ('100540005', '5', '2015-01-01', '2015-07-31', 'MONTH');
+INSERT INTO `newleasereq` (`snumber`, `reqloc1`, `startdate`, `enddate`, `paymentperiod`) VALUES ('100540006', '5', '2015-01-01', '2015-07-31', 'SEMESTER');
+INSERT INTO `newleasereq` (`snumber`, `reqloc1`, `startdate`, `enddate`, `paymentperiod`) VALUES ('100540007', '3', '2015-01-01', '2015-07-31', 'SEMESTER');
+INSERT INTO `newleasereq` (`snumber`, `reqloc1`, `startdate`, `enddate`, `paymentperiod`) VALUES ('200540001', '4', '2015-03-01', '2015-04-30', 'MONTH');
+INSERT INTO `newleasereq` (`snumber`, `reqloc1`, `startdate`, `enddate`, `paymentperiod`) VALUES ('200540002', '4', '2015-04-01', '2015-04-30', 'MONTH');
+INSERT INTO `newleasereq` (`snumber`, `reqloc1`, `startdate`, `enddate`, `paymentperiod`) VALUES ('100540008', '6', '2015-01-01', '2015-07-31', 'SEMESTER');
+INSERT INTO `newleasereq` (`snumber`, `reqloc1`, `startdate`, `enddate`, `paymentperiod`) VALUES ('100540009', '1', '2015-01-01', '2015-07-31', 'SEMESTER');
 
 INSERT INTO `lease` (`snumber`, `hallLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('100540001', '1', 'SEMESTER', '2015-01-01', '2015-07-31', '1');
 UPDATE `hallrooms` SET `snumber`='100540001' WHERE `hallLocation`='1';
@@ -213,7 +213,7 @@ UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber
 INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`) VALUES ('100540002', '1', 'Small Car', '1', '0', '2');
 UPDATE `parkingspots` SET `snumber`='100540002' WHERE `spotnumber`='13';
 
-INSERT INTO `lease` (`snumber`, `hallLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('100540003', '2', 'MONTH', '2015-01-01', '2015-5-31', '1');
+INSERT INTO `lease` (`snumber`, `hallLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('100540003', '2', 'MONTH', '2015-01-01', '2015-05-31', '1');
 UPDATE `hallrooms` SET `snumber`='100540003' WHERE `hallLocation`='2';
 UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber`='3' WHERE `reqid`='3';
 INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`) VALUES ('100540003', '1', 'Bike', '1', '0', '3');

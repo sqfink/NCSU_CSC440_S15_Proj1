@@ -2,13 +2,21 @@ package statemachine.states.student;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
-import dbms.beans.tmpstore.LeaseRequestStorBean;
+import daos.Dao;
+import dbms.beans.AptFullInfo;
+import dbms.beans.HousingDetailsBean;
+import dbms.beans.LeaseRequestBean;
+import dbms.beans.SemesterBean;
+import dbms.beans.StudentBean;
+import dialogs.impl.DateDialog;
 import dialogs.impl.newlease.AppartmentTypeSelectionDialog;
+import dialogs.impl.newlease.AptDataListDailog;
+import dialogs.impl.newlease.HousingLocationSelectDialog;
 import dialogs.impl.newlease.HousingTypeSelectionDialog;
-import dialogs.impl.newlease.LeaseLengthDialog;
 import dialogs.impl.newlease.LeasePaymentOptionsDialog;
-import dialogs.impl.newlease.LeaseStartDateDialog;
 import dialogs.impl.newlease.NewLeaseMainDialog;
 import statemachine.Runner;
 import statemachine.State;
@@ -17,12 +25,14 @@ public class StudentNewLeaseRequestState extends State {
 
 	@Override
 	public String doState(Runner r) {
-		LeaseRequestStorBean b = null;
+		StudentBean s = (StudentBean) r.getKV("LoggedInUser");
+		LeaseRequestBean b = null;
 		if (r.getKV("LeaseRequest") == null) {
-			b = new LeaseRequestStorBean();
+			b = new LeaseRequestBean();
+			b.snumber = s.snumber;
 			r.setKV("LeaseRequest", b);
 		} else {
-			b = (LeaseRequestStorBean) r.getKV("LeaseRequest");
+			b = (LeaseRequestBean) r.getKV("LeaseRequest");
 		}
 		
 		do {
@@ -31,54 +41,42 @@ public class StudentNewLeaseRequestState extends State {
 				int mainResult = maind.doCLIPrompt();
 				switch (mainResult) {
 				case 1:
-					LeaseLengthDialog lend = new LeaseLengthDialog(); 
-					int lenr = lend.doCLIPrompt();
-					switch(lenr) {
-					case 1:
-						b.housingLen = "Full";
+					List<HousingDetailsBean> locs = Dao.getHousingLocations(s.year);
+					if (locs == null || locs.size() == 0) {
+						System.out.println("No housing locations availible to this user");
 						break;
-					case 2:
-						b.housingLen = "Semester";
-						break;
-					case 3:
-						System.out.println("Housing term input canceled");
-						break;
-					default:
-						System.out.println("Invalid selection");
+					}
+					HousingLocationSelectDialog locd = new HousingLocationSelectDialog(locs);
+					for (int i = 0; i < 3; i++) {
+						HousingDetailsBean locb =  (HousingDetailsBean) locd.doCLIPrompt();
+						switch(i) {
+						case 0:
+							b.reqloc1 = locb.location;
+							break;
+						case 1:
+							if (locb != null)
+								b.reqloc2 = locb.location;
+							break;
+						case 2:
+							if (locb != null)
+								b.reqloc2 = locb.location;
+							break;
+						}
+						if (i == 0)
+							locs.add(null);
+						if (locb == null)
+							break;
 					}
 					break;
 				case 2:
-					HousingTypeSelectionDialog housd = new HousingTypeSelectionDialog();
-					int housr = housd.doCLIPrompt();
-					switch (housr) {
-					case 1:
-						AppartmentTypeSelectionDialog appd = new AppartmentTypeSelectionDialog();
-						int appr = appd.doCLIPrompt();
-						switch (appr) {
-						case 1:
-							//TODO: add display and selection of location
-							System.out.println("Selection of housing location not implemented");
-							break;
-						case 2:
-							//TODO: add display and selection of location
-							System.out.println("Selection of housing location not implemented");
-							break;
-						case 3:
-							System.out.println("Housing type selection canceled");
-							break;
-						}
-						break;
-					case 2:
-						//TODO: add display and selection of location
-						System.out.println("Selection of housing location not implemented");
-						break;
-					case 3:
-						System.out.println("Housing type selection canceled");
-						break;
+					List<SemesterBean> l = Dao.getSemesterList();
+					System.out.println("Semesters:");
+					for (SemesterBean lb : l) {
+						SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd");
+						System.out.println("\t" + lb.name + " starts " + dateFormat.format(lb.start) + " ends " + dateFormat.format(lb.end));
 					}
-					break;
-				case 3:
-					LeaseStartDateDialog startd = new LeaseStartDateDialog();
+					System.out.println("Lease start date:");
+					DateDialog startd = new DateDialog();
 					Date d = null;
 					do {
 						try {
@@ -93,27 +91,44 @@ public class StudentNewLeaseRequestState extends State {
 							d = null;
 						}
 					} while (d == null);
-					b.startDate = d.toString();
+					b.startdate = d;
+					System.out.println("Lease end date:");
+					d = null;
+					do {
+						try {
+							startd.doCLIPrompt();
+							d = Date.valueOf(startd.startDate);
+							if (d.before(new Date(new java.util.Date().getTime()))) {
+								System.out.println("Lease end date must be after the selected start date of " + b.startdate);
+								d = null;
+							}
+						} catch (IllegalArgumentException e) {
+							System.out.println("Lease end date not valid");
+							d = null;
+						}
+					} while (d == null);
+					b.enddate = d;
 					break;
-				case 4:
+				case 3:
 					LeasePaymentOptionsDialog payd = new LeasePaymentOptionsDialog();
 					int payr = payd.doCLIPrompt();
 					switch (payr) {
 					case 1:
-						b.paymentPeriod = "Month";
+						b.paymentperiod = "MONTH";
 						break;
 					case 2:
-						b.paymentPeriod = "Semester";
+						b.paymentperiod = "SEMESTER";
 						break;
 					case 3:
 						System.out.println("Payment period selection aborted");
 						break;
 					}
 					break;
-				case 5:
+				case 4:
 					System.out.println("Submitting lease request");
-					return "SaveLeaseRequestState";
-				case 6:
+					r.setKV("LeaseRequest", b);
+					return SaveLeaseRequestState.class.getName();
+				case 5:
 					System.out.println("New lease request discarded");
 					r.setKV("LeaseRequest", null);
 					return StudentHousingOptionsState.class.getName();

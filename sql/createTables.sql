@@ -76,6 +76,7 @@ CREATE TABLE newleasereq(
 	leasenumber INT,
 	startdate DATE NOT NULL,
 	enddate DATE NOT NULL,
+	paymentperiod VARCHAR(16) NOT NULL,
 	CONSTRAINT ensureValidSpan CHECK (enddate > startdate),
 	FOREIGN KEY (leasenumber) REFERENCES lease(leasenumber),
 	FOREIGN KEY (reqloc1) REFERENCES housingdetails(housingDetailsLocation),

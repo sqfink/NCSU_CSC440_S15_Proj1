@@ -26,6 +26,9 @@ public class LeaseRequestBean extends Bean {
 	@Column(columnName="status")
 	public String status;
 	
+	@Column(columnName="paymentperiod")
+	public String paymentperiod;
+	
 	@Column(columnName="staffnumber")
 	public Long staffnumber;
 	
