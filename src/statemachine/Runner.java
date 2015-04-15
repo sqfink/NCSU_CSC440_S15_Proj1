@@ -20,21 +20,28 @@ public class Runner {
 		states.put(s.getName(), (Class<State>) s);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void Run() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		kvStore = new HashMap<String, Object>();
 		String nextState = initialState;
-		while (nextState != null) {
-			if (!states.containsKey(nextState)) {
-				Class<?> c = this.getClass().getClassLoader().loadClass(nextState);
-				if (c != null) {
-					states.put(nextState, (Class<State>) c);
-				} else {
-					throw new ClassNotFoundException("Class loader returned null for " + nextState);
+		String lastState = "_INIT";
+		try {
+			while (nextState != null) {
+				if (!states.containsKey(nextState)) {
+					Class<?> c = this.getClass().getClassLoader().loadClass(nextState);
+					if (c != null) {
+						states.put(nextState, (Class<State>) c);
+					} else {
+						throw new ClassNotFoundException("Class loader returned null for " + nextState);
+					}
 				}
+				lastState = nextState;
+				State tmp = states.get(nextState).newInstance();
+				nextState = tmp.doState(this);
 			}
-			State tmp = states.get(nextState).newInstance();
-			nextState = tmp.doState(this);
+		} catch (ClassNotFoundException e) {
+			System.out.println("State loader failed.");
+			System.out.println("Could not find " + nextState + " (last state " + lastState + ")");
+			e.printStackTrace();
 		}
 	}
 	
