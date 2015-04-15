@@ -198,19 +198,11 @@ public class Dao {
 			if(rs != null) {
 				while(rs.next()) {
 					ib = new InvoiceBean();
-					ib.staffname = rs.getString("staffname");
-					ib.residencename = rs.getString("residencename");
-					ib.roomnumber = rs.getLong("roomnumber");
-					ib.placenumber = rs.getLong("placenumber");
 					ib.leasenumber = rs.getLong("leasenumber");
 					ib.duedate = rs.getString("duedate");
 					ib.paiddate = rs.getString("paiddate");
 					ib.paymentdue = rs.getLong("paymentdue");
 					ib.paymenttype = rs.getString("paymenttype");
-					ib.location = rs.getString("location");
-					ib.department = rs.getString("department");
-					ib.position = rs.getString("position");
-					ib.dob = rs.getString("roomnum");
 					ret.add(ib);
 				}
 			}
@@ -221,33 +213,24 @@ public class Dao {
 		return null;
 	}
 	
-	public long addInvoice(InvoiceBean ib) {
+	public static void addInvoice(InvoiceBean ib) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO invoices (snumber,staffname,residencename,roomnumber,placenumber,leasenumber,duedate,paiddate,paymentdue,paymenttype,location,department,position,dob) Values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO invoices (snumber,staffnumber,leasenumber,duedate,paiddate,paymentdue,paymenttype) Values(?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 			ps.setLong(1, ib.snumber);
-			ps.setString(2, ib.staffname);
-			ps.setString(3, ib.residencename);
-			ps.setLong(4, ib.roomnumber);
-			ps.setLong(5, ib.placenumber);
+			ps.setString(2, ib.staffnumber);
 			ps.setLong(6, ib.leasenumber);
 			ps.setString(7, ib.duedate);
 			ps.setString(8, ib.paiddate);
 			ps.setLong(9, ib.paymentdue);
 			ps.setString(10, ib.paymenttype);
-			ps.setString(11, ib.location);
-			ps.setString(12, ib.department);
-			ps.setString(13, ib.position);
-			ps.setString(14, ib.dob);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs != null && rs.next()) {
-				return rs.getLong(1);
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return -1;
 	}
 	
 	/**
@@ -986,7 +969,45 @@ public class Dao {
 	}
 	
 	public static void approveLeaseTerminationRequest(StaffLeaseTerminationStorBean b) {
-		
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			
+			// Update the lease request to be processed
+			ps = conn.prepareStatement("UPDATE leaseterminaterequest SET status='PROCESSED' WHERE reqid=?");
+			ps.setLong(1, b.requestid);
+			ps.executeUpdate();
+			
+			// Update the lease to reflect that it has been completed
+			ps = conn.prepareStatement("UPDATE lease SET active=0 hallrooms WHERE leasenumber=?");
+			ps.setLong(1, b.leasenumber);
+			ps.executeUpdate();
+			
+			ps = conn.prepareStatement("SELECT snumber FROM lease WHERE leasenumber=?");
+			ps.setLong(1, b.leasenumber);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			Long snumber = rs.getLong("snumber");
+			
+			ps = conn.prepareStatement("SELECT * FROM hallrooms WHERE snumber=?");
+			ps.setLong(1, snumber);
+			
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				ps = conn.prepareStatement("UPDATE hallrooms SET snumber=NULL WHERE snumber=?");
+				ps.setLong(1, snumber);
+			} else {
+				ps = conn.prepareStatement("UPDATE appartmentrooms SET snumber=NULL WHERE snumber=?");
+				ps.setLong(1, snumber);
+			}
+			ps.close();
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void rejectLeaseTerminationRequeset(StaffLeaseTerminationStorBean b) {

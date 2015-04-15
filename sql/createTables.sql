@@ -94,6 +94,7 @@ CREATE TABLE lease(
 	startdate DATE NOT NULL,
 	enddate DATE NOT NULL,
 	active INT NOT NULL DEFAULT '0',
+	terminationfee INT(100) NOT NULL DEFAULT '50',
 	FOREIGN KEY (snumber) REFERENCES student(snumber),
 	FOREIGN KEY (hallLocation) REFERENCES hallrooms(hallLocation),
 	FOREIGN KEY (aptLocation) REFERENCES appartmentrooms(aptLocation),

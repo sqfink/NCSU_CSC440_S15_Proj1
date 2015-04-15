@@ -7,6 +7,7 @@ import java.util.List;
 
 import daos.Dao;
 import dbms.DatabaseManager;
+import dbms.beans.InvoiceBean;
 import dbms.beans.StaffPendingHousingBean;
 import dbms.beans.tmpstore.StaffLeaseTerminationStorBean;
 import dialogs.ListSelectionDialog;
@@ -86,6 +87,12 @@ public class StaffSelectPendingLeaseTerminationState extends State {
 				b.Damages = dmg.str;
 				return this.getClass().getName();
 			case 3:
+				/*TODO: Create a new invoice and add line items to it.
+						The early termination fee should be included as any damages.
+				*/
+				if(b.Damages.equals("0")) {
+					//Dao.addInvoice(ib);
+				}
 				Dao.approveLeaseTerminationRequest(b);
 				return StaffDoRequestsMainState.class.getName();
 			case 4:
