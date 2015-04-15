@@ -10,17 +10,8 @@ public class InvoiceBean extends Bean {
 	@Column(columnName="snumber")
 	public Long snumber;
 
-	@Column(columnName="staffname")
-	public String staffname;
-	
-	@Column(columnName="residencename")
-	public String residencename;
-	
-	@Column(columnName="invoicenumber")
-	public Long roomnumber;
-	
-	@Column(columnName="placenumber")
-	public Long placenumber;
+	@Column(columnName="staffnumber")
+	public String staffnumber;
 	
 	@Column(columnName="leasenumber")
 	public Long leasenumber;
@@ -36,17 +27,5 @@ public class InvoiceBean extends Bean {
 	
 	@Column(columnName="paymenttype")
 	public String paymenttype;
-	
-	@Column(columnName="location")
-	public String location;
-	
-	@Column(columnName="department")
-	public String department;
-	
-	@Column(columnName="position")
-	public String position;
-	
-	@Column(columnName="dob")
-	public String dob;
 	
 }
