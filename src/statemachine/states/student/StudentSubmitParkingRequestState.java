@@ -1,5 +1,10 @@
 package statemachine.states.student;
 
+import java.sql.SQLException;
+
+import daos.Dao;
+import dbms.beans.CreateParkingRequestBean;
+import dbms.beans.ParkingRequestBean;
 import dbms.beans.tmpstore.ParkingLotRequestStorBean;
 import statemachine.Runner;
 import statemachine.State;
@@ -12,14 +17,26 @@ public class StudentSubmitParkingRequestState extends State {
 			System.out.println("Error: Parking request not initialized");
 			return StudentNewParkingRequestState.class.getName();
 		}
-		ParkingLotRequestStorBean b = (ParkingLotRequestStorBean) r.getKV("ParkingRequest");
-		if (b.Type == null) {
+		
+		CreateParkingRequestBean b = (CreateParkingRequestBean) r.getKV("ParkingRequest");
+		if (b.classification == null) {
 			System.out.println("Error: Parking spot type not set");
 			return StudentNewParkingRequestState.class.getName();
-		} 
-		String sql = "SELECT COUNT(*) FROM `parkinglots` WHERE `lotnumber`=\"" + b.lotNum + "\";";
+		}
+		if (b.requestlot == null) {
+			System.out.println("Notice: No lot number request added");
+		}
+
+		try {
+			Dao.insertParkingRequestBean(b);
+			System.out.println("Parking request submitted");
+			return StudentHomepageState.class.getName();
+		} catch (SQLException e) {
+			System.out.println("Unable to submit request. Invalid lot number.");
+			e.printStackTrace();
+			return StudentNewParkingRequestState.class.getName();
+		}
 		
-		return null;
 	}
 
 }

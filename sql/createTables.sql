@@ -246,13 +246,17 @@ CREATE TABLE maintnencetickets(
 
 CREATE TABLE parkingrequests(
 	reqnumber INT(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	lreqid INT NOT NULL,
+	lreqid INT,
 	snumber INT(10) NOT NULL,
-	farok INT(1) NOT NULL,
+	farok INT(1) NOT NULL DEFAULT '1',
 	classification VARCHAR(32) NOT NULL,
-	approved INT(1) NOT NULL,
-	pending INT(1) NOT NULL,
-	changedon TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	approved INT(1) NOT NULL DEFAULT '0',
+	pending INT(1) NOT NULL DEFAULT '1',
+	changedon TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	changedby INT,
+	requestlot INT,
+	FOREIGN KEY (requestlot) REFERENCES parkinglots(lotnumber),
+	FOREIGN KEY (changedby) REFERENCES staff(staffnumber),
 	FOREIGN KEY (lreqid) REFERENCES newleasereq(reqid),
 	FOREIGN KEY (classification) REFERENCES parkingclasscosts(classification),
 	FOREIGN KEY (snumber) REFERENCES student(snumber)

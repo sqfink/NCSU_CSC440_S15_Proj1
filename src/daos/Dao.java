@@ -931,14 +931,7 @@ public class Dao {
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections");
-				e.printStackTrace();
-			}
-		}	
+		}
 	}
 
 	public static List<HousingDetailsBean> getHousingLocations(Long year) {
@@ -1070,6 +1063,85 @@ public class Dao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}	
-		
+	}
+	
+	public static List<ParkingNearBean> getParkingNear(Long loc) {
+		String sql = "SELECT * FROM parkinglotsnear JOIN housingdetails ON near=housingDetailsLocation WHERE lotnumber=" + loc + ";";
+		try {
+			return DatabaseManager.executeBeanQuery(sql, ParkingNearBean.class);
+		} catch (SQLException e) {
+			System.out.println("Error retrieving nearby lots to location " + loc);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static SimpleParkingSlot getCurrentParking(Long snumber) {
+		String sql = "SELECT * FROM `parkingspots` WHERE snumber=" + snumber + ";";
+		List<SimpleParkingSlot> s;
+		try {
+			s = DatabaseManager.executeBeanQuery(sql, SimpleParkingSlot.class);
+		} catch (SQLException e) {
+			System.out.println("Failed to load current parking slot");
+			e.printStackTrace();
+			return null;
+		}
+		if (s == null || s.size() == 0)
+			return null;
+		return s.get(0);
+	}
+	
+	public static List<ParkingAvailibleBean> getParkingAvailibilities() {
+		String sql = "SELECT \r\n" + 
+				"        *, COUNT(lotnumber) AS count\r\n" + 
+				"    FROM\r\n" + 
+				"        (SELECT \r\n" + 
+				"        *\r\n" + 
+				"    FROM\r\n" + 
+				"        (SELECT \r\n" + 
+				"        *\r\n" + 
+				"    FROM\r\n" + 
+				"        `parkingspots`\r\n" + 
+				"    WHERE\r\n" + 
+				"        `lotnumber` IN (SELECT \r\n" + 
+				"                `lotnumber`\r\n" + 
+				"            FROM\r\n" + 
+				"                `parkinglots`\r\n" + 
+				"            WHERE\r\n" + 
+				"                `lotnumber` NOT IN (SELECT \r\n" + 
+				"                        `lotnumber`\r\n" + 
+				"                    FROM\r\n" + 
+				"                        `parkinglotsnear`))\r\n" + 
+				"            AND `snumber` IS NULL) AS A UNION (SELECT \r\n" + 
+				"        *\r\n" + 
+				"    FROM\r\n" + 
+				"        `parkingspots`\r\n" + 
+				"    WHERE\r\n" + 
+				"        `lotnumber` IN (SELECT \r\n" + 
+				"                `lotnumber`\r\n" + 
+				"            FROM\r\n" + 
+				"                `parkinglotsnear`)\r\n" + 
+				"            AND `snumber` IS NULL)) AS B\r\n" + 
+				"    GROUP BY classification , lotnumber;";
+		try {
+			return DatabaseManager.executeBeanQuery(sql, ParkingAvailibleBean.class);
+		} catch (SQLException e) {
+			System.out.println("Error retrieving list of availible parking spaces.");
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static void insertParkingRequestBean(CreateParkingRequestBean b) throws SQLException {
+		String sql = "INSERT INTO `parkingrequests` (`snumber`, `classification`, `requestlot`, `changedon`) VALUES (?,?,?, CURRENT_TIMESTAMP);";
+		PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
+		ps.setLong(1, b.snumber);
+		ps.setString(2, b.classification);
+		if (b.requestlot == null)
+			ps.setNull(3, java.sql.Types.INTEGER);
+		else
+			ps.setLong(3, b.requestlot);
+		ps.executeUpdate();
+		ps.close();
 	}
 }

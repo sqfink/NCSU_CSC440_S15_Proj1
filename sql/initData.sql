@@ -204,19 +204,19 @@ INSERT INTO `newleasereq` (`snumber`, `reqloc1`, `startdate`, `enddate`, `paymen
 INSERT INTO `lease` (`snumber`, `hallLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('100540001', '1', 'SEMESTER', '2015-01-01', '2015-07-31', '1');
 UPDATE `hallrooms` SET `snumber`='100540001' WHERE `hallLocation`='1';
 UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber`='1' WHERE `reqid`='1';
-INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`) VALUES ('100540001', '1', 'Small Car', '1', '0', '1');
+INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`, `changedby`) VALUES ('100540001', '1', 'Small Car', '1', '0', '1', '7');
 UPDATE `parkingspots` SET `snumber`='100540001' WHERE `spotnumber`='3';
 
 INSERT INTO `lease` (`snumber`, `aptLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('100540002', '1', 'SEMESTER', '2015-01-01', '2015-7-31', '1');
 UPDATE `appartmentrooms` SET `snumber`='100540002' WHERE `aptLocation`='1';
 UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber`='2' WHERE `reqid`='2';
-INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`) VALUES ('100540002', '1', 'Small Car', '1', '0', '2');
+INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`, `changedby`) VALUES ('100540002', '1', 'Small Car', '1', '0', '2', '7');
 UPDATE `parkingspots` SET `snumber`='100540002' WHERE `spotnumber`='13';
 
 INSERT INTO `lease` (`snumber`, `hallLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('100540003', '2', 'MONTH', '2015-01-01', '2015-05-31', '1');
 UPDATE `hallrooms` SET `snumber`='100540003' WHERE `hallLocation`='2';
 UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber`='3' WHERE `reqid`='3';
-INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`) VALUES ('100540003', '1', 'Bike', '1', '0', '3');
+INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`, `changedby`) VALUES ('100540003', '1', 'Bike', '1', '0', '3', '7');
 UPDATE `parkingspots` SET `snumber`='100540003' WHERE `spotnumber`='2';
 
 INSERT INTO `lease` (`snumber`, `hallLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('100540004', '3', 'MONTH', '2015-01-01', '2015-7-31', '1');
@@ -226,25 +226,25 @@ UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber
 INSERT INTO `lease` (`snumber`, `aptLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('100540005', '8', 'MONTH', '2015-01-01', '2015-7-31', '1');
 UPDATE `appartmentrooms` SET `snumber`='100540005' WHERE `aptLocation`='8';
 UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber`='5' WHERE `reqid`='5';
-INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`) VALUES ('100540005', '1', 'Large Car', '1', '0', '5');
+INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`, `changedby`) VALUES ('100540005', '1', 'Large Car', '1', '0', '5', '7');
 UPDATE `parkingspots` SET `snumber`='100540005' WHERE `spotnumber`='27';
 
 INSERT INTO `lease` (`snumber`, `aptLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('100540006', '9', 'SEMESTER', '2015-01-01', '2015-7-31', '1');
 UPDATE `appartmentrooms` SET `snumber`='100540006' WHERE `aptLocation`='9';
 UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber`='6' WHERE `reqid`='6';
-INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`) VALUES ('100540006', '1', 'Small Car', '1', '0', '6');
+INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`, `changedby`) VALUES ('100540006', '1', 'Small Car', '1', '0', '6', '7');
 UPDATE `parkingspots` SET `snumber`='100540006' WHERE `spotnumber`='25';
 
 INSERT INTO `lease` (`snumber`, `hallLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('100540007', '6', 'SEMESTER', '2015-01-01', '2015-7-31', '1');
 UPDATE `hallrooms` SET `snumber`='100540007' WHERE `hallLocation`='6';
 UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber`='7' WHERE `reqid`='7';
-INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`) VALUES ('100540007', '1', 'Small Car', '1', '0', '7');
+INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`, `changedby`) VALUES ('100540007', '1', 'Small Car', '1', '0', '7', '7');
 UPDATE `parkingspots` SET `snumber`='100540007' WHERE `spotnumber`='7';
 
 INSERT INTO `lease` (`snumber`, `aptLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('200540001', '4', 'MONTH', '2015-03-01', '2015-4-30', '1');
 UPDATE `appartmentrooms` SET `snumber`='200540001' WHERE `aptLocation`='4';
 UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber`='8' WHERE `reqid`='8';
-INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`) VALUES ('200540001', '1', 'Small Car', '1', '0', '8');
+INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`, `changedby`) VALUES ('200540001', '1', 'Small Car', '1', '0', '8', '7');
 UPDATE `parkingspots` SET `snumber`='200540001' WHERE `spotnumber`='45';
 
 INSERT INTO `lease` (`snumber`, `aptLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('200540002', '5', 'MONTH', '2015-04-01', '2015-4-30', '1');
@@ -254,13 +254,13 @@ UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber
 INSERT INTO `lease` (`snumber`, `aptLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('100540008', '17', 'SEMESTER', '2015-01-01', '2015-7-31', '1');
 UPDATE `appartmentrooms` SET `snumber`='100540008' WHERE `aptLocation`='17';
 UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber`='10' WHERE `reqid`='10';
-INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`) VALUES ('100540008', '1', 'Large Car', '1', '0', '10');
+INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`, `changedby`) VALUES ('100540008', '1', 'Large Car', '1', '0', '10', '7');
 UPDATE `parkingspots` SET `snumber`='100540008' WHERE `spotnumber`='38';
 
 INSERT INTO `lease` (`snumber`, `aptLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES ('100540009', '18', 'SEMESTER', '2015-01-01', '2015-7-31', '1');
 UPDATE `appartmentrooms` SET `snumber`='100540009' WHERE `aptLocation`='18';
 UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber`='11' WHERE `reqid`='11';
-INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`) VALUES ('100540009', '1', 'Handicapped', '1', '0', '11');
+INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`, `changedby`) VALUES ('100540009', '1', 'Handicapped', '1', '0', '11', '7');
 UPDATE `parkingspots` SET `snumber`='100540009' WHERE `spotnumber`='1';
 
 INSERT INTO `leaseterminaterequest` (`leasenumber`, `reason`, `enddate`) VALUES ('7', 'Database Blows', '2015-01-01');

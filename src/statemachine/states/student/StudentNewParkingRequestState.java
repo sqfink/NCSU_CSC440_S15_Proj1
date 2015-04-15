@@ -2,6 +2,8 @@ package statemachine.states.student;
 
 import java.io.IOException;
 
+import dbms.beans.CreateParkingRequestBean;
+import dbms.beans.StudentBean;
 import dbms.beans.tmpstore.ParkingLotRequestStorBean;
 import dialogs.impl.parking.NewParkingRequestDialog;
 import dialogs.impl.parking.ParkingLotNumberDialog;
@@ -17,37 +19,40 @@ public class StudentNewParkingRequestState extends State {
 	public String doState(Runner r) {
 		NewParkingRequestDialog d = new NewParkingRequestDialog();
 		if (r.getKV("ParkingRequest") == null) {
-			r.setKV("ParkingRequest", new ParkingLotRequestStorBean());
+			r.setKV("ParkingRequest", new CreateParkingRequestBean());
 		}
-		ParkingLotRequestStorBean req = (ParkingLotRequestStorBean)r.getKV("ParkingRequest");
+		CreateParkingRequestBean req = (CreateParkingRequestBean)r.getKV("ParkingRequest");
+		StudentBean user = (StudentBean) r.getKV("LoggedInUser"); 
+		req.snumber = user.snumber;
 		try {
 			int result = d.doCLIPrompt();
 			switch (result) {
 			case 1:
 				ParkingLotNumberDialog pd = new ParkingLotNumberDialog();
 				pd.doCLIPrompt();
-				req.lotNum = pd.lotNo;
+				req.requestlot = pd.lotNo;
 				break;
 			case 2:
 				ParkingTypeDialog ptd = new ParkingTypeDialog();
 				int ptr = ptd.doCLIPrompt();
 				switch (ptr) {
 				case 1:
-					req.Type = "Handicapped";
+					req.classification = "Handicapped";
 					break;
 				case 2:
-					req.Type = "Small car";
+					req.classification = "Small car";
 					break;
 				case 3:
-					req.Type = "Large car";
+					req.classification = "Large car";
 					break;
 				case 4:
-					req.Type = "Bike";
+					req.classification = "Bike";
 					break;
 				case 5:
-					SpecialParkingTypeDialog ptyped = new SpecialParkingTypeDialog();
-					ptyped.doCLIPrompt();
-					req.Type = ptyped.type;
+					System.out.println("No non-standard parkng availible at this time.");
+					//SpecialParkingTypeDialog ptyped = new SpecialParkingTypeDialog();
+					//ptyped.doCLIPrompt();
+					//req.Type = ptyped.type;
 					break;
 				case 6:
 					System.out.println("Parking space type selection canceled");
