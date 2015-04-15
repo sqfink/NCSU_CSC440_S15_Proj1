@@ -915,23 +915,16 @@ public class Dao {
 		return null;
 	}
 	
-	public void addLeaseTerminationRequest(LeaseTerminationRequestBean ltrb) {
-		Connection conn = null;
-		PreparedStatement ps = null;
-		try {
-			conn = DatabaseManager.getConnection();
-			ps = conn.prepareStatement("INSERT INTO leaseterminaterequest (leasenumber, status, reason, enddate, staffnumber) VALUES(?,?,?,?,?)");
+	public static void addLeaseTerminationRequest(LeaseTerminationRequestBean ltrb) throws SQLException {
+		String sql = "INSERT INTO leaseterminaterequest (leasenumber, reason, enddate) VALUES(?,?,?)";
+		PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
 
-			ps.setLong(1, ltrb.leasenumber);
-			ps.setString(2, ltrb.status);
-			ps.setString(3, ltrb.reason);
-			ps.setDate(4, ltrb.enddate);
-			ps.setLong(5, ltrb.staffnumber);
-			ps.executeUpdate();
-			ps.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		ps.setLong(1, ltrb.leasenumber);
+		ps.setString(2, ltrb.reason);
+		ps.setDate(3, ltrb.enddate);
+		ps.executeUpdate();
+		ps.close();
+	
 	}
 
 	public static List<HousingDetailsBean> getHousingLocations(Long year) {

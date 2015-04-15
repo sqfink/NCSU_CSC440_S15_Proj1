@@ -17,7 +17,7 @@ public class StudentNewRequestState extends State {
 			case 1:
 				return StudentNewLeaseRequestState.class.getName();
 			case 2:
-				return "StudentTerminateLeaseRequestState";
+				return StudentLeaseTerminationRequestState.class.getName();
 			case 3:
 				return StudentHousingOptionsState.class.getName();
 			default:

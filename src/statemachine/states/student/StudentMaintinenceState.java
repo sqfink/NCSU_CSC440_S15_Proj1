@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import daos.Dao;
+import dbms.beans.LeaseBean;
 import dbms.beans.MaintenanceTicketBean;
 import dbms.beans.StudentBean;
 import dialogs.impl.student.MaintinenceIssueDialog;
@@ -18,6 +19,12 @@ public class StudentMaintinenceState extends State {
 	public String doState(Runner r) {
 		StudentMaintinenceDialog d = new StudentMaintinenceDialog();
 		StudentBean s = (StudentBean) r.getKV("LoggedInUser");
+		LeaseBean clb = Dao.getCurrentlLease(s.snumber);
+		if (clb == null) {
+			System.out.println("No current lease exists for this user");
+			System.out.println("Only users with a current lease may submit a maintinence request");
+			return StudentHousingOptionsState.class.getName();
+		}
 		try {
 			MaintenanceTicketBean b = null;
 			int result = d.doCLIPrompt();

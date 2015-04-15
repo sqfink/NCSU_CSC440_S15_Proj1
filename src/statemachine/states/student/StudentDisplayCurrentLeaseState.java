@@ -17,7 +17,7 @@ public class StudentDisplayCurrentLeaseState extends State {
 		StudentBean s = (StudentBean) r.getKV("LoggedInUser");
 		LeaseBean b = Dao.getCurrentlLease(s.snumber);
 		if (b == null) {
-			System.out.println("No current leases exist for this user");
+			System.out.println("No current lease exists for this user");
 		} else {
 			System.out.println("Current lease:");
 			System.out.println("\tLease ID: " + b.leasenumber);
