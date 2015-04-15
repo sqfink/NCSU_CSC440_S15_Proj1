@@ -753,9 +753,9 @@ public class Dao {
 		return getAllStaff;
 	}
 	
-	public List<MaintenanceTicketBean> getMaintenanceTicketsByLeaseNumber(long leaseNumber) throws SQLException {
-		String getMaintenanceTicketsByLeaseNumberQuery = "SELECT * FROM maintnencetickets WHERE createdby = " + leaseNumber + ";";
-		List<MaintenanceTicketBean> getMaintenanceTicketsByLeaseNumber = DatabaseManager.executeBeanQuery(getMaintenanceTicketsByLeaseNumberQuery, MaintenanceTicketBean.class);
+	public static List<MaintenanceTicketBean> getMaintenanceTicketsByStudent(long snumber) throws SQLException {
+		String sql = "SELECT * FROM maintnencetickets WHERE createdby = " + snumber + ";";
+		List<MaintenanceTicketBean> getMaintenanceTicketsByLeaseNumber = DatabaseManager.executeBeanQuery(sql, MaintenanceTicketBean.class);
 		return getMaintenanceTicketsByLeaseNumber;
 	}
 	
@@ -773,7 +773,7 @@ public class Dao {
 			ps = conn.prepareStatement("INSERT INTO maintnencetickets (issue, createdon, status, createdby, comments) VALUES(?,?,?,?,?)");
 			
 			ps.setString(1, mtb.issue);
-			ps.setString(2, mtb.createdon);
+			ps.setDate(2, mtb.createdon);
 			ps.setString(3, mtb.status);
 			ps.setLong(4, mtb.createdby);
 			ps.setString(5, mtb.comments);
@@ -1141,6 +1141,16 @@ public class Dao {
 			ps.setNull(3, java.sql.Types.INTEGER);
 		else
 			ps.setLong(3, b.requestlot);
+		ps.executeUpdate();
+		ps.close();
+	}
+	
+	public static void createMaintinenceTicket(MaintenanceTicketBean b) throws SQLException {
+		String sql = "INSERT INTO `csc440`.`maintnencetickets` (`issue`, `createdby`, `comments`, `createdon`) VALUES (?, ?, ?, CURRENT_DATE);";
+		PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
+		ps.setString(1, b.issue);
+		ps.setLong(2, b.createdby);
+		ps.setString(3, b.comments);
 		ps.executeUpdate();
 		ps.close();
 	}

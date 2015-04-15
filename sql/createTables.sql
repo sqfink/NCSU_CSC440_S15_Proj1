@@ -233,12 +233,12 @@ CREATE TABLE lineitems(
 
 CREATE TABLE maintnencetickets(
 	ticketnumber INT NOT NULL PRIMARY KEY UNIQUE AUTO_INCREMENT,
-	issue VARCHAR(100) NOT NULL,
+	issue VARCHAR(64) NOT NULL,
 	createdon DATE NOT NULL,
-	status VARCHAR(32) NOT NULL,
+	status VARCHAR(32) NOT NULL DEFAULT "Pending",
 	createdby INT NOT NULL,
 	comments VARCHAR(512) NOT NULL,
-	changedon TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	changedon TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	changedby INT,
 	FOREIGN KEY (changedby) REFERENCES staff(staffnumber),
 	FOREIGN KEY (createdby) REFERENCES student(snumber)

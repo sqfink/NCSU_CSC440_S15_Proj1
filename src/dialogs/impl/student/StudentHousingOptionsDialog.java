@@ -9,7 +9,8 @@ import dialogs.annotations.SelectionOption;
 		@SelectionOption(prompt="View leases", value=2),
 		@SelectionOption(prompt="New request", value=3),
 		@SelectionOption(prompt="View request status", value=4),
-		@SelectionOption(prompt="Back", value=5)		
+		@SelectionOption(prompt="Maintinence tickets", value=5),
+		@SelectionOption(prompt="Back", value=6)		
 })
 public class StudentHousingOptionsDialog extends SelectionDialog {
 

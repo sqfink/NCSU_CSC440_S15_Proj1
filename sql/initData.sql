@@ -111,8 +111,8 @@ INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VA
 INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VALUES ('8', '3', '3');
 
 INSERT INTO `maintnencetickets` (`issue`, `createdon`, `status`, `createdby`, `comments`) VALUES ('Water', '2015-04-06', 'Pending', '100540001', 'No Water');
-INSERT INTO `maintnencetickets` (`issue`, `createdon`, `status`, `createdby`, `comments`) VALUES ('Internet', '2015-03-30', 'Complete', '100540003', 'Internet not working');
-INSERT INTO `maintnencetickets` (`issue`, `createdon`, `status`, `createdby`, `comments`) VALUES ('Cleaning', '2015-03-15', 'Complete', '100540007', 'Cleaning');
+INSERT INTO `maintnencetickets` (`issue`, `createdon`, `status`, `createdby`, `comments`, `changedby`) VALUES ('Internet', '2015-03-30', 'Complete', '100540003', 'Internet not working', '5');
+INSERT INTO `maintnencetickets` (`issue`, `createdon`, `status`, `createdby`, `comments`, `changedby`) VALUES ('Cleaning', '2015-03-15', 'Complete', '100540007', 'Cleaning', '7');
 INSERT INTO `maintnencetickets` (`issue`, `createdon`, `status`, `createdby`, `comments`) VALUES ('Miscellaneous', '2015-04-02', 'Pending', '200540002', 'Window broken');
 
 INSERT INTO `parkinglots` (`lotnumber`) VALUES ('1');

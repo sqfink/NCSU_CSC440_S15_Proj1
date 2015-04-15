@@ -23,6 +23,8 @@ public class StudentHousingOptionsState extends State {
 			case 4:
 				return StudentViewCurrentRequestState.class.getName();
 			case 5:
+				return StudentMaintinenceState.class.getName();
+			case 6:
 				return StudentHomepageState.class.getName();
 			default:
 				System.out.println("Illegal input returned by dialog");
