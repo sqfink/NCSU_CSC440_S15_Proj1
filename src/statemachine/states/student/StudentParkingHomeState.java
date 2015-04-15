@@ -70,11 +70,10 @@ public class StudentParkingHomeState extends State {
 						}						
 					}
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					System.out.println("Failed to retrieve list of parking requests");
 					e.printStackTrace();
 				}
 				return this.getClass().getName();
-				//return "StudentParkingRequestStatusState";
 			case 6:
 				return StudentHomepageState.class.getName();
 			default:
