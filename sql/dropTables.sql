@@ -42,6 +42,8 @@ DROP TABLE IF EXISTS appartments;
 
 DROP TABLE IF EXISTS appartmentlocations;
 
+DROP TABLE IF EXISTS halls;
+
 DROP TABLE IF EXISTS hallrooms;
 
 DROP TABLE IF EXISTS appartmentrooms;

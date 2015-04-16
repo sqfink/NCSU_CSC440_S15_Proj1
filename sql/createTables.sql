@@ -115,11 +115,19 @@ CREATE TABLE leaseterminaterequest(
 	FOREIGN KEY (leasenumber) REFERENCES lease(leasenumber)
 );
 
+CREATE TABLE halls(
+	hallnum INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	rent REAL NOT NULL,
+	deposit REAL NOT NULL	
+);
+
 CREATE TABLE hallrooms(
 	hallLocation INT PRIMARY KEY NOT NULL,
 	housingDetailsLocation INT(10) NOT NULL,
 	roomnum INT(10) NOT NULL,
 	snumber INT,
+	hallnum INT NOT NULL,
+	FOREIGN KEY (hallnum) REFERENCES halls(hallnum),
 	FOREIGN KEY (snumber) REFERENCES student(snumber),
 	FOREIGN KEY (housingDetailsLocation) REFERENCES housingdetails(housingDetailsLocation)
 );

@@ -101,14 +101,17 @@ INSERT INTO `appartmentrooms` (`aptLocation`, `aptnum`, `roomnum`) VALUES ('16',
 INSERT INTO `appartmentrooms` (`aptLocation`, `aptnum`, `roomnum`) VALUES ('17', '107', '1');
 INSERT INTO `appartmentrooms` (`aptLocation`, `aptnum`, `roomnum`) VALUES ('18', '108', '1');
 
-INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VALUES ('1', '2', '1');
-INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VALUES ('2', '2', '2');
-INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VALUES ('3', '2', '3');
-INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VALUES ('4', '2', '4');
-INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VALUES ('5', '2', '5');
-INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VALUES ('6', '3', '1');
-INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VALUES ('7', '3', '2');
-INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`) VALUES ('8', '3', '3');
+INSERT INTO `halls` (`rent`, `deposit`) VALUES ('400','400');
+INSERT INTO `halls` (`rent`, `deposit`) VALUES ('450','500');
+
+INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`, `hallnum`) VALUES ('1', '2', '1', '1');
+INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`, `hallnum`) VALUES ('2', '2', '2', '1');
+INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`, `hallnum`) VALUES ('3', '2', '3', '1');
+INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`, `hallnum`) VALUES ('4', '2', '4', '1');
+INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`, `hallnum`) VALUES ('5', '2', '5', '1');
+INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`, `hallnum`) VALUES ('6', '3', '1', '2');
+INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`, `hallnum`) VALUES ('7', '3', '2', '2');
+INSERT INTO `hallrooms` (`hallLocation`, `housingDetailsLocation`, `roomnum`, `hallnum`) VALUES ('8', '3', '3', '2');
 
 INSERT INTO `maintnencetickets` (`issue`, `createdon`, `status`, `createdby`, `comments`) VALUES ('Water', '2015-04-06', 'Pending', '100540001', 'No Water');
 INSERT INTO `maintnencetickets` (`issue`, `createdon`, `status`, `createdby`, `comments`, `changedby`) VALUES ('Internet', '2015-03-30', 'Complete', '100540003', 'Internet not working', '5');
