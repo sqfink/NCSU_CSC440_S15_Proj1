@@ -35,8 +35,7 @@ public class StaffSelectPendingLeaseTerminationState extends State {
 	}
 	
 	private List<StaffLeaseTerminationStorBean> getBeanList() throws SQLException {
-		// WHERE status='PENDING'
-		String sql = "SELECT * FROM leaseterminaterequest;";
+		String sql = "SELECT * FROM leaseterminaterequest WHERE status='PENDING';";
 		return DatabaseManager.executeBeanQuery(sql, StaffLeaseTerminationStorBean.class);
 	}
 	
@@ -82,7 +81,6 @@ public class StaffSelectPendingLeaseTerminationState extends State {
 				StaffAssignInspectionDateDialog ad = new StaffAssignInspectionDateDialog();
 				do {
 					ad.doCLIPrompt();
-					System.out.println(ad.str);
 				} while (ad.str == null || !validateDate(ad.str));
 				b.InspectionDate = ad.str;
 				return this.getClass().getName();
@@ -103,12 +101,14 @@ public class StaffSelectPendingLeaseTerminationState extends State {
 					return this.getClass().getName();
 				}
 				Dao.approveLeaseTerminationRequest(b);
+				r.setKV("StaffLeaseTerminationStorBean", null);
 				return StaffDoRequestsMainState.class.getName();
 			case 4:
 				Dao.rejectLeaseTerminationRequeset(b);
+				r.setKV("StaffLeaseTerminationStorBean", null);
 				return StaffDoRequestsMainState.class.getName();
 			case 5:
-				r.setKV("LeaseTerminationRequestBean", null);
+				r.setKV("StaffLeaseTerminationStorBean", null);
 				return StaffDoRequestsMainState.class.getName();
 			default:
 				throw new IOException("Invalid response returned by dialog");

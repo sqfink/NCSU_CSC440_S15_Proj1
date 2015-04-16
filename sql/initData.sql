@@ -266,5 +266,5 @@ UPDATE `newleasereq` SET `status`='IN PROGRESS', `staffnumber`='7', `leasenumber
 INSERT INTO `parkingrequests` (`snumber`, `farok`, `classification`, `approved`, `pending`, `lreqid`, `changedby`) VALUES ('100540009', '1', 'Handicapped', '1', '0', '11', '7');
 UPDATE `parkingspots` SET `snumber`='100540009' WHERE `spotnumber`='1';
 
-INSERT INTO `leaseterminaterequest` (`leasenumber`, `reason`, `enddate`) VALUES ('7', 'Database Blows', '2015-01-01');
+INSERT INTO `leaseterminaterequest` (`leasenumber`, `reason`, `enddate`, `status`) VALUES ('7', 'Database Blows', '2015-01-01', 'PENDING');
 INSERT INTO `leaseterminaterequest` (`leasenumber`, `reason`, `enddate`, `status`) VALUES ('6', 'Database Blows', '2015-01-01', 'PROCESSED');

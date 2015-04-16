@@ -362,7 +362,7 @@ public class Dao {
 	public static void addLineItem(long invoicenumber, double fee, String itemtype) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO lineitems fee,itemtype,invoicenumber VALUES(?,?,?)");
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO lineitems (fee,itemtype,invoicenumber) VALUES(?,?,?)");
 			ps.setDouble(1, fee);
 			ps.setString(2, itemtype);
 			ps.setLong(3, invoicenumber);
@@ -1003,12 +1003,12 @@ public class Dao {
 			conn = DatabaseManager.getConnection();
 			
 			// Update the lease request to be processed
-			ps = conn.prepareStatement("UPDATE leaseterminaterequest SET status='PROCESSED' WHERE reqid=?");
+			ps = conn.prepareStatement("UPDATE leaseterminaterequest SET status='PROCESSED' WHERE requestid=?");
 			ps.setLong(1, b.requestid);
 			ps.executeUpdate();
 			
 			// Update the lease to reflect that it has been completed
-			ps = conn.prepareStatement("UPDATE lease SET active=0 hallrooms WHERE leasenumber=?");
+			ps = conn.prepareStatement("UPDATE lease SET active=0 WHERE leasenumber=?");
 			ps.setLong(1, b.leasenumber);
 			ps.executeUpdate();
 			
@@ -1016,6 +1016,8 @@ public class Dao {
 			ps.setLong(1, b.leasenumber);
 			
 			ResultSet rs = ps.executeQuery();
+			
+			rs.next();
 			
 			Long snumber = rs.getLong("snumber");
 			Long terminationfee = rs.getLong("terminationfee");
@@ -1064,8 +1066,9 @@ public class Dao {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.MONTH, 2);
-			Date duedate = (Date) dateFormat.parse(dateFormat.format(cal.getTime()));
-			ps.setDate(4, duedate);
+			java.util.Date duedate = dateFormat.parse(dateFormat.format(cal.getTime()));
+			java.sql.Date sqlDueDate = new java.sql.Date(duedate.getTime());
+			ps.setDate(4, sqlDueDate);
 			ps.setLong(5, 0);
 			ps.executeUpdate();
 			rs = ps.getGeneratedKeys();
@@ -1078,7 +1081,7 @@ public class Dao {
 			
 			cal = Calendar.getInstance();
 			
-			Date currentdate = (Date) dateFormat.parse(dateFormat.format(cal.getTime()));
+			java.util.Date currentdate = dateFormat.parse(dateFormat.format(cal.getTime()));
 
 			long diff = Math.abs(currentdate.getTime() - duedate.getTime());
 			long diffDays = diff / (24 * 60 * 60 * 1000);
@@ -1127,7 +1130,7 @@ public class Dao {
 		try {
 			Long l = b.requestid;
 			conn = DatabaseManager.getConnection();
-			ps = conn.prepareStatement("UPDATE leaseterminationrequest SET status='REJECTED' WHERE reqid=?");
+			ps = conn.prepareStatement("UPDATE leaseterminaterequest SET status='REJECTED' WHERE requestid=?");
 			ps.setLong(1, l);
 			ps.executeUpdate();
 			ps.close();
