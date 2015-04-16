@@ -1,5 +1,7 @@
 package dbms.beans.tmpstore;
 
+import java.sql.Date;
+
 import dbms.Bean;
 import dbms.annotations.Column;
 
@@ -17,6 +19,9 @@ public class StaffLeaseTerminationStorBean extends Bean {
 	
 	@Column(columnName="reason")
 	public String reason;
+	
+	@Column(columnName="enddate")
+	public Date enddate;
 	
 	public Long staffnumber;
 

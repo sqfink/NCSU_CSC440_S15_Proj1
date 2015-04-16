@@ -1003,8 +1003,9 @@ public class Dao {
 			conn = DatabaseManager.getConnection();
 			
 			// Update the lease request to be processed
-			ps = conn.prepareStatement("UPDATE leaseterminaterequest SET status='PROCESSED' WHERE requestid=?");
-			ps.setLong(1, b.requestid);
+			ps = conn.prepareStatement("UPDATE leaseterminaterequest SET status='PROCESSED', staffnumber=? WHERE requestid=?");
+			ps.setLong(1, b.staffnumber);
+			ps.setLong(2, b.requestid);
 			ps.executeUpdate();
 			
 			// Update the lease to reflect that it has been completed
@@ -1078,12 +1079,8 @@ public class Dao {
             } else {
             	throw new SQLException("Creating invoice failed");
             }
-			
-			cal = Calendar.getInstance();
-			
-			java.util.Date currentdate = dateFormat.parse(dateFormat.format(cal.getTime()));
 
-			long diff = Math.abs(currentdate.getTime() - duedate.getTime());
+			long diff = Math.abs(b.enddate.getTime() - enddate.getTime());
 			long diffDays = diff / (24 * 60 * 60 * 1000);
 			
 			double remainingAmount = diffDays / 30 * rent;
@@ -1093,12 +1090,12 @@ public class Dao {
 			if(diffDays < 60) {
 				fee = remainingAmount;
 			} else {
-				fee = remainingAmount*(100/terminationfee);
+				fee = remainingAmount*((double)terminationfee/100);
 			}
 			
 			addLineItem(invoicenumber,fee,"Early Termination Fee");
 			
-			if(b.Damages.equals("0")) {
+			if(!b.Damages.equals("0") && !b.Damages.equals("0.00") && !b.Damages.equals("0.0")) {
 				double damages =  Double.parseDouble(b.Damages);
 				addLineItem(invoicenumber, damages, "Damage Charge. Inspected On " + b.InspectionDate);
 			}
