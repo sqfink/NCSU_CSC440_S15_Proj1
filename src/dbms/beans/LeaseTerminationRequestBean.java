@@ -23,7 +23,7 @@ public class LeaseTerminationRequestBean extends Bean {
 	@Column(columnName="enddate")
 	public Date enddate;
 	
-	@Column(columnName="reqid")
+	@Column(columnName="staffnumber")
 	public Long staffnumber;
 	
 	@Column(columnName="changedon")

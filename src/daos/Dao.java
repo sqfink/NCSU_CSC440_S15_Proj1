@@ -1124,6 +1124,11 @@ public class Dao {
 		return null;
 	}
 	
+	public static List<LeaseTerminationRequestBean> getLeaseTerminationRequestsByStudent(Long leasenumber) throws SQLException {
+		String sql = "SELECT * FROM `leaseterminaterequest` WHERE leasenumber =" + leasenumber + ";";
+		return DatabaseManager.executeBeanQuery(sql, LeaseTerminationRequestBean.class);
+	}
+	
 	public static void rejectLeaseTerminationRequeset(StaffLeaseTerminationStorBean b) {
 		Connection conn = null;
 		PreparedStatement ps = null;
