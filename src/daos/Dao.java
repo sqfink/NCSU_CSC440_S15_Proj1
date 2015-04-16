@@ -5,11 +5,16 @@ import dbms.beans.*;
 import dbms.beans.tmpstore.StaffLeaseTerminationStorBean;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 import java.util.List;
 
@@ -354,17 +359,18 @@ public class Dao {
 	 * @param fee
 	 * @param itemtype
 	 */
-	public void addLineItem(long invoicenumber, int fee, String itemtype) {
+	public static void addLineItem(long invoicenumber, double fee, String itemtype) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
 			PreparedStatement ps = conn.prepareStatement("INSERT INTO lineitems fee,itemtype,invoicenumber VALUES(?,?,?)");
-			ps.setInt(1, fee);
+			ps.setDouble(1, fee);
 			ps.setString(2, itemtype);
 			ps.setLong(3, invoicenumber);
 			ps.executeUpdate();
 			ps = conn.prepareStatement("UPDATE invoices SET paymentdue=paymentdue+?");
-			ps.setInt(1, fee);
+			ps.setDouble(1, fee);
 			ps.executeUpdate();
+			ps.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		} 
@@ -1006,28 +1012,100 @@ public class Dao {
 			ps.setLong(1, b.leasenumber);
 			ps.executeUpdate();
 			
-			ps = conn.prepareStatement("SELECT snumber FROM lease WHERE leasenumber=?");
+			ps = conn.prepareStatement("SELECT snumber,terminationfee,enddate FROM lease WHERE leasenumber=?");
 			ps.setLong(1, b.leasenumber);
 			
 			ResultSet rs = ps.executeQuery();
 			
 			Long snumber = rs.getLong("snumber");
+			Long terminationfee = rs.getLong("terminationfee");
+			Date enddate = rs.getDate("enddate");
 			
 			ps = conn.prepareStatement("SELECT * FROM hallrooms WHERE snumber=?");
 			ps.setLong(1, snumber);
 			
 			rs = ps.executeQuery();
 			
+			Long rent = null;
+			
 			if(rs.next()) {
+				Long hallnum = rs.getLong("hallnum");
+				
+				ps = conn.prepareStatement("SELECT rent FROM halls WHERE hallnum=?");
+				ps.setLong(1, hallnum);
+				rs = ps.executeQuery();
+				rs.next();
+				rent = rs.getLong("rent");
+				
 				ps = conn.prepareStatement("UPDATE hallrooms SET snumber=NULL WHERE snumber=?");
 				ps.setLong(1, snumber);
+				ps.executeUpdate();
+				
 			} else {
+				ps = conn.prepareStatement("SELECT A.rent FROM appartmentrooms AR, appartments A WHERE A.hallnum=AR.hallnum AND AR=?");
+				ps.setLong(1, snumber);
+				rs = ps.executeQuery();
+				rs.next();
+				rent = rs.getLong("rent");
+				
 				ps = conn.prepareStatement("UPDATE appartmentrooms SET snumber=NULL WHERE snumber=?");
 				ps.setLong(1, snumber);
+				ps.executeUpdate();
+
 			}
+			
+			
+			
+			ps = conn.prepareStatement("INSERT INTO invoices (snumber,staffnumber,leasenumber,duedate,paymentdue) VALUES(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			
+			ps.setLong(1, snumber);
+			ps.setLong(2, b.staffnumber);
+			ps.setLong(3, b.leasenumber);
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.MONTH, 2);
+			Date duedate = (Date) dateFormat.parse(dateFormat.format(cal.getTime()));
+			ps.setDate(4, duedate);
+			ps.setLong(5, 0);
+			ps.executeUpdate();
+			rs = ps.getGeneratedKeys();
+			Long invoicenumber = null;
+			if (rs.next()) {
+				invoicenumber = rs.getLong(1);
+            } else {
+            	throw new SQLException("Creating invoice failed");
+            }
+			
+			cal = Calendar.getInstance();
+			
+			Date currentdate = (Date) dateFormat.parse(dateFormat.format(cal.getTime()));
+
+			long diff = Math.abs(currentdate.getTime() - duedate.getTime());
+			long diffDays = diff / (24 * 60 * 60 * 1000);
+			
+			double remainingAmount = diffDays / 30 * rent;
+			
+			double fee;
+			
+			if(diffDays < 60) {
+				fee = remainingAmount;
+			} else {
+				fee = remainingAmount*(100/terminationfee);
+			}
+			
+			addLineItem(invoicenumber,fee,"Early Termination Fee");
+			
+			if(b.Damages.equals("0")) {
+				double damages =  Double.parseDouble(b.Damages);
+				addLineItem(invoicenumber, damages, "Damage Charge. Inspected On " + b.InspectionDate);
+			}
+			
 			ps.close();
 			rs.close();
 		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			System.out.println("Error formatting date");
 			e.printStackTrace();
 		}
 	}

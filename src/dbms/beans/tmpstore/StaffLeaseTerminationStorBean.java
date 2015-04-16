@@ -5,9 +5,9 @@ import dbms.annotations.Column;
 
 public class StaffLeaseTerminationStorBean extends Bean {
 
-	public String InspectionDate;
+	public String InspectionDate = null;
 	
-	public String Damages;
+	public String Damages = null;
 	
 	@Column(columnName="requestid")
 	public Long requestid;
@@ -17,5 +17,7 @@ public class StaffLeaseTerminationStorBean extends Bean {
 	
 	@Column(columnName="reason")
 	public String reason;
+	
+	public Long staffnumber;
 
 }
