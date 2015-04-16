@@ -8,6 +8,7 @@ import java.util.List;
 import daos.Dao;
 import dbms.DatabaseManager;
 import dbms.beans.InvoiceBean;
+import dbms.beans.LoginStaffBean;
 import dbms.beans.StaffPendingHousingBean;
 import dbms.beans.tmpstore.StaffLeaseTerminationStorBean;
 import dialogs.ListSelectionDialog;
@@ -55,19 +56,24 @@ public class StaffSelectPendingLeaseTerminationState extends State {
 	@Override
 	public String doState(Runner r) {
 		StaffLeaseTerminationStorBean b = null;
-		try {
-			List<StaffLeaseTerminationStorBean> l = getBeanList();
-			ListSelectionDialog<StaffLeaseTerminationStorBean> dialog = new Selector(l);
-			if (l.size() == 0) {
-				System.out.println("There are no pending lease termination requests");
-				return StaffMainState.class.getName();
-			} else {
-				b = dialog.doCLIPrompt();
+		b = (StaffLeaseTerminationStorBean)r.getKV("StaffLeaseTerminationStorBean");
+		if(b == null) {
+			try {
+				List<StaffLeaseTerminationStorBean> l = getBeanList();
+				ListSelectionDialog<StaffLeaseTerminationStorBean> dialog = new Selector(l);
+				if (l.size() == 0) {
+					System.out.println("There are no pending lease termination requests");
+					return StaffMainState.class.getName();
+				} else {
+					b = dialog.doCLIPrompt();
+					LoginStaffBean lisb = (LoginStaffBean)r.getKV("LoggedInUser");
+					b.staffnumber = lisb.id;
+					r.setKV("StaffLeaseTerminationStorBean", b);
+				}
+			} catch (SQLException | IOException | IllegalAccessException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException | IOException | IllegalAccessException e) {
-			e.printStackTrace();
 		}
-		
 		StaffLeaseTerminationMainDialog d = new StaffLeaseTerminationMainDialog();
 		try {
 			int result = d.doCLIPrompt();
@@ -76,22 +82,25 @@ public class StaffSelectPendingLeaseTerminationState extends State {
 				StaffAssignInspectionDateDialog ad = new StaffAssignInspectionDateDialog();
 				do {
 					ad.doCLIPrompt();
-				} while (ad.str == null || validateDate(ad.str));
+					System.out.println(ad.str);
+				} while (ad.str == null || !validateDate(ad.str));
 				b.InspectionDate = ad.str;
 				return this.getClass().getName();
 			case 2:
 				StaffAssignDamagesDialog dmg = new StaffAssignDamagesDialog();
 				do {
 					dmg.doCLIPrompt();
-				} while (dmg.str == null || validateDate(dmg.str));
+				} while (dmg.str == null);
 				b.Damages = dmg.str;
 				return this.getClass().getName();
 			case 3:
-				/*TODO: Create a new invoice and add line items to it.
-						The early termination fee should be included as any damages.
-				*/
-				if(b.Damages.equals("0")) {
-					//Dao.addInvoice(ib);
+				if(b.InspectionDate == null) {
+					System.out.println("Enter an Inspection Date before approving.");
+					return this.getClass().getName();
+				}
+				if(b.Damages == null) {
+					System.out.println("Enter Damage Charges before approving. If there are no charges enter 0");
+					return this.getClass().getName();
 				}
 				Dao.approveLeaseTerminationRequest(b);
 				return StaffDoRequestsMainState.class.getName();
