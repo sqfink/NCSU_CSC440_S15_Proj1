@@ -794,6 +794,7 @@ public class Dao {
 		Connection conn = null;
 		PreparedStatement ps = null;
 		try {
+			Dao.updateLeaseActiveFlags();
 			conn = DatabaseManager.getConnection();
 			ps = conn.prepareStatement("INSERT INTO newleasereq (snumber, reqloc1, reqloc2, reqloc3, startdate, enddate, paymentperiod, changedon) VALUES(?,?,?,?,?,?,?,CURRENT_TIMESTAMP)");
 
@@ -821,6 +822,7 @@ public class Dao {
 	
 	public static LeaseBean getCurrentlLease(long snumber) {
 		try {
+			Dao.updateLeaseActiveFlags();
 			List<LeaseBean> b = DatabaseManager.executeBeanQuery("SELECT * FROM `lease` WHERE `snumber`=" + snumber + " AND `active`=1 LIMIT 1;", LeaseBean.class);
 			if (b.size() == 0)
 				return null;
@@ -1292,5 +1294,102 @@ public class Dao {
 		ps.setString(3, b.comments);
 		ps.executeUpdate();
 		ps.close();
+	}
+	
+	public static void updateLeaseActiveFlags() throws SQLException {
+		String sql = "UPDATE lease SET active=1 WHERE enddate >= CURRENT_DATE AND startdate <= CURRENT_DATE; " + 
+				"UPDATE lease SET active=0 WHERE enddate < CURRENT_DATE AND startdate > CURRENT_DATE;";
+		DatabaseManager.exec(sql);
+	}
+	
+	public static Long initInvoice(InvoiceInitBean b) throws SQLException {
+		String sql = "INSERT INTO invoices (`leasenumber`, `duedate`) VALUES (" + b.leasenumber + ", " + b.duedate + ");";
+		Statement s = DatabaseManager.getConnection().createStatement();
+		s.execute(sql);
+		ResultSet rs = s.getGeneratedKeys();
+		if (!rs.next()) {
+			return null;
+		}
+		return rs.getLong(1);
+	}
+	
+	public static Date getLastInvoiceGenDate() throws SQLException {
+		String sql = "SELECT * FROM invoicegens LIMIT 1;";
+		Statement s = DatabaseManager.getConnection().createStatement();
+		s.execute(sql);
+		ResultSet rs = s.getResultSet();
+		if (!rs.next())
+			return null;
+		return rs.getDate(1);
+	}
+	
+	public static boolean invoicesExistForLease(Long leasenumber) {
+		String sql = "SELECT COUNT(*) FROM invoices WHERE leasenumber=" + leasenumber + ";";
+		try {
+			return DatabaseManager.execCount(sql) == 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public static ParkingCosts getParkingFee(Long snumber) {
+		String sql = "SELECT \r\n" + 
+			"    cost\r\n" + 
+			"FROM\r\n" + 
+			"    (SELECT \r\n" + 
+			"        *\r\n" + 
+			"    FROM\r\n" + 
+			"        parkingspots\r\n" + 
+			"    WHERE\r\n" + 
+			"        snumber = " + snumber + ") AS A\r\n" + 
+			"        JOIN\r\n" + 
+			"    parkingclasscosts ON A.classification = parkingclasscosts.classification;";
+		List<ParkingCosts> l;
+		try {
+			l = DatabaseManager.executeBeanQuery(sql, ParkingCosts.class);
+		} catch (SQLException e) {
+			System.out.println("Error retreiving parking costs for user " + snumber);
+			e.printStackTrace();
+			return null;
+		}
+		if (l == null || l.size() == 0) {
+			return null;
+		}
+		return l.get(0);
+	}
+	
+	public static LeaseCostsBean getCostsByLease(Long leasenumber) {
+		String sql = "SELECT \r\n" + 
+			"    *\r\n" + 
+			"FROM\r\n" + 
+			"    (SELECT \r\n" + 
+			"        *\r\n" + 
+			"    FROM\r\n" + 
+			"        (SELECT \r\n" + 
+			"        leasenumber, lease.snumber, terminationfee, rent, deposit\r\n" + 
+			"    FROM\r\n" + 
+			"        `lease`\r\n" + 
+			"    JOIN `hallrooms` ON lease.hallLocation = hallrooms.hallLocation\r\n" + 
+			"    JOIN `halls` ON halls.hallnum = hallrooms.hallnum) AS A UNION (SELECT \r\n" + 
+			"        leasenumber, lease.snumber, terminationfee, rent, deposit\r\n" + 
+			"    FROM\r\n" + 
+			"        `lease`\r\n" + 
+			"    JOIN `appartmentrooms` ON lease.aptLocation = appartmentrooms.aptLocation\r\n" + 
+			"    JOIN `appartments` ON appartmentrooms.aptnum = appartments.aptnum)) AS B\r\n" + 
+			"WHERE\r\n" + 
+			"    leasenumber = " + leasenumber + ";";
+		List<LeaseCostsBean> l = null;
+		try {
+			l = DatabaseManager.executeBeanQuery(sql, LeaseCostsBean.class);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error retreiving lease costs for lease " + leasenumber);
+		}
+		if (l == null || l.size() == 0) {
+			System.out.println("No leases exist for lease " + leasenumber);
+			return null;
+		}
+		return l.get(0);
 	}
 }
