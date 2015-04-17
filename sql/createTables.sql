@@ -70,7 +70,7 @@ CREATE TABLE newleasereq(
 	reqloc1 INT NOT NULL,
 	reqloc2 INT,
 	reqloc3 INT,
-	status VARCHAR(16) NOT NULL DEFAULT "PENDING",
+	status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
 	staffnumber INT, 
 	changedon TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	leasenumber INT,
@@ -106,7 +106,7 @@ CREATE TABLE lease(
 CREATE TABLE leaseterminaterequest(
 	requestid INT NOT NULL PRIMARY KEY UNIQUE AUTO_INCREMENT,
 	leasenumber INT(10) NOT NULL, 
-	status VARCHAR(16) NOT NULL DEFAULT "PENDING",
+	status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
 	reason VARCHAR(150) NOT NULL,
 	enddate DATE NOT NULL,
 	staffnumber INT, 

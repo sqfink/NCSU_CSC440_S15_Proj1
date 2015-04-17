@@ -3,6 +3,7 @@ package daos;
 import dbms.DatabaseManager;
 import dbms.beans.*;
 import dbms.beans.tmpstore.StaffLeaseTerminationStorBean;
+import dbms.beans.tmpstore.StaffParkingRequestStorBean;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -15,7 +16,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Map;
 import java.util.List;
 
 public class Dao {	
@@ -952,6 +952,10 @@ public class Dao {
 			ps = conn.prepareStatement("UPDATE newleasereq SET status='REJECTED' WHERE reqid=?");
 			ps.setLong(1, reqid);
 			ps.executeUpdate();
+			
+			ps = conn.prepareStatement("UPDATE parkingrequests SET pending=0 WHERE lreqid=?");
+			ps.setLong(1, reqid);
+			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1023,6 +1027,11 @@ public class Dao {
 			Long snumber = rs.getLong("snumber");
 			Long terminationfee = rs.getLong("terminationfee");
 			Date enddate = rs.getDate("enddate");
+			
+			// Clear the snumber from the students parkingspot to reflect that it no longer belongs to them
+			ps = conn.prepareStatement("UPDATE parkingspots SET snumber=NULL WHERE snumber=?");
+			ps.setLong(1, snumber);
+			ps.executeUpdate();
 			
 			ps = conn.prepareStatement("SELECT * FROM hallrooms WHERE snumber=?");
 			ps.setLong(1, snumber);
@@ -1135,6 +1144,60 @@ public class Dao {
 			ps = conn.prepareStatement("UPDATE leaseterminaterequest SET status='REJECTED' WHERE requestid=?");
 			ps.setLong(1, l);
 			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	public static boolean tryApproveParkingRequest(StaffParkingRequestStorBean b) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			
+			//Check the requested lot for an unassigned spot with the requested classification
+			ps = conn.prepareStatement("SELECT spotnumber FROM parkingspots WHERE snumber IS NULL AND classification=? AND lotnumber=?");
+			ps.setString(1, b.classification);
+			ps.setLong(2, b.requestlot);
+			rs = ps.executeQuery();
+			
+			if(rs == null || !rs.next()) {
+				return false;
+			}
+			
+			//If there is an available spot then get the first one and insert set it's snumber
+			ps = conn.prepareStatement("UPDATE parkingspots SET snumber=? WHERE spotnumber=?");
+			ps.setLong(1, b.snumber);
+			ps.setLong(2, rs.getLong("spotnumber"));
+			ps.executeUpdate();
+			
+			//Update the parking request 
+			ps = conn.prepareStatement("UPDATE parkingrequests SET pending=0, approved=1, changedby=? WHERE reqnumber=?");
+			ps.setLong(1, b.changedby);
+			ps.setLong(2, b.reqnumber);
+			ps.executeUpdate();
+
+			ps.close();
+			rs.close();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static void rejectParkingRequest(StaffParkingRequestStorBean b) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("UPDATE parkingrequests SET pending=0, changedby=? WHERE reqnumber=?");
+			ps.setLong(1, b.changedby);
+			ps.setLong(2, b.reqnumber);
+			ps.executeUpdate();
+
 			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
