@@ -60,4 +60,6 @@ DROP TABLE IF EXISTS leaseterminaterequest;
 
 DROP TABLE IF EXISTS newleasereq;
 
+DROP TABLE IF EXISTS invoicegens;
+
 SET foreign_key_checks = 1;

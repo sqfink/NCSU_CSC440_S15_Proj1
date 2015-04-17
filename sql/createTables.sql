@@ -220,15 +220,12 @@ CREATE TABLE staff(
 
 CREATE TABLE invoices(
 	invoicenumber INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	snumber INT NOT NULL,
 	staffnumber INT NOT NULL,
 	leasenumber INT NOT NULL,
 	duedate DATE NOT NULL,
 	paiddate DATE,
-	paymentdue INT(1) NOT NULL,
 	paymenttype VARCHAR(10),
 	FOREIGN KEY (leasenumber) REFERENCES lease(leasenumber),
-	FOREIGN KEY (snumber) REFERENCES student(snumber),
 	FOREIGN KEY (staffnumber) REFERENCES staff(staffnumber)
 ); 
 
@@ -268,6 +265,12 @@ CREATE TABLE parkingrequests(
 	FOREIGN KEY (lreqid) REFERENCES newleasereq(reqid),
 	FOREIGN KEY (classification) REFERENCES parkingclasscosts(classification),
 	FOREIGN KEY (snumber) REFERENCES student(snumber)
+);
+
+CREATE TABLE invoicegens (
+  `lastdate` DATE NOT NULL,
+  PRIMARY KEY (`lastdate`),
+  UNIQUE INDEX `lastdate_UNIQUE` (`lastdate` ASC)
 );
 
 SET foreign_key_checks = 1;
