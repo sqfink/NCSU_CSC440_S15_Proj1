@@ -230,6 +230,7 @@ CREATE TABLE invoices(
 ); 
 
 CREATE TABLE lineitems(
+	id INT NOT NULL UNIQUE AUTO_INCREMENT PRIMARY KEY,
 	invoicenumber INT NOT NULL,
 	fee REAL NOT NULL,
 	itemtype VARCHAR(128),
