@@ -22,7 +22,7 @@ public class StartState extends State {
 		case 0:
 			return LoginState.class.getName();
 		case 1:
-			return "CreateUserState";
+			return CreateState.class.getName();
 		case 2:
 			System.out.println("Bye!");
 			return null;

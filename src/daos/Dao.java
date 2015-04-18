@@ -40,22 +40,29 @@ public class Dao {
 		return false;
 	}
 	
-	public void newUser(LoginStudentBean lsb) {
+	public static Long newUser(String password) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO users (id,password) VALUES(?,?)");
-			ps.setLong(1, lsb.id);
-			ps.setString(2, lsb.password);
-			ps.executeQuery();
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO users (password) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, password);
+			ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+			if (!rs.next()) {
+				System.out.println("Failed to create new user ID");
+				return null;
+			}
+			return rs.getLong(1);
 		} catch(SQLException e) {
+			System.out.println("Error executing user create");
 			e.printStackTrace();
+			return null;
 		}
 	}
 	
-	public int newStudent(StudentBean sb) {
+	public static Long newStudent(Long snumber, StudentBean sb) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO student (firstname,lastname,dob,phone,alternatephone,nationality,address,city,state,country,zip,year,specialneeds,comments,sex,smoker,guest) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO student (firstname,lastname,dob,phone,alternatephone,nationality,address,city,state,country,zip,year,specialneeds,comments,sex,smoker,guest,snumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, sb.firstname);
 			ps.setString(2, sb.lastname);
@@ -68,40 +75,44 @@ public class Dao {
 			ps.setString(9, sb.state);
 			ps.setString(10, sb.country);
 			ps.setString(11, sb.zip);
-			String year = sb.year.toString();
-			if(year.equals("freshman")) {
-				ps.setInt(12, 0);
-			} else if(year.equals("sophomore")) {
-				ps.setInt(12, 1);
-			} else if(year.equals("junior")) {
-				ps.setInt(12, 2);
-			} else if(year.equals("senior")) {
-				ps.setInt(12, 3);
-			} else if(year.equals("graduate")) {
-				ps.setInt(12, 4);
-			} else {
-				ps.setInt(12,-1);
-			}
-
+			ps.setLong(12, sb.year);
 			ps.setString(13, sb.specialneeds);
 			ps.setString(14, sb.comments);
 			ps.setString(15, sb.sex);
 			ps.setString(16, sb.smoker);
-			if(sb.guest) {
+			if(sb.guest || sb.year > 5) {
 				ps.setInt(17, 1);
 			} else {
 				ps.setInt(17, 0);
 			}
+			ps.setLong(17, snumber);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs != null && rs.next()) {
-				return rs.getInt(1);
+				return rs.getLong(1);
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return -1;
+		return -1l;
 		
+	}
+	
+	public static void createNextOfKin(NextOfKinBean b) throws SQLException {
+		String sql = "INSERT INTO `csc440`.`nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `state`, `country`, `zip`, `phone`) VALUES (?,?,?,?,?,?,?,?,?,?);";
+		//'100540001', 'Fn', 'Ln', 'R', 'A', 'C', 'S', 'Co', 'Z', 'P'
+		PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
+		ps.setLong(1, b.snumber);
+		ps.setString(2, b.firstname);
+		ps.setString(3, b.lastname);
+		ps.setString(4, b.relationship);
+		ps.setString(5, b.address);
+		ps.setString(6, b.city);
+		ps.setString(7, b.state);
+		ps.setString(8, b.zip);
+		ps.setString(9, b.country);
+		ps.setString(10, b.phone);
+		ps.execute();
 	}
 
 	/**

@@ -25,7 +25,7 @@ public class LoginPrompt extends InputDialog {
 		)
 	public String password;
 	
-	public String hashString(String input) {
+	public static String hashString(String input) {
 		MessageDigest md = null;
 		try {
 			md = MessageDigest.getInstance("SHA-256");
