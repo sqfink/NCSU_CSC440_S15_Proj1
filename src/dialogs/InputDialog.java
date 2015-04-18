@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.lang.annotation.Annotation;
 import java.lang.annotation.AnnotationFormatError;
 import java.lang.reflect.Field;
+import java.sql.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -90,6 +91,16 @@ public abstract class InputDialog {
 						value = new Float(strVal);
 					} else if (fieldType == Short.class) {
 						value = new Short(strVal);
+					} else if (fieldType == Date.class) {
+						do {
+							try {
+								value = Date.valueOf(strVal);
+							} catch (IllegalArgumentException ex) {
+								System.out.println("Not a valid date");
+								strVal = doField(f, outStream, inStream);
+								value = null;
+							}
+						} while (value == null);
 					} else {
 						throw new IllegalAccessException("No supported conversion availible for field type " + fieldType.getName());
 					}
