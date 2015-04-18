@@ -17,7 +17,7 @@ public class StaffMainState extends State {
 			case 1:
 				return StaffDoRequestsMainState.class.getName();
 			case 2:
-				return "StaffDoTicketsMainState";
+				return StaffDoTicketsMainState.class.getName();
 			case 3:
 				System.out.println("Bye!");
 				return null;

@@ -43,7 +43,7 @@ public class StaffSelectPendingParkingState extends State {
 				ListSelectionDialog<StaffParkingRequestStorBean> dialog = new Selector(l);
 				if (l.size() == 0) {
 					System.out.println("There are no pending parking requests");
-					return StaffMainState.class.getName();
+					return StaffDoRequestsMainState.class.getName();
 				} else {
 					b = dialog.doCLIPrompt();
 					LoginStaffBean lisb = (LoginStaffBean)r.getKV("LoggedInUser");

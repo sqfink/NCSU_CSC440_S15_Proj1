@@ -225,6 +225,7 @@ CREATE TABLE invoices(
 	duedate DATE NOT NULL,
 	paiddate DATE,
 	paymenttype VARCHAR(10),
+	paymentdue INT NOT NULL DEFAULT 0,
 	FOREIGN KEY (leasenumber) REFERENCES lease(leasenumber),
 	FOREIGN KEY (staffnumber) REFERENCES staff(staffnumber)
 ); 
@@ -246,6 +247,7 @@ CREATE TABLE maintnencetickets(
 	comments VARCHAR(512) NOT NULL,
 	changedon TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	changedby INT,
+	damagecharges REAL,
 	FOREIGN KEY (changedby) REFERENCES staff(staffnumber),
 	FOREIGN KEY (createdby) REFERENCES student(snumber)
 );

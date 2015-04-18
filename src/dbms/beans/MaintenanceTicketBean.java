@@ -31,5 +31,8 @@ public class MaintenanceTicketBean extends Bean {
 
 	@Column(columnName="changedon")
 	public Timestamp changedon;
+	
+	@Column(columnName="damagecharges")
+	public Double damagecharges;
 
 }

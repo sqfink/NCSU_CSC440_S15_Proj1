@@ -367,8 +367,9 @@ public class Dao {
 			ps.setString(2, itemtype);
 			ps.setLong(3, invoicenumber);
 			ps.executeUpdate();
-			ps = conn.prepareStatement("UPDATE invoices SET paymentdue=paymentdue+?");
+			ps = conn.prepareStatement("UPDATE invoices SET paymentdue=paymentdue+? WHERE invoicenumber=?");
 			ps.setDouble(1, fee);
+			ps.setLong(2, invoicenumber);
 			ps.executeUpdate();
 			ps.close();
 		} catch(SQLException e) {
@@ -1042,25 +1043,29 @@ public class Dao {
 			
 			Long rent = null;
 			
+			double deposit = 0;
+			
 			if(rs.next()) {
 				Long hallnum = rs.getLong("hallnum");
 				
-				ps = conn.prepareStatement("SELECT rent FROM halls WHERE hallnum=?");
+				ps = conn.prepareStatement("SELECT rent,deposit FROM halls WHERE hallnum=?");
 				ps.setLong(1, hallnum);
 				rs = ps.executeQuery();
 				rs.next();
 				rent = rs.getLong("rent");
+				deposit = rs.getDouble("deposit");
 				
 				ps = conn.prepareStatement("UPDATE hallrooms SET snumber=NULL WHERE snumber=?");
 				ps.setLong(1, snumber);
 				ps.executeUpdate();
 				
 			} else {
-				ps = conn.prepareStatement("SELECT A.rent FROM appartmentrooms AR, appartments A WHERE A.hallnum=AR.hallnum AND AR=?");
+				ps = conn.prepareStatement("SELECT A.rent A.deposit FROM appartmentrooms AR, appartments A WHERE A.hallnum=AR.hallnum AND AR=?");
 				ps.setLong(1, snumber);
 				rs = ps.executeQuery();
 				rs.next();
 				rent = rs.getLong("rent");
+				deposit = rs.getDouble("deposit");
 				
 				ps = conn.prepareStatement("UPDATE appartmentrooms SET snumber=NULL WHERE snumber=?");
 				ps.setLong(1, snumber);
@@ -1070,18 +1075,17 @@ public class Dao {
 			
 			
 			
-			ps = conn.prepareStatement("INSERT INTO invoices (snumber,staffnumber,leasenumber,duedate,paymentdue) VALUES(?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-			
-			ps.setLong(1, snumber);
-			ps.setLong(2, b.staffnumber);
-			ps.setLong(3, b.leasenumber);
+			ps = conn.prepareStatement("INSERT INTO invoices (staffnumber,leasenumber,duedate,paymentdue) VALUES(?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+
+			ps.setLong(1, b.staffnumber);
+			ps.setLong(2, b.leasenumber);
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.MONTH, 2);
 			java.util.Date duedate = dateFormat.parse(dateFormat.format(cal.getTime()));
 			java.sql.Date sqlDueDate = new java.sql.Date(duedate.getTime());
-			ps.setDate(4, sqlDueDate);
-			ps.setLong(5, 0);
+			ps.setDate(3, sqlDueDate);
+			ps.setLong(4, 0);
 			ps.executeUpdate();
 			rs = ps.getGeneratedKeys();
 			Long invoicenumber = null;
@@ -1111,12 +1115,39 @@ public class Dao {
 				addLineItem(invoicenumber, damages, "Damage Charge. Inspected On " + b.InspectionDate);
 			}
 			
+			double negatedeposit = 0 - deposit;
+			
+			addLineItem(invoicenumber,negatedeposit,"Deposit Returned");
+			
+			List<MaintenanceTicketBean> l =  getMaintenanceTicketsByStudent(snumber);
+			for(MaintenanceTicketBean ticketbean : l) {
+				if(ticketbean.damagecharges > 0) {
+					addLineItem(invoicenumber,ticketbean.damagecharges, String.format("Maintenence Charge. Ticket Info: Created On %s with issue given as %s.", ticketbean.createdon, ticketbean.issue) );
+				}
+			}
+			
 			ps.close();
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			System.out.println("Error formatting date");
+			e.printStackTrace();
+		}
+	}
+	
+	public static void processMaintenanceTicket(MaintenanceTicketBean b) {
+		Connection conn = null;
+		PreparedStatement ps = null;
+		try {
+			conn = DatabaseManager.getConnection();
+			ps = conn.prepareStatement("UPDATE maintnencetickets SET status='Processed', changedby=?, damagecharges=? WHERE ticketnumber=?");
+			ps.setLong(1, b.changedby);
+			ps.setDouble(2, b.damagecharges);
+			ps.setLong(3, b.ticketnumber);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}

@@ -39,7 +39,7 @@ public class StaffSelectPendingHousingState extends State {
 			ListSelectionDialog<StaffPendingHousingBean> d = new Selector(l);
 			if (l.size() == 0) {
 				System.out.println("There are no pending housing requests");
-				return StaffMainState.class.getName();
+				return StaffDoRequestsMainState.class.getName();
 			}
 			r.setKV("CurrentStaffPendingHousingBean", d.doCLIPrompt());
 			return StaffEditHousingRequestState.class.getName();
@@ -50,7 +50,7 @@ public class StaffSelectPendingHousingState extends State {
 			System.out.println("Error reading response from input");
 			e.printStackTrace();
 		}
-		return StaffMainState.class.getName();
+		return StaffDoRequestsMainState.class.getName();
 	}
 
 }
