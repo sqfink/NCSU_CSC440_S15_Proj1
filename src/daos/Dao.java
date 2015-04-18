@@ -204,8 +204,8 @@ public class Dao {
 				while(rs.next()) {
 					ib = new InvoiceBean();
 					ib.leasenumber = rs.getLong("leasenumber");
-					ib.duedate = rs.getString("duedate");
-					ib.paiddate = rs.getString("paiddate");
+					ib.duedate = rs.getDate("duedate");
+					ib.paiddate = rs.getDate("paiddate");
 					ib.paymentdue = rs.getLong("paymentdue");
 					ib.paymenttype = rs.getString("paymenttype");
 					ret.add(ib);
@@ -225,8 +225,8 @@ public class Dao {
 			ps.setLong(1, ib.snumber);
 			ps.setString(2, ib.staffnumber);
 			ps.setLong(6, ib.leasenumber);
-			ps.setString(7, ib.duedate);
-			ps.setString(8, ib.paiddate);
+			ps.setDate(7, ib.duedate);
+			ps.setDate(8, ib.paiddate);
 			ps.setLong(9, ib.paymentdue);
 			ps.setString(10, ib.paymenttype);
 			ps.executeUpdate();
@@ -1437,5 +1437,28 @@ public class Dao {
 			System.out.println("Failed to update last invoce generation date. Check error clog for details");
 			e.printStackTrace();
 		}
+	}
+	
+	public static List<InvoiceBean> getUnpaidInvoices(Long snumber) throws SQLException {
+		String sql = "SELECT * FROM " + 
+				"    (invoices " + 
+				"    JOIN lease ON invoices.leasenumber = lease.leasenumber) " + 
+				"WHERE " + 
+				"    paiddate IS NULL AND snumber = " + snumber + ";";
+		return DatabaseManager.executeBeanQuery(sql, InvoiceBean.class);
+	}
+	
+	public static List<InvoiceBean> getPaidInvoices(Long snumber) throws SQLException {
+		String sql = "SELECT * FROM " + 
+				"    (invoices " + 
+				"    JOIN lease ON invoices.leasenumber = lease.leasenumber) " + 
+				"WHERE " + 
+				"    paiddate IS NOT NULL AND snumber = " + snumber + ";";
+		return DatabaseManager.executeBeanQuery(sql, InvoiceBean.class);
+	}
+	
+	public static List<LineItemBean> getLineItems(Long invoicenumber) throws SQLException {
+		String sql = "SELECT * FROM csc440.lineitems WHERE invoicenumber = " + invoicenumber + ";";
+		return DatabaseManager.executeBeanQuery(sql, LineItemBean.class);
 	}
 }

@@ -1,5 +1,7 @@
 package dbms.beans;
 
+import java.sql.Date;
+
 import dbms.Bean;
 import dbms.annotations.Column;
 
@@ -17,10 +19,10 @@ public class InvoiceBean extends Bean {
 	public Long leasenumber;
 	
 	@Column(columnName="duedate")
-	public String duedate;
+	public Date duedate;
 	
 	@Column(columnName="paiddate")
-	public String paiddate;
+	public Date paiddate;
 	
 	@Column(columnName="paymentdue")
 	public Long paymentdue;

@@ -19,9 +19,9 @@ public class StudentViewInvoicesState extends State {
 			result = d.doCLIPrompt();
 			switch (result) {
 			case 1:
-				return "StudentDisplayCurrentInvoice";
+				return StudentDisplayCurrentInvoiceState.class.getName();
 			case 2:
-				return "StudentDisplayPastInvoices";
+				return StudentDisplayPastInvoiceState.class.getName();
 			case 3:
 				return StudentHousingOptionsState.class.getName();
 			default:
