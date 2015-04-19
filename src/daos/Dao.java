@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Types;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -1491,5 +1492,80 @@ public class Dao {
 	public static List<LineItemBean> getLineItems(Long invoicenumber) throws SQLException {
 		String sql = "SELECT * FROM csc440.lineitems WHERE invoicenumber = " + invoicenumber + ";";
 		return DatabaseManager.executeBeanQuery(sql, LineItemBean.class);
+	}
+	
+	public static List<HallDescriptorBean> getHallLocations(Long syear) throws SQLException {
+		String sql = "SELECT \r\n" + 
+				"    housingdetails.housingDetailsLocation,\r\n" + 
+				"    name,\r\n" + 
+				"    requiredYear,\r\n" + 
+				"    snumber,\r\n" + 
+				"    hallLocation,\r\n" + 
+				"    roomnum\r\n" + 
+				"FROM\r\n" + 
+				"    housingdetails\r\n" + 
+				"        JOIN\r\n" + 
+				"    hallrooms ON hallrooms.housingDetailsLocation = housingdetails.housingDetailsLocation\r\n" + 
+				"WHERE\r\n" + 
+				"    requiredYear <= " + syear +";";
+		return DatabaseManager.executeBeanQuery(sql, HallDescriptorBean.class);
+	}
+	
+	public static List<AptDescriptorBean> getAptLocations(Long syear) throws SQLException {
+		String sql = "SELECT \r\n" + 
+				"    housingdetails.housingDetailsLocation,\r\n" + 
+				"    name,\r\n" + 
+				"    requiredYear,\r\n" + 
+				"    snumber,\r\n" + 
+				"    aptLocation,\r\n" + 
+				"    roomnum\r\n," +
+				"    appartments.aptnum\r\n" + 
+				"FROM\r\n" + 
+				"    housingdetails\r\n" + 
+				"        JOIN\r\n" + 
+				"    appartments ON housingdetails.housingDetailsLocation = appartments.housingDetailsLocation\r\n" + 
+				"        JOIN\r\n" + 
+				"    appartmentrooms ON appartmentrooms.aptnum = appartments.aptnum\r\n" + 
+				"WHERE\r\n" + 
+				"    requiredYear <= " + syear + ";";
+		return DatabaseManager.executeBeanQuery(sql, AptDescriptorBean.class);
+	}
+	
+	public static StudentBean getStudent(Long snumber) {
+		String sql = "SELECT * FROM student JOIN users ON id=snumber WHERE snumber = " + snumber + ";";
+		try {
+			List<StudentBean> l = DatabaseManager.executeBeanQuery(sql, StudentBean.class);
+			if (l == null || l.size() != 1) {
+				System.out.println("No student with id " + snumber);
+				return null;
+			}
+			return l.get(0);
+		} catch (SQLException e) {
+			System.out.println("Failed to obtain student information for snumber=" + snumber);
+			return null;
+		}
+	}
+
+	public static void createLease(LeaseBean lease) throws SQLException {
+		String sql = "INSERT INTO `lease` (`snumber`, `hallLocation`, `aptLocation`, `paymentperiod`, `startdate`, `enddate`, `active`) VALUES (?, ?, ?, ?, ?, ?, ?);";
+		PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
+		ps.setLong(1, lease.snumber);
+		
+		if (lease.hallLocation != null)
+			ps.setLong(2, lease.hallLocation);
+		else
+			ps.setNull(2, Types.INTEGER);
+		
+		if (lease.aptLocation != null)
+			ps.setLong(3, lease.aptLocation);
+		else
+			ps.setNull(3, Types.INTEGER);
+		
+		ps.setString(4, lease.paymentperiod);
+		ps.setDate(5, lease.startdate);
+		ps.setDate(6, lease.enddate);
+		ps.setBoolean(7, lease.active);
+		
+		ps.executeUpdate();
 	}
 }

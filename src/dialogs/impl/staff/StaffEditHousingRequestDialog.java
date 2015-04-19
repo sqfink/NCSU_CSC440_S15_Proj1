@@ -5,8 +5,8 @@ import dialogs.annotations.SelectionOptions;
 import dialogs.annotations.SelectionOption;
 
 @SelectionOptions(options={
-		@SelectionOption(prompt="Assign place number", value=1),
-		@SelectionOption(prompt="Assign room number", value=2),
+		@SelectionOption(prompt="Assign hall housing", value=1),
+		@SelectionOption(prompt="Assign appartment housing", value=2),
 		@SelectionOption(prompt="Approve request", value=3),
 		@SelectionOption(prompt="Refuse request", value=4),
 		@SelectionOption(prompt="Back", value=5),

@@ -28,5 +28,6 @@ public class LeaseBean extends Bean {
 	public Date startdate;
 	
 	@Column(columnName="active")
-	public boolean active;	
+	public boolean active;
+
 }
