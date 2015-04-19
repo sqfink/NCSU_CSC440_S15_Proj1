@@ -5,10 +5,12 @@ import java.sql.SQLException;
 
 import daos.Dao;
 import dbms.beans.NextOfKinBean;
+import dbms.beans.StaffBean;
 import dbms.beans.StudentBean;
 import dialogs.impl.CreatUserTypeSelectDialog;
 import dialogs.impl.CreateStudentDialog;
 import dialogs.impl.LoginPrompt;
+import dialogs.impl.StaffCreateDialog;
 import statemachine.Runner;
 import statemachine.State;
 
@@ -81,6 +83,27 @@ public class CreateState extends State {
 				System.out.println("User ID " + newUid + " created");
 				break;
 			case 2:
+				StaffCreateDialog sc = new StaffCreateDialog();
+				sc.doCLIPrompt();
+				
+				sc.password = LoginPrompt.hashString(sc.password);
+				newUid = Dao.newUser(sc.password);
+				
+				StaffBean stb = new StaffBean();
+				stb.address = sc.address;
+				stb.city = sc.city;
+				stb.dob = sc.dob.toString();
+				stb.country = sc.country;
+				stb.department = sc.department;
+				stb.firstname = sc.firstName;
+				stb.lastname = sc.lastName;
+				stb.position = sc.position;
+				stb.sex = sc.sex;
+				stb.staffnumber = newUid;
+				stb.state = sc.state;
+				stb.zip = sc.zip;
+				
+				Dao.newStaff(stb);
 				break;
 			case 3:
 				//do nothing

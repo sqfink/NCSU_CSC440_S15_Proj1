@@ -143,10 +143,10 @@ public class Dao {
 	 * @param attributes
 	 * @return The staffnumber of the new record
 	 */
-	public int newStaff(StaffBean sb) {
+	public static Long newStaff(StaffBean sb) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO staff (firstname,lastname,department,position,dob,address,city,state,zip,country,sex) VALUES(?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO staff (firstname,lastname,department,position,dob,address,city,state,zip,country,sex,staffnumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 						
 			ps.setString(1, sb.firstname);
 			ps.setString(2, sb.lastname);
@@ -159,15 +159,12 @@ public class Dao {
 			ps.setString(9, sb.zip);
 			ps.setString(10, sb.country);
 			ps.setString(11, sb.sex);
-			ps.executeUpdate();
-			ResultSet rs = ps.getGeneratedKeys();
-			if(rs != null && rs.next()) {
-				return rs.getInt(1);
-			}
+			ps.setLong(12, sb.staffnumber);
+			ps.execute();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
-		return -1;
+		return -1l;
 	}
 	
 	/**
