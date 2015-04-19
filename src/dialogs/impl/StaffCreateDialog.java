@@ -23,7 +23,7 @@ public class StaffCreateDialog extends InputDialog {
 	@InputField(prompt="Department", failMessage="Invalid department. Expected 1 word [a-zA-Z-]{1,32}", regex="^[a-zA-Z-]{1,32}$")
 	public String department;
 
-	@InputField(prompt="Position", failMessage="Invalid position. Expected 1 word [a-zA-Z-]{1,32}", regex="^[a-zA-Z-]{1,32}$")
+	@InputField(prompt="Position", failMessage="Invalid position. Expected 1 word [a-zA-Z-]{1,32}", regex="^[a-zA-Z- ]{1,32}$")
 	public String position;
 	
 	@InputField(prompt="Address", failMessage="Expected ^[a-zA-Z -.0-9]{5,64}$", regex="^[a-zA-Z -.0-9]{5,64}$")

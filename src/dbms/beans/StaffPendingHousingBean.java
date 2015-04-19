@@ -19,9 +19,10 @@ public class StaffPendingHousingBean extends Bean {
 	
 	@Column(columnName="reqid")
 	public Long reqid;
-		
+	
+	public Long staffnumber = null;
+	
 	public Long AssignedRoom = null;
 	
-
 	public Long AssignedPlace = null;
 }

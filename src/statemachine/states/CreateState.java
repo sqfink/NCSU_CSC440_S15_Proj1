@@ -104,6 +104,8 @@ public class CreateState extends State {
 				stb.zip = sc.zip;
 				
 				Dao.newStaff(stb);
+				
+				System.out.println("Created new staff member " + newUid);
 				break;
 			case 3:
 				//do nothing

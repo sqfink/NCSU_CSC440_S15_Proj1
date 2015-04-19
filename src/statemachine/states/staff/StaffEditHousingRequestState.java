@@ -3,6 +3,7 @@ package statemachine.states.staff;
 import java.io.IOException;
 
 import daos.Dao;
+import dbms.beans.StaffBean;
 import dbms.beans.StaffPendingHousingBean;
 import dialogs.impl.staff.StaffAssignPlaceDialog;
 import dialogs.impl.staff.StaffAssignRoomDialog;
@@ -14,13 +15,15 @@ public class StaffEditHousingRequestState extends State {
 
 	@Override
 	public String doState(Runner r) {
+		StaffBean staff = (StaffBean) r.getKV("LoggedInUser");
+		
 		if (r.getKV("CurrentStaffPendingHousingBean") == null) {
 			System.out.println("Request selection failed");
 			return StaffSelectPendingHousingState.class.getName();
 		}
 		StaffPendingHousingBean b = (StaffPendingHousingBean) r.getKV("CurrentStaffPendingHousingBean");
 		StaffEditHousingRequestDialog d = new StaffEditHousingRequestDialog();
-		
+		b.staffnumber = staff.staffnumber;
 		try {
 			int result = d.doCLIPrompt();
 			switch (result) {
