@@ -9,11 +9,10 @@ import dbms.DatabaseManager;
 import dbms.beans.ParkingRequestBean;
 import dbms.beans.SimpleParkingSlot;
 import dbms.beans.StudentBean;
-import dialogs.impl.parking.NewParkingRequestDialog;
 import dialogs.impl.student.StudentParkingHomeDialog;
 import statemachine.Runner;
 import statemachine.State;
-import sun.security.util.PendingException;
+
 
 public class StudentParkingHomeState extends State {
 
