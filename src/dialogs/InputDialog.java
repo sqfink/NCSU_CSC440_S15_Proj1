@@ -26,7 +26,7 @@ public abstract class InputDialog {
 		return buf;
 	}
 	
-	protected String doField(InputField f, PrintStream outStream, InputStream inStream) throws IOException {
+	protected String doField(InputField f, PrintStream outStream, InputStream inStream, boolean nullable) throws IOException {
 		Pattern p = Pattern.compile(f.regex());
 		Matcher match = null;
 		do {
@@ -34,6 +34,9 @@ public abstract class InputDialog {
 				outStream.print("\t");
 			outStream.print(f.prompt() + ": ");
 			String line = getInput(inStream);
+			if ((line == null || line.length() == 0) && nullable) {
+				return "";
+			}
 			if (line == null || line.length() == 0) {
 				outStream.println(f.failMessage());
 				continue;
@@ -74,7 +77,7 @@ public abstract class InputDialog {
 			for (Annotation a : annotations) {
 				if (a instanceof InputField) {
 					InputField f = (InputField)a;
-					String strVal = doField(f, outStream, inStream);
+					String strVal = doField(f, outStream, inStream, f.nullable());
 					Class<?> fieldType = field.getType();
 					Object value = null;
 					if (fieldType == Integer.class) {
@@ -97,7 +100,7 @@ public abstract class InputDialog {
 								value = Date.valueOf(strVal);
 							} catch (IllegalArgumentException ex) {
 								System.out.println("Not a valid date");
-								strVal = doField(f, outStream, inStream);
+								strVal = doField(f, outStream, inStream, f.nullable());
 								value = null;
 							}
 						} while (value == null);

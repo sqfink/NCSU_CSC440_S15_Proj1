@@ -1,7 +1,7 @@
 SET foreign_key_checks = 0;
 
 CREATE TABLE users(
-	id INT NOT NULL UNIQUE,
+	id INT NOT NULL UNIQUE AUTO_INCREMENT,
 	password VARCHAR(64) NOT NULL,
 	PRIMARY KEY (id)
 ); 

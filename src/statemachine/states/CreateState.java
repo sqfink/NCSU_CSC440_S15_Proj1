@@ -26,6 +26,15 @@ public class CreateState extends State {
 				s.password = LoginPrompt.hashString(s.password);
 				Long newUid = Dao.newUser(s.password);
 				
+				Long cnumber = null;
+				try {
+					cnumber = Dao.courseNo(s.course);
+				} catch (SQLException e1) {
+					System.out.println("Error getting course number");
+					e1.printStackTrace();
+					return null;
+				}
+				
 				StudentBean sb = new StudentBean();
 				sb.address = s.address;
 				sb.alternatephone = s.altphone;
@@ -47,6 +56,7 @@ public class CreateState extends State {
 				sb.state = s.state;
 				sb.year = s.year;
 				sb.zip = s.zip;
+				sb.course = cnumber;
 				
 				Dao.newStudent(newUid, sb);
 				

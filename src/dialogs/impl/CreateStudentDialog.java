@@ -23,7 +23,7 @@ public class CreateStudentDialog extends InputDialog {
 	@InputField(prompt="Phone number (as a single number)", failMessage="Expected 8-12 digit positive number", regex="^\\d{8,12}$")
 	public String phone;
 	
-	@InputField(prompt="Alternate phone number (optional)", failMessage="Expected 8-12 digit positive number or no input", regex="^(?:|\\d{8,12})$")
+	@InputField(prompt="Alternate phone number (optional)", failMessage="Expected 8-12 digit positive number or no input", regex="^\\d{8,12}$", nullable=true)
 	public String altphone;
 	
 	@InputField(prompt="Nationality", failMessage="Expected 1 word of 3-20 letters", regex="^[a-zA-Z]{3,20}$")
@@ -35,7 +35,7 @@ public class CreateStudentDialog extends InputDialog {
 	@InputField(prompt="City", failMessage="Expected 1 word of 2-16 letters", regex="^[a-zA-Z]{2,16}$")
 	public String city;
 	
-	@InputField(prompt="State (optional)", failMessage="Expected 2 capital letters of no input", regex="^(?:|[A-Z]{2})$")
+	@InputField(prompt="State (optional)", failMessage="Expected 2 capital letters of no input", regex="^(?:|[A-Z]{2})$", nullable=true)
 	public String state;
 	
 	@InputField(prompt="Country", failMessage="Expected 1 word of 2-32 letters", regex="^[a-zA-Z-]{2,32}$")
@@ -44,10 +44,10 @@ public class CreateStudentDialog extends InputDialog {
 	@InputField(prompt="Postal code",  failMessage="Expected 2-10 alphanumeric characters", regex="^[a-zA-Z- 0-9]{2,10}$")
 	public String zip;
 	
-	@InputField(prompt="Special Needs (optional)", failMessage="Expected ^(?:|[a-zA-Z0-9 -,.]{1,50})$", regex="^(?:|[a-zA-Z0-9 -,.]{1,150})$")
+	@InputField(prompt="Special Needs (optional)", failMessage="Expected ^(?:|[a-zA-Z0-9 -,.]{1,50})$", regex="^(?:|[a-zA-Z0-9 -,.]{1,150})$", nullable=true)
 	public String specialNeeds;
 	
-	@InputField(prompt="Comments (optional)", failMessage="Expected ^(?:|[a-zA-Z0-9 -,.]{1,150})$", regex="^(?:|[a-zA-Z0-9 -,.]{1,150})$")
+	@InputField(prompt="Comments (optional)", failMessage="Expected ^(?:|[a-zA-Z0-9 -,.]{1,150})$", regex="^(?:|[a-zA-Z0-9 -,.]{1,150})$", nullable=true)
 	public String comments;
 	
 	@InputField(prompt="Sex M/F", failMessage="Expected M or F", regex="^(?:M|F)$")
@@ -80,7 +80,7 @@ public class CreateStudentDialog extends InputDialog {
 	@InputField(prompt="Next of kin city", failMessage="Expected 1 word of 2-16 letters", regex="^[a-zA-Z]{2,16}$")
 	public String nokcity;
 	
-	@InputField(prompt="Next of kin state (optional)", failMessage="Expected 2 capital letters of no input", regex="^(?:|[A-Z]{2})$")
+	@InputField(prompt="Next of kin state (optional)", failMessage="Expected 2 capital letters of no input", regex="^(?:|[A-Z]{2})$", nullable=true)
 	public String nokstate;
 	
 	@InputField(prompt="Next of kin country", failMessage="Expected 1 word of 2-32 letters", regex="^[a-zA-Z-]{2,32}$")

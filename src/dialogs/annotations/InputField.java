@@ -11,4 +11,5 @@ public @interface InputField {
 	String regex() default "[\\s\\S]+";
 	String prompt();
 	String failMessage();
+	boolean nullable() default false;
 }

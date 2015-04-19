@@ -62,7 +62,7 @@ public class Dao {
 	public static Long newStudent(Long snumber, StudentBean sb) {
 		Connection conn = DatabaseManager.getConnection();
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO student (firstname,lastname,dob,phone,alternatephone,nationality,address,city,state,country,zip,year,specialneeds,comments,sex,smoker,guest,snumber) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO student (firstname,lastname,dob,phone,alternatephone,nationality,address,city,state,country,zip,year,specialneeds,comments,sex,smoker,guest,snumber, course) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
 			ps.setString(1, sb.firstname);
 			ps.setString(2, sb.lastname);
@@ -85,7 +85,8 @@ public class Dao {
 			} else {
 				ps.setInt(17, 0);
 			}
-			ps.setLong(17, snumber);
+			ps.setLong(18, snumber);
+			ps.setLong(19, sb.course);
 			ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
 			if(rs != null && rs.next()) {
@@ -98,8 +99,30 @@ public class Dao {
 		
 	}
 	
+	public static Long courseNo(String course) throws SQLException {
+		String sql = "SELECT `cnumber` FROM `courses` WHERE `title` = ?;";
+		PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
+		ps.setString(1, course);
+		ps.execute();
+		ResultSet rs = ps.getResultSet();
+		if (!rs.next()) {
+			sql = "INSERT INTO `courses` (`title`) VALUES (?);";
+			ps = DatabaseManager.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, course);
+			ps.executeUpdate();
+			rs = ps.getGeneratedKeys();
+			if (!rs.next()) {
+				System.out.println("Error adding to courses database");
+				return 1l;
+			}
+			return rs.getLong(1);
+		} else {
+			return rs.getLong(1);
+		}
+	}
+	
 	public static void createNextOfKin(NextOfKinBean b) throws SQLException {
-		String sql = "INSERT INTO `csc440`.`nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `state`, `country`, `zip`, `phone`) VALUES (?,?,?,?,?,?,?,?,?,?);";
+		String sql = "INSERT INTO `nextofkin` (`snumber`, `firstname`, `lastname`, `relationship`, `address`, `city`, `state`, `country`, `zip`, `phone`) VALUES (?,?,?,?,?,?,?,?,?,?);";
 		//'100540001', 'Fn', 'Ln', 'R', 'A', 'C', 'S', 'Co', 'Z', 'P'
 		PreparedStatement ps = DatabaseManager.getConnection().prepareStatement(sql);
 		ps.setLong(1, b.snumber);

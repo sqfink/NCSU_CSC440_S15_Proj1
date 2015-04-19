@@ -63,4 +63,7 @@ public class StudentBean extends Bean {
 	
 	@Column(columnName="guest")
 	public Boolean guest;
+
+	@Column(columnName="course")
+	public Long course;
 }
