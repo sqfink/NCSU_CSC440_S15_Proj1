@@ -1,5 +1,7 @@
 package statemachine.states.student;
 
+import helpers.InvoiceManager;
+
 import java.io.IOException;
 
 import dialogs.impl.student.StudentViewInvoicesDialog;
@@ -13,6 +15,7 @@ public class StudentViewInvoicesState extends State {
 		StudentViewInvoicesDialog d = new StudentViewInvoicesDialog();
 		int result = -1;
 		try {
+			InvoiceManager.updateInvoices();
 			result = d.doCLIPrompt();
 			switch (result) {
 			case 1:

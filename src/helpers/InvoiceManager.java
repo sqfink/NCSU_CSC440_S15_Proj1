@@ -14,7 +14,7 @@ import dbms.beans.SemesterBean;
 
 public class InvoiceManager {
 	
-	public boolean isNewMonth() {
+	protected static boolean isNewMonth() {
 		try {
 			Calendar c = Calendar.getInstance();
 			c.setTime(Dao.getLastInvoiceGenDate());
@@ -28,7 +28,7 @@ public class InvoiceManager {
 		}
 	}
 
-	public boolean isNewSemester() {
+	protected static boolean isNewSemester() {
 		try {
 			List<SemesterBean> semList = Dao.getSemesterList();
 			SemesterBean lastSemester = null;
@@ -53,7 +53,7 @@ public class InvoiceManager {
 		return true;
 	}
 	
-	public int diffMonths(Date start, Date end) {
+	protected static int diffMonths(Date start, Date end) {
 		Calendar s = Calendar.getInstance();
 		s.setTime(start);
 		
@@ -66,7 +66,39 @@ public class InvoiceManager {
 		return dM + 12 * dY;
 	}
 	
-	public void tryGenInvoice(LeaseBean l) {
+	public static void updateInvoices() {
+		boolean newMonth = false;
+		boolean newSemester = false;
+		
+		List<LeaseBean> l;
+		try {
+			l = Dao.getAllCurrentLeases();
+			newMonth = isNewMonth();
+			newSemester = isNewSemester();
+		} catch (SQLException e) {
+			System.out.println("Failed to retrieve lease data for invoices. Check error log for details.");
+			e.printStackTrace();
+			return;
+		}
+		System.out.println("Updating invoices. Please wait...");
+		for (LeaseBean b : l) {
+			if (b.paymentperiod.equals("SEMESTER") && newSemester ) {
+				tryGenInvoice(b);
+			}
+			if (b.paymentperiod.equals("MONTH") && newMonth) {
+				tryGenInvoice(b);
+			}
+		}
+		try {
+			Dao.updateLeaseActiveFlags();
+			Dao.updateInvoiceGenDate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	protected static void tryGenInvoice(LeaseBean l) {
 		LeaseCostsBean costs = Dao.getCostsByLease(l.leasenumber);
 		if (costs == null){
 			System.out.println("Could not generate invoice for lease " + l.leasenumber + ". No costs could be found.");
@@ -74,18 +106,30 @@ public class InvoiceManager {
 		}
 		InvoiceInitBean invoice = new InvoiceInitBean();
 		ParkingCosts pcost = Dao.getParkingFee(l.snumber);
+		if (pcost == null) {
+			pcost = new ParkingCosts();
+			pcost.cost = (long) 0;
+		}
 		invoice.leasenumber = l.leasenumber;
 		double rentcosts = 0;
 		double parkingcosts = 0;
 		if (l.paymentperiod.equals("MONTH")) {
 			rentcosts = costs.rent;
 			parkingcosts = pcost.cost;
+			Date tmp = new Date(System.currentTimeMillis());
+			tmp = Date.valueOf(tmp.toString().substring(0, 8) + "01");
+			invoice.duedate = tmp;
 		} else { //must be semester
 			List<SemesterBean> semList = Dao.getSemesterList();
-			int monthsInSemester  = 1;
+			int monthsInSemester = 1;
 			for (SemesterBean s : semList) {
-				if ((s.end.after(l.startdate) || s.end.equals(l.startdate)) && s.start.before(l.enddate)) {
+				Date start = Date.valueOf(l.startdate.toString().replaceAll("\\d{4}", "0000"));
+				Date end = Date.valueOf(l.enddate.toString().replaceAll("\\d{4}", "0000"));
+				if ((s.end.after(start) || s.end.equals(start)) && s.start.before(end)) {
 					monthsInSemester = diffMonths(s.start, s.end);
+					Date today = new Date(System.currentTimeMillis());
+					String curyear = today.toString().substring(0, 4);
+					invoice.duedate = Date.valueOf(s.start.toString().replaceAll("\\d{4}", curyear));
 					break;
 				}	
 			}

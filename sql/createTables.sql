@@ -220,7 +220,7 @@ CREATE TABLE staff(
 
 CREATE TABLE invoices(
 	invoicenumber INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	staffnumber INT NOT NULL,
+	staffnumber INT,
 	leasenumber INT NOT NULL,
 	duedate DATE NOT NULL,
 	paiddate DATE,

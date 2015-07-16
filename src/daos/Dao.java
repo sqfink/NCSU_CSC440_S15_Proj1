@@ -1328,15 +1328,16 @@ public class Dao {
 	}
 	
 	public static void updateLeaseActiveFlags() throws SQLException {
-		String sql = "UPDATE lease SET active=1 WHERE enddate >= CURRENT_DATE AND startdate <= CURRENT_DATE; " + 
-				"UPDATE lease SET active=0 WHERE enddate < CURRENT_DATE AND startdate > CURRENT_DATE;";
+		String sql = "UPDATE lease SET active=1 WHERE enddate >= CURRENT_DATE AND startdate <= CURRENT_DATE; ";
+		DatabaseManager.exec(sql);
+		sql = "UPDATE lease SET active=0 WHERE enddate < CURRENT_DATE AND startdate > CURRENT_DATE;";
 		DatabaseManager.exec(sql);
 	}
 	
 	public static Long initInvoice(InvoiceInitBean b) throws SQLException {
-		String sql = "INSERT INTO invoices (`leasenumber`, `duedate`) VALUES (" + b.leasenumber + ", " + b.duedate + ");";
-		Statement s = DatabaseManager.getConnection().createStatement();
-		s.execute(sql);
+		String sql = "INSERT INTO invoices (`leasenumber`, `duedate`) VALUES (" + b.leasenumber + ", \"" + b.duedate + "\");";
+		PreparedStatement s = DatabaseManager.getConnection().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+		s.executeUpdate();
 		ResultSet rs = s.getGeneratedKeys();
 		if (!rs.next()) {
 			return null;
@@ -1345,7 +1346,7 @@ public class Dao {
 	}
 	
 	public static Date getLastInvoiceGenDate() throws SQLException {
-		String sql = "SELECT * FROM invoicegens LIMIT 1;";
+		String sql = "SELECT * FROM invoicegens ORDER BY lastdate DESC LIMIT 1;";
 		Statement s = DatabaseManager.getConnection().createStatement();
 		s.execute(sql);
 		ResultSet rs = s.getResultSet();
@@ -1357,7 +1358,7 @@ public class Dao {
 	public static boolean invoicesExistForLease(Long leasenumber) {
 		String sql = "SELECT COUNT(*) FROM invoices WHERE leasenumber=" + leasenumber + ";";
 		try {
-			return DatabaseManager.execCount(sql) == 0;
+			return DatabaseManager.execCount(sql) != 0;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -1422,5 +1423,19 @@ public class Dao {
 			return null;
 		}
 		return l.get(0);
+	}
+
+	public static List<LeaseBean> getAllCurrentLeases() throws SQLException {
+		String sql = "SELECT * FROM `lease` WHERE enddate >= CURRENT_DATE AND startdate <= CURRENT_DATE;";
+		return DatabaseManager.executeBeanQuery(sql, LeaseBean.class);
+	}
+	
+	public static void updateInvoiceGenDate() {
+		try {
+			DatabaseManager.exec("INSERT IGNORE INTO invoicegens (lastdate) VALUES(CURRENT_DATE);");
+		} catch (SQLException e) {
+			System.out.println("Failed to update last invoce generation date. Check error clog for details");
+			e.printStackTrace();
+		}
 	}
 }
